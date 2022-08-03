@@ -10,6 +10,7 @@ import {
 import Home from '@views/home';
 // import Carousel from '@views/carousel';
 import { useIdleTimer } from 'react-idle-timer';
+import './App.scss';
 
 const RoutesComponent: FC = () => {
   const navigate = useNavigate();
