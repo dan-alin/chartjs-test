@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import LineChart from '@components/charts/LineChart';
+import PieChart from '@components/charts/PieChart';
+import DoughnutChart from '@components/charts/Doughtnut';
 
 export type ChartProps = {
   id: string;
@@ -15,8 +17,12 @@ const charts: ChartProps[] = [
     label: 'Line Chart',
   },
   {
-    id: 'pieAndSliced',
-    label: 'Pie and Sliced Charts',
+    id: 'pie',
+    label: 'Pie Chart',
+  },
+  {
+    id: 'doughnut',
+    label: 'Doughnut Chart',
   },
 ];
 
@@ -24,6 +30,10 @@ const renderSwitch = (chart: ChartProps) => {
   switch (chart.id) {
     case 'line':
       return <LineChart />;
+    case 'pie':
+      return <PieChart />;
+    case 'doughnut':
+      return <DoughnutChart />;
     default:
       return <LineChart />;
   }
