@@ -33,10 +33,6 @@ const charts: ChartProps[] = [
     description:
       'A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.',
   },
-  {
-    id: 'bar',
-    label: 'Bar Chart',
-  },
 ];
 
 const renderSwitch = (chart: ChartProps) => {
@@ -46,7 +42,7 @@ const renderSwitch = (chart: ChartProps) => {
     case 'pie':
       return <PieChart />;
     case 'doughnut':
-      return <DoughnutChart />;
+      return <DoughnutChart height={400} width={400} />;
 
     case 'bar':
       return <BarChart description={chart.description} />;

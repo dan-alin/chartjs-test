@@ -21,26 +21,49 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+type Dataset = {
+  label: string;
+  data: number[];
+  borderColor: string;
+  backgroundColor: string | string[];
+};
+
+type DoughnutProps = {
+  title?: string;
+  labels?: string[];
+  datasets?: Dataset;
+  height: number;
+  width: number;
+};
 
 const labels = ['January', 'February', 'March'];
 
-export const data = {
+const data = {
   labels,
   datasets: [
     {
       label: 'Dataset 1',
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      borderColor: 'rgb(255, 255, 255)',
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+        'rgb(255, 205, 86)',
+      ],
+      hoverOffset: 20,
     },
   ],
 };
 
-export const options = {
+const options = {
   responsive: true,
+  cutout: '85%',
+  layout: {
+    padding: 20,
+  },
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: 'right' as const,
     },
     title: {
       display: true,
@@ -49,16 +72,16 @@ export const options = {
   },
 };
 
-type DoughnutProps = {
-  title?: string;
-};
-
-const DoughnutChart: FC<DoughnutProps> = ({ title }) => {
+const DoughnutChart: FC<DoughnutProps> = ({
+  title,
+  height = 300,
+  width = 200,
+}) => {
   return (
-    <>
+    <div style={{ height: `${height}px`, width: `${width}px` }}>
       {title && <h5>{title}</h5>}
       <Doughnut options={options} data={data} />
-    </>
+    </div>
   );
 };
 
