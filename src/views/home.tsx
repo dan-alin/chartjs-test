@@ -42,7 +42,7 @@ const renderSwitch = (chart: ChartProps) => {
     case 'pie':
       return <PieChart />;
     case 'doughnut':
-      return <DoughnutChart height={400} width={400} />;
+      return <DoughnutChart size={500} />;
 
     case 'bar':
       return <BarChart description={chart.description} />;

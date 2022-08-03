@@ -32,8 +32,7 @@ type DoughnutProps = {
   title?: string;
   labels?: string[];
   datasets?: Dataset;
-  height: number;
-  width: number;
+  size?: number;
 };
 
 const labels = ['January', 'February', 'March'];
@@ -72,13 +71,9 @@ const options = {
   },
 };
 
-const DoughnutChart: FC<DoughnutProps> = ({
-  title,
-  height = 300,
-  width = 200,
-}) => {
+const DoughnutChart: FC<DoughnutProps> = ({ title, size = 300 }) => {
   return (
-    <div style={{ height: `${height}px`, width: `${width}px` }}>
+    <div style={{ width: `${size}px` }}>
       {title && <h5>{title}</h5>}
       <Doughnut options={options} data={data} />
     </div>
