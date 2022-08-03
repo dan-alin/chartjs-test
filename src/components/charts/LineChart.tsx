@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { Card } from 'react-bootstrap';
 
 ChartJS.register(
   CategoryScale,
@@ -56,13 +57,19 @@ export const options = {
 };
 
 export type LineChartProps = {
-  title?: string;
+  description?: string | undefined;
 };
 
-const LineChart: FC<LineChartProps> = ({ title }) => {
+const LineChart: FC<LineChartProps> = ({ description }) => {
   return (
     <>
-      {title && <h5>{title}</h5>}
+      {description && (
+        <Card>
+          <Card.Body>
+            <Card.Text>{description}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
       <Line options={options} data={data} />
     </>
   );
