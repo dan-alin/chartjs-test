@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-
 import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import LineChart from '@components/charts/LineChart';
+import BarChart from '@components/charts/BarChart';
 
 export type ChartProps = {
   id: string;
@@ -15,6 +15,10 @@ const charts: ChartProps[] = [
     label: 'Line Chart',
   },
   {
+    id: 'bar',
+    label: 'Bar Chart',
+  },
+  {
     id: 'pieAndSliced',
     label: 'Pie and Sliced Charts',
   },
@@ -24,6 +28,8 @@ const renderSwitch = (chart: ChartProps) => {
   switch (chart.id) {
     case 'line':
       return <LineChart />;
+    case 'bar':
+      return <BarChart />;
     default:
       return <LineChart />;
   }
@@ -49,9 +55,9 @@ const Home: FC = () => {
           <h2 className='mb-4 h2'>{chartType.label}</h2>
           <Form.Select
             aria-label='Theme selection'
+            value={chartType.id}
             onChange={(event) => changeChart(event.target)}
           >
-            <option>Select chart theme</option>
             {charts.map((chart) => {
               return (
                 <option value={chart.id} key={chart.id}>
@@ -62,8 +68,8 @@ const Home: FC = () => {
           </Form.Select>
         </Col>
       </Row>
-      <Row>
-        <Col>{renderSwitch(chartType)}</Col>
+      <Row className='justify-content-center'>
+        <Col xs={12}>{renderSwitch(chartType)}</Col>
       </Row>
     </Container>
   );
