@@ -10,6 +10,7 @@ import {
   Legend,
   BarElement,
 } from 'chart.js';
+import { Card } from 'react-bootstrap';
 
 ChartJS.register(
   CategoryScale,
@@ -52,13 +53,19 @@ export const data = {
 };
 
 export type BarChartProps = {
-  title?: string;
+  description?: string | undefined;
 };
 
-const BarChart: FC<BarChartProps> = ({ title }) => {
+const BarChart: FC<BarChartProps> = ({ description }) => {
   return (
     <>
-      {title && <h5>{title}</h5>}
+      {description && (
+        <Card>
+          <Card.Body>
+            <Card.Text>{description}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
       <div>
         <Bar options={options} data={data} />
       </div>

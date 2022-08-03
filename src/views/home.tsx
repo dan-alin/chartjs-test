@@ -7,16 +7,21 @@ import BarChart from '@components/charts/BarChart';
 export type ChartProps = {
   id: string;
   label: string;
+  description?: string;
 };
 
 const charts: ChartProps[] = [
   {
     id: 'line',
     label: 'Line Chart',
+    description:
+      'A line chart is a way of plotting data points on a line. Often, it is used to show trend data, or the comparison of two data sets.',
   },
   {
     id: 'bar',
     label: 'Bar Chart',
+    description:
+      'A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.',
   },
   {
     id: 'pieAndSliced',
@@ -27,9 +32,9 @@ const charts: ChartProps[] = [
 const renderSwitch = (chart: ChartProps) => {
   switch (chart.id) {
     case 'line':
-      return <LineChart />;
+      return <LineChart description={chart.description} />;
     case 'bar':
-      return <BarChart />;
+      return <BarChart description={chart.description} />;
     default:
       return <LineChart />;
   }
@@ -50,7 +55,7 @@ const Home: FC = () => {
 
   return (
     <Container>
-      <Row className='justify-content-center'>
+      <Row className='justify-content-center mb-4'>
         <Col>
           <h2 className='mb-4 h2'>{chartType.label}</h2>
           <Form.Select
@@ -69,7 +74,9 @@ const Home: FC = () => {
         </Col>
       </Row>
       <Row className='justify-content-center'>
-        <Col xs={12}>{renderSwitch(chartType)}</Col>
+        <Col xs={12} lg={11}>
+          {renderSwitch(chartType)}
+        </Col>
       </Row>
     </Container>
   );
