@@ -6,6 +6,7 @@ import PieChart from '@components/charts/PieChart';
 import DoughnutChart from '@components/charts/Doughtnut';
 import BarChart from '@components/charts/BarChart';
 import { chartConfigurations } from '../utils';
+import { LineOptions } from '@typings/charts.d';
 
 export type ChartProps = {
   id: string;
@@ -36,10 +37,24 @@ const charts: ChartProps[] = [
   },
 ];
 
+const customOptions: LineOptions = {
+  plugins: {
+    title: {
+      display: true,
+      text: 'Custom title',
+    },
+  },
+};
+
 const renderSwitch = (chart: ChartProps) => {
   switch (chart.id) {
     case 'line':
-      return <LineChart description={chart.description} />;
+      return (
+        <LineChart
+          description={chart.description}
+          customOptions={customOptions}
+        />
+      );
     case 'pie':
       return <PieChart />;
     case 'doughnut':
