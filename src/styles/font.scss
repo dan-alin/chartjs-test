@@ -1,0 +1,30 @@
+@font-face {
+    font-family: "BentonSans";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/BentonSans/BentonSans.ttf") format("truetype"),
+        url("../fonts/BentonSans/BentonSans.woff") format("woff"),
+        url("../fonts/BentonSans/BentonSans.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "BentonSans";
+    font-style: normal;
+    font-weight: 500;
+    src: url("../fonts/BentonSans/BentonSans-Medium.ttf") format("truetype"),
+        url("../fonts/BentonSans/BentonSans-Medium.woff") format("woff"),
+        url("../fonts/BentonSans/BentonSans-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "BentonSans";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../fonts/BentonSans/BentonSans-Bold.ttf") format("truetype"),
+        url("../fonts/BentonSans/BentonSans-Bold.woff") format("woff"),
+        url("../fonts/BentonSans/BentonSans-Bold.woff2") format("woff2");
+}
+
+body {
+    font-family: 'BentonSans', sans-serif;
+}

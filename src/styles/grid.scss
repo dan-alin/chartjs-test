@@ -1,0 +1,48 @@
+.container {
+  padding: 0 8px;
+
+  &--home {
+    padding: 10.94vh 87px 24px 85px;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.col {
+  padding-left: 8px;
+  padding-right: 8px;
+  max-width: 33.333%;
+  flex-basis: 33.333%;
+}
+
+.carousel-mosaic {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  &__container {
+    display: grid;
+    gap: 40px 40px;
+    grid-template-columns: auto auto;
+    grid-template-rows:
+      50vh calc(50vh - 40px) calc(50vh - 40px) calc(50vh - 40px)
+      calc(50vh - 40px) calc(50vh - 40px) calc(50vh - 40px) calc(50vh - 40px)
+      calc(50vh - 40px) calc(50vh - 40px);
+    transition: transform 5s linear;
+    margin-bottom: 40px;
+  }
+
+  .tile {
+    img,
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

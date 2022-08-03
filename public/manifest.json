@@ -1,0 +1,21 @@
+{
+  "short_name": "Scaffold App",
+  "name": "Scaffold App",
+  "icons": [
+    {
+      "src": "/images/256.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

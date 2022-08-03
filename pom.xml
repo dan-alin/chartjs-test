@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2018 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- ====================================================================== -->
+  <!-- P R O J E C T  D E S C R I P T I O N                                   -->
+  <!-- ====================================================================== -->
+  <groupId>com.prada.digitalcatalogue</groupId>
+  <artifactId>digitalcatalogue-galleria</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>3dconfigurator-digitalcatalogue-galleria</name>
+  <description>3dconfigurator-digitalcatalogue-galleria</description>
+
+  <scm>
+    <connection>scm:git:https://bitbucket.org/pradagroup/3dconfigurator-digitalcatalogue-galleria.git</connection>
+    <tag>pradanux-frontend-parent-3.16.89</tag>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>3dconfigurator-digitalcatalogue-galleria</name>
+      <url>${releases.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>3D Configurator Digital Catalogue</name>
+      <url>${snapshots.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <!-- ====================================================================== -->
+  <!-- P R O P E R T I E S                                                    -->
+  <!-- ====================================================================== -->
+  <properties>
+    <frontend-maven-plugin.version>1.10.4</frontend-maven-plugin.version>
+    <node.version>v16.13.2</node.version>
+    <npm.version>8.1.2</npm.version>
+    <build.env />
+
+    <aem.host>localhost</aem.host>
+    <aem.port>4502</aem.port>
+    <aem.publish.host>localhost</aem.publish.host>
+    <aem.publish.port>4503</aem.publish.port>
+    <sling.user>admin</sling.user>
+    <sling.password>admin</sling.password>
+    <vault.user>admin</vault.user>
+    <vault.password>admin</vault.password>
+    <vault.package.version>${project.version}</vault.package.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <!-- ====================================================================== -->
+  <!-- B U I L D   D E F I N I T I O N                                        -->
+  <!-- ====================================================================== -->
+  <build>
+    <resources>
+      <resource>
+        <directory>.</directory>
+      </resource>
+    </resources>
+    <pluginManagement>
+      <plugins>
+        <!-- Content Package Plugin -->
+        <plugin>
+          <groupId>com.day.jcr.vault</groupId>
+          <artifactId>content-package-maven-plugin</artifactId>
+          <version>0.0.24</version>
+          <configuration>
+            <targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+            <failOnError>true</failOnError>
+            <failOnMissingEmbed>true</failOnMissingEmbed>
+          </configuration>
+        </plugin>
+        <!-- Maven Remote Resources Plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.5</version>
+          <configuration>
+            <resourceBundles>
+              <resourceBundle>
+                com.adobe:adobe-jar-resource-bundle:1.0.0
+              </resourceBundle>
+            </resourceBundles>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.0.0-M1</version>
+          <configuration>
+            <skip>${static.site.skip.nexus}</skip>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.3</version>
+          <!-- Enable when commit format will be ok
+              <configuration>
+              <releaseProfiles>release</releaseProfiles>
+              </configuration>
+          -->
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <modules>
+    <module>ui.apps</module>
+    <module>static.site</module>
+  </modules>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${frontend-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>install node and npm</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-node-and-npm</goal>
+                </goals>
+                <configuration>
+                  <npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
+                  <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+                  <installDirectory>${project.build.directory}</installDirectory>
+                  <nodeVersion>${node.version}</nodeVersion>
+                  <npmVersion>${npm.version}</npmVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>run npm install</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>ci</arguments>
+                  <installDirectory>${project.build.directory}</installDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>run npm build</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <installDirectory>${project.build.directory}</installDirectory>
+                  <arguments>run changelog-update</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
