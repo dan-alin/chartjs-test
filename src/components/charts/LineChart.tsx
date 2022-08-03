@@ -12,6 +12,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
+import { yAxeRight } from 'src/utils';
 
 ChartJS.register(
   CategoryScale,
@@ -25,20 +26,27 @@ ChartJS.register(
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
+const colors = [
+  faker.color.rgb(),
+  faker.color.rgb(),
+  faker.color.rgb(),
+  faker.color.rgb(),
+];
+
 export const data = {
   labels,
   datasets: [
     {
       label: 'Dataset 1',
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      borderColor: colors[0],
+      backgroundColor: colors[0],
     },
     {
       label: 'Dataset 2',
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      borderColor: colors[2],
+      backgroundColor: colors[2],
     },
   ],
 };
@@ -47,12 +55,18 @@ export const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: 'bottom' as const,
     },
     title: {
       display: true,
       text: 'Chart.js Line Chart',
     },
+  },
+  scales: {
+    y: yAxeRight,
+  },
+  interaction: {
+    intersect: false,
   },
 };
 

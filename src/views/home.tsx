@@ -5,6 +5,7 @@ import LineChart from '@components/charts/LineChart';
 import PieChart from '@components/charts/PieChart';
 import DoughnutChart from '@components/charts/Doughtnut';
 import BarChart from '@components/charts/BarChart';
+import { chartConfigurations } from '../utils';
 
 export type ChartProps = {
   id: string;
@@ -33,10 +34,6 @@ const charts: ChartProps[] = [
     description:
       'A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.',
   },
-  {
-    id: 'bar',
-    label: 'Bar Chart',
-  },
 ];
 
 const renderSwitch = (chart: ChartProps) => {
@@ -58,6 +55,8 @@ const renderSwitch = (chart: ChartProps) => {
 const Home: FC = () => {
   const [chartType, setChartType] = useState<ChartProps>(charts[0]);
 
+  chartConfigurations();
+
   const changeChart = (target: EventTarget & HTMLSelectElement) => {
     const selected = charts.find(
       (chart: ChartProps) => chart.id === target.value
@@ -72,7 +71,7 @@ const Home: FC = () => {
     <Container>
       <Row className='justify-content-center mb-4'>
         <Col>
-          <h2 className='mb-4 h2'>{chartType.label}</h2>
+          <h2 className='mb-4 h2 text-center'>Chart.js Demo</h2>
           <Form.Select
             aria-label='Theme selection'
             value={chartType.id}
@@ -89,7 +88,7 @@ const Home: FC = () => {
         </Col>
       </Row>
       <Row className='justify-content-center'>
-        <Col xs={12} lg={11}>
+        <Col xs={12} lg={10}>
           {renderSwitch(chartType)}
         </Col>
       </Row>
