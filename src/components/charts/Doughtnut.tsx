@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import type { DoughnutOptions } from '../../typings/charts';
 import { faker } from '@faker-js/faker';
 import {
   Chart as ChartJS,
@@ -12,6 +13,9 @@ import {
   ArcElement,
 } from 'chart.js';
 
+import './charts.style.scss';
+import { Card } from 'react-bootstrap';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,26 +25,45 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+//
+
+type DoughnutProps = {
+  size?: 'xs' | 'md' | 'xl';
+  description?: string | undefined;
+  customOptions?: DoughnutOptions;
+};
 
 const labels = ['January', 'February', 'March'];
 
-export const data = {
+const colors = [
+  faker.color.rgb(),
+  faker.color.rgb(),
+  faker.color.rgb(),
+  faker.color.rgb(),
+];
+
+const data = {
   labels,
   datasets: [
     {
       label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      borderColor: 'rgb(255, 255, 255)',
+      backgroundColor: colors,
+      hoverOffset: 20,
     },
   ],
 };
 
-export const options = {
+const options = {
   responsive: true,
+
+  layout: {
+    padding: 20,
+  },
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: 'right' as const,
     },
     title: {
       display: true,
@@ -49,16 +72,27 @@ export const options = {
   },
 };
 
-type DoughnutProps = {
-  title?: string;
-};
-
-const DoughnutChart: FC<DoughnutProps> = ({ title }) => {
+const DoughnutChart: FC<DoughnutProps> = ({
+  description,
+  size,
+  customOptions = {},
+}) => {
+  const chartOptions = {
+    ...options,
+    ...customOptions,
+  };
+  console.log(chartOptions);
   return (
-    <>
-      {title && <h5>{title}</h5>}
-      <Doughnut options={options} data={data} />
-    </>
+    <div className={`chart__container chart__container--${size}`}>
+      {description && (
+        <Card>
+          <Card.Body>
+            <Card.Text>{description}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
+      <Doughnut options={chartOptions} data={data} />
+    </div>
   );
 };
 

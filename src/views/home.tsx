@@ -6,7 +6,13 @@ import PieChart from '@components/charts/PieChart';
 import DoughnutChart from '@components/charts/Doughtnut';
 import BarChart from '@components/charts/BarChart';
 import { chartConfigurations } from '../utils';
-import { ChartTypes, LineOptions } from '@typings/charts.d';
+import {
+  DoughnutOptions,
+  ChartTypes,
+  LineOptions,
+  PieOptions,
+  BarOptions,
+} from '@typings/charts.d';
 
 export type ChartProps = {
   id: ChartTypes;
@@ -24,10 +30,12 @@ const charts: ChartProps[] = [
   {
     id: 'pie',
     label: 'Pie Chart',
+    description: 'A pie chart.',
   },
   {
     id: 'doughnut',
     label: 'Doughnut Chart',
+    description: 'A doughnut chart.',
   },
   {
     id: 'bar',
@@ -37,7 +45,35 @@ const charts: ChartProps[] = [
   },
 ];
 
-const customOptions: LineOptions = {
+const customLineOptions: LineOptions = {
+  plugins: {
+    title: {
+      display: true,
+      text: 'Custom title',
+    },
+  },
+};
+
+const customDoughnutOptions: DoughnutOptions = {
+  cutout: '85%',
+  plugins: {
+    title: {
+      display: true,
+      text: 'Custom title',
+    },
+  },
+};
+
+const customPieOptions: PieOptions = {
+  plugins: {
+    title: {
+      display: true,
+      text: 'Custom title',
+    },
+  },
+};
+
+const customBarOptions: BarOptions = {
   plugins: {
     title: {
       display: true,
@@ -51,18 +87,39 @@ const renderSwitch = (chart: ChartProps) => {
     case 'line':
       return (
         <LineChart
+          size='md'
           description={chart.description}
-          customOptions={customOptions}
+          customOptions={customLineOptions}
         />
       );
     case 'pie':
-      return <PieChart />;
+      return (
+        <PieChart
+          size='xs'
+          description={chart.description}
+          customOptions={customPieOptions}
+        />
+      );
+
     case 'doughnut':
-      return <DoughnutChart />;
+      return (
+        <DoughnutChart
+          size='xl'
+          description={chart.description}
+          customOptions={customDoughnutOptions}
+        />
+      );
+
     case 'bar':
-      return <BarChart description={chart.description} />;
+      return (
+        <BarChart
+          size='md'
+          description={chart.description}
+          customOptions={customBarOptions}
+        />
+      );
     default:
-      return <LineChart />;
+      return <div>no chart</div>;
   }
 };
 

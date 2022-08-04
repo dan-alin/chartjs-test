@@ -12,6 +12,11 @@ import {
   ArcElement,
 } from 'chart.js';
 
+import './charts.style.scss';
+
+import type { PieOptions } from '@typings/charts';
+import { Card } from 'react-bootstrap';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,8 +35,14 @@ export const data = {
     {
       label: 'Dataset 1',
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      borderColor: 'rgb(255, 255, 255)',
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+        'rgb(255, 205, 86)',
+      ],
+
+      hoverOffset: 4,
     },
   ],
 };
@@ -40,7 +51,7 @@ export const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: 'right' as const,
     },
     title: {
       display: true,
@@ -50,15 +61,31 @@ export const options = {
 };
 
 type PieChartProps = {
-  title?: string;
+  description?: string | undefined;
+  customOptions?: PieOptions;
+  size?: 'xs' | 'md' | 'xl';
 };
 
-const PieChart: FC<PieChartProps> = ({ title }) => {
+const PieChart: FC<PieChartProps> = ({
+  size,
+  description,
+  customOptions = {},
+}) => {
+  const chartOptions = {
+    ...options,
+    ...customOptions,
+  };
   return (
-    <>
-      {title && <h5>{title}</h5>}
-      <Pie options={options} data={data} />
-    </>
+    <div className={`chart__container chart__container--${size}`}>
+      {description && (
+        <Card>
+          <Card.Body>
+            <Card.Text>{description}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
+      <Pie options={chartOptions} data={data} />
+    </div>
   );
 };
 

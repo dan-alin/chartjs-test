@@ -5,6 +5,8 @@ import {
   DatasetChartOptions,
   ElementChartOptions,
   LineControllerChartOptions,
+  DoughnutControllerChartOptions,
+  PieControllerChartOptions,
   BarControllerChartOptions,
   ChartTypeRegistry,
 } from 'chart.js';
@@ -19,6 +21,24 @@ export type LineOptions = _DeepPartialObject<
     DatasetChartOptions<'line'> &
     ScaleChartOptions<'line'> &
     LineControllerChartOptions
+>;
+
+export type DoughnutOptions = _DeepPartialObject<
+  CoreChartOptions<'doughnut'> &
+    ElementChartOptions<'doughnut'> &
+    PluginChartOptions<'doughnut'> &
+    DatasetChartOptions<'doughnut'> &
+    ScaleChartOptions<'doughnut'> &
+    DoughnutControllerChartOptions
+>;
+
+export type PieOptions = _DeepPartialObject<
+  CoreChartOptions<'pie'> &
+    ElementChartOptions<'pie'> &
+    PluginChartOptions<'pie'> &
+    DatasetChartOptions<'pie'> &
+    ScaleChartOptions<'pie'> &
+    PieControllerChartOptions
 >;
 
 export type BarOptions = _DeepPartialObject<
