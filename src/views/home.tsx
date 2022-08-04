@@ -13,6 +13,8 @@ import {
   PieOptions,
   BarOptions,
 } from '@typings/charts.d';
+import { ChartData } from 'chart.js';
+import { faker } from '@faker-js/faker';
 
 export type ChartProps = {
   id: ChartTypes;
@@ -82,6 +84,21 @@ const customBarOptions: BarOptions = {
   },
 };
 
+const customLabels = ['custom1', 'custom2', 'custom3'];
+
+const customDoughnutData: ChartData<'doughnut'> = {
+  labels: customLabels,
+  datasets: [
+    {
+      label: 'custom',
+      data: [1, 4, 7],
+      borderColor: 'rgb(255, 255, 255)',
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+      hoverOffset: 20,
+    },
+  ],
+};
+
 const renderSwitch = (chart: ChartProps) => {
   switch (chart.id) {
     case 'line':
@@ -107,6 +124,7 @@ const renderSwitch = (chart: ChartProps) => {
           size='xl'
           description={chart.description}
           customOptions={customDoughnutOptions}
+          customData={customDoughnutData}
         />
       );
 
