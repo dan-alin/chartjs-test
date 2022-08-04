@@ -8,6 +8,7 @@ export const yAxeRight = {
     drawOnChartArea: false,
   },
 };
+
 const chartConfigurations = () => {
   // Points
   const pointStyle: PointStyle = 'circle';
