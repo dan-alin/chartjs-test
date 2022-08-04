@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-// import type { DoughnutOptions } from '../../typings/charts';
 import type { ChartData, ChartOptions } from 'chart.js';
 
 import {

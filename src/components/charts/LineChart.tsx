@@ -13,7 +13,7 @@ import {
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
 import { yAxeRight } from 'src/utils';
-import { LineOptions } from '@typings/charts.d';
+import { LineChartProps } from '@typings/charts.d';
 import './charts.style.scss';
 import _ from 'lodash';
 
@@ -54,7 +54,7 @@ export const data = {
   ],
 };
 
-export const options: LineOptions = {
+export const options = {
   responsive: true,
   plugins: {
     legend: {
@@ -71,12 +71,6 @@ export const options: LineOptions = {
   interaction: {
     intersect: false,
   },
-};
-
-export type LineChartProps = {
-  description?: string | undefined;
-  customOptions?: LineOptions;
-  size?: 'xs' | 'md' | 'xl';
 };
 
 const LineChart: FC<LineChartProps> = ({
