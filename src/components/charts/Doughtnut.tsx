@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import type { DoughnutOptions } from '../../typings/charts';
+import type { DoughnutChartProps } from '../../typings/charts';
 import type { ChartData } from 'chart.js';
 
 import {
@@ -28,13 +28,6 @@ ChartJS.register(
   Legend
 );
 //
-
-type DoughnutProps = {
-  size?: 'xs' | 'md' | 'xl';
-  description?: string | undefined;
-  customOptions?: DoughnutOptions;
-  customData?: ChartData<'doughnut'>;
-};
 
 const labels = ['default'];
 
@@ -67,7 +60,7 @@ const options = {
   },
 };
 
-const DoughnutChart: FC<DoughnutProps> = ({
+const DoughnutChart: FC<DoughnutChartProps> = ({
   description,
   size,
   customOptions = {},

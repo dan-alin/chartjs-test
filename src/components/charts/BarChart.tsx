@@ -11,7 +11,7 @@ import {
   BarElement,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
-import { BarOptions } from '@typings/charts.d';
+import { BarChartProps } from '@typings/charts.d';
 import _ from 'lodash';
 
 ChartJS.register(
@@ -23,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-export const options: BarOptions = {
+export const options = {
   responsive: true,
   plugins: {
     legend: {
@@ -52,12 +52,6 @@ export const data = {
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
   ],
-};
-
-export type BarChartProps = {
-  description?: string | undefined;
-  customOptions?: BarOptions;
-  size?: 'xs' | 'md' | 'xl';
 };
 
 const BarChart: FC<BarChartProps> = ({
