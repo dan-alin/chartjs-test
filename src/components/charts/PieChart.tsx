@@ -16,6 +16,7 @@ import './charts.style.scss';
 
 import type { PieOptions } from '@typings/charts';
 import { Card } from 'react-bootstrap';
+import _ from 'lodash';
 
 ChartJS.register(
   CategoryScale,
@@ -71,10 +72,8 @@ const PieChart: FC<PieChartProps> = ({
   description,
   customOptions = {},
 }) => {
-  const chartOptions = {
-    ...options,
-    ...customOptions,
-  };
+  const chartOptions = _.merge(options, customOptions);
+
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
