@@ -6,18 +6,12 @@ import PieChart from '@components/charts/PieChart';
 import DoughnutChart from '@components/charts/Doughtnut';
 import BarChart from '@components/charts/BarChart';
 import { chartConfigurations } from '../utils';
-import {
-  DoughnutOptions,
-  ChartTypes,
-  LineOptions,
-  PieOptions,
-  BarOptions,
-} from '@typings/charts.d';
-import { ChartData } from 'chart.js';
+import { Charts } from '@typings/charts.d';
+import { ChartData, ChartOptions } from 'chart.js';
 import { faker } from '@faker-js/faker';
 
 export type ChartProps = {
-  id: ChartTypes;
+  id: Charts;
   label: string;
   description?: string;
 };
@@ -47,7 +41,7 @@ const charts: ChartProps[] = [
   },
 ];
 
-const customLineOptions: LineOptions = {
+const customLineOptions: ChartOptions<'line'> = {
   plugins: {
     title: {
       display: true,
@@ -56,7 +50,7 @@ const customLineOptions: LineOptions = {
   },
 };
 
-const customDoughnutOptions: DoughnutOptions = {
+const customDoughnutOptions: ChartOptions<'doughnut'> = {
   cutout: '85%',
   plugins: {
     title: {
@@ -66,7 +60,7 @@ const customDoughnutOptions: DoughnutOptions = {
   },
 };
 
-const customPieOptions: PieOptions = {
+const customPieOptions: ChartOptions<'pie'> = {
   plugins: {
     title: {
       display: true,
@@ -75,7 +69,7 @@ const customPieOptions: PieOptions = {
   },
 };
 
-const customBarOptions: BarOptions = {
+const customBarOptions: ChartOptions<'bar'> = {
   plugins: {
     title: {
       display: true,

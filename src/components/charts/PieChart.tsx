@@ -14,7 +14,7 @@ import {
 
 import './charts.style.scss';
 
-import type { PieOptions } from '@typings/charts';
+import type { PieChartProps } from '@typings/charts';
 import { Card } from 'react-bootstrap';
 import _ from 'lodash';
 
@@ -59,12 +59,6 @@ export const options = {
       text: 'Chart.js Line Chart',
     },
   },
-};
-
-type PieChartProps = {
-  description?: string | undefined;
-  customOptions?: PieOptions;
-  size?: 'xs' | 'md' | 'xl';
 };
 
 const PieChart: FC<PieChartProps> = ({
