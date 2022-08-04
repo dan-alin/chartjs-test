@@ -1,0 +1,15 @@
+.chart__container {
+  margin: auto;
+
+  &--sm {
+    width: 300px;
+  }
+
+  &--md {
+    width: 500px;
+  }
+
+  &--xl {
+    width: 800px;
+  }
+}
