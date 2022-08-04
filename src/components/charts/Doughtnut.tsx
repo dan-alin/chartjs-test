@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import type { DoughnutOptions } from '../../typings/charts';
-import { faker } from '@faker-js/faker';
+import type { ChartData } from 'chart.js';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,36 +29,23 @@ ChartJS.register(
 );
 //
 
-type GraphData = {
-  labels: string[];
-  data: unknown;
-};
-
 type DoughnutProps = {
   size?: 'xs' | 'md' | 'xl';
   description?: string | undefined;
   customOptions?: DoughnutOptions;
-  data?: GraphData;
+  customData?: ChartData<'doughnut'>;
 };
 
-const labels = ['January', 'February', 'March'];
+const labels = ['default'];
 
-const colors = [
-  faker.color.rgb(),
-  faker.color.rgb(),
-  faker.color.rgb(),
-  faker.color.rgb(),
-];
-
-const data = {
+const data: ChartData<'doughnut'> = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      label: 'default',
+      data: [1],
       borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: colors,
-      hoverOffset: 20,
+      backgroundColor: '#333',
     },
   ],
 };
@@ -83,10 +71,11 @@ const DoughnutChart: FC<DoughnutProps> = ({
   description,
   size,
   customOptions = {},
+  customData = {},
 }) => {
   const chartOptions = _.merge(options, customOptions);
+  const chartData = _.merge(data, customData);
 
-  console.log(chartOptions);
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -96,7 +85,7 @@ const DoughnutChart: FC<DoughnutProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Doughnut options={chartOptions} data={data} />
+      <Doughnut options={chartOptions} data={chartData} />
     </div>
   );
 };

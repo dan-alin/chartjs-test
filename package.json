@@ -7,14 +7,14 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --open --live-reload --config config/webpack.dev.js",
-    "build": "webpack --config config/webpack.prod.js",
+    "build": "webpack --config config/webpack.prod.js --progress ",
     "start": "ws --config-file config/lws.config.js",
     "format": "prettier --write .",
     "lint": "eslint --cache --fix .",
     "prepare": "husky install"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.182",
+    "@types/chart.js": "^2.9.37",
     "bootstrap": "^5.2.0",
     "chart.js": "^3.9.0",
     "clsx": "^1.2.1",
@@ -67,7 +67,8 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0",
     "webpack-merge": "^5.8.0",
-    "workbox-webpack-plugin": "^6.5.3"
+    "workbox-webpack-plugin": "^6.5.3",
+    "@types/lodash": "^4.14.182"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix",

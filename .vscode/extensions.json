@@ -3,7 +3,6 @@
     "esbenp.prettier-vscode",
     "EditorConfig.EditorConfig",
     "csstools.postcss",
-    "dbaeumer.vscode-eslint",
-    "Vue.vscode-typescript-vue-plugin"
+    "dbaeumer.vscode-eslint"
   ]
 }
