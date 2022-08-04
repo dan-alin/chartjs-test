@@ -14,12 +14,14 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.182",
     "bootstrap": "^5.2.0",
     "chart.js": "^3.9.0",
     "clsx": "^1.2.1",
     "gsap": "^3.10.4",
     "i18next": "^21.8.4",
     "i18next-http-backend": "^1.4.0",
+    "lodash": "^4.17.21",
     "react": "^18.1.0",
     "react-bootstrap": "^2.4.0",
     "react-chartjs-2": "^4.3.1",

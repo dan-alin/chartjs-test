@@ -15,6 +15,7 @@ import {
 
 import './charts.style.scss';
 import { Card } from 'react-bootstrap';
+import _ from 'lodash';
 
 ChartJS.register(
   CategoryScale,
@@ -77,10 +78,8 @@ const DoughnutChart: FC<DoughnutProps> = ({
   size,
   customOptions = {},
 }) => {
-  const chartOptions = {
-    ...options,
-    ...customOptions,
-  };
+  const chartOptions = _.merge(options, customOptions);
+
   console.log(chartOptions);
   return (
     <div className={`chart__container chart__container--${size}`}>

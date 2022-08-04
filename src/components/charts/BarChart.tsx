@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
 import { BarOptions } from '@typings/charts.d';
+import _ from 'lodash';
 
 ChartJS.register(
   CategoryScale,
@@ -64,10 +65,7 @@ const BarChart: FC<BarChartProps> = ({
   description,
   customOptions = {},
 }) => {
-  const chartOptions = {
-    ...options,
-    ...customOptions,
-  };
+  const chartOptions = _.merge(options, customOptions);
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (

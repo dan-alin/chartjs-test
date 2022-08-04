@@ -15,6 +15,7 @@ import { Card } from 'react-bootstrap';
 import { yAxeRight } from 'src/utils';
 import { LineOptions } from '@typings/charts.d';
 import './charts.style.scss';
+import _ from 'lodash';
 
 ChartJS.register(
   CategoryScale,
@@ -83,10 +84,7 @@ const LineChart: FC<LineChartProps> = ({
   description,
   customOptions = {},
 }) => {
-  const chartOptions = {
-    ...options,
-    ...customOptions,
-  };
+  const chartOptions = _.merge(options, customOptions);
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
