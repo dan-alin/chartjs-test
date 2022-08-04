@@ -11,6 +11,7 @@ import {
   BarElement,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
+import { BarOptions } from '@typings/charts.d';
 
 ChartJS.register(
   CategoryScale,
@@ -21,7 +22,7 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+export const options: BarOptions = {
   responsive: true,
   plugins: {
     legend: {
@@ -54,9 +55,14 @@ export const data = {
 
 export type BarChartProps = {
   description?: string | undefined;
+  customOptions?: BarOptions;
 };
 
-const BarChart: FC<BarChartProps> = ({ description }) => {
+const BarChart: FC<BarChartProps> = ({ description, customOptions = {} }) => {
+  const chartOptions = {
+    ...options,
+    ...customOptions,
+  };
   return (
     <>
       {description && (
@@ -66,9 +72,7 @@ const BarChart: FC<BarChartProps> = ({ description }) => {
           </Card.Body>
         </Card>
       )}
-      <div>
-        <Bar options={options} data={data} />
-      </div>
+      <Bar options={chartOptions} data={data} />
     </>
   );
 };

@@ -6,10 +6,10 @@ import PieChart from '@components/charts/PieChart';
 import DoughnutChart from '@components/charts/Doughtnut';
 import BarChart from '@components/charts/BarChart';
 import { chartConfigurations } from '../utils';
-import { LineOptions } from '@typings/charts.d';
+import { ChartTypes, LineOptions } from '@typings/charts.d';
 
 export type ChartProps = {
-  id: string;
+  id: ChartTypes;
   label: string;
   description?: string;
 };
@@ -58,8 +58,7 @@ const renderSwitch = (chart: ChartProps) => {
     case 'pie':
       return <PieChart />;
     case 'doughnut':
-      return <DoughnutChart size={500} />;
-
+      return <DoughnutChart />;
     case 'bar':
       return <BarChart description={chart.description} />;
     default:

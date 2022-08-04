@@ -52,7 +52,7 @@ export const data = {
   ],
 };
 
-export const options = {
+export const options: LineOptions = {
   responsive: true,
   plugins: {
     legend: {
