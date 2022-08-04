@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import type { DoughnutOptions } from '../../typings/charts';
-import type { ChartData } from 'chart.js';
+// import type { DoughnutOptions } from '../../typings/charts';
+import type { ChartData, ChartOptions } from 'chart.js';
 
 import {
   Chart as ChartJS,
@@ -17,6 +17,10 @@ import {
 import './charts.style.scss';
 import { Card } from 'react-bootstrap';
 import _ from 'lodash';
+import {
+  getDefaultData,
+  getDefaultOptions,
+} from 'src/utils/configurations/chartsConfigurations';
 
 ChartJS.register(
   CategoryScale,
@@ -32,40 +36,13 @@ ChartJS.register(
 type DoughnutProps = {
   size?: 'xs' | 'md' | 'xl';
   description?: string | undefined;
-  customOptions?: DoughnutOptions;
-  customData?: ChartData<'doughnut'>;
+  customOptions?: ChartOptions;
+  customData?: ChartData;
 };
 
-const labels = ['default'];
+const data = getDefaultData() as ChartData<'doughnut'>;
 
-const data: ChartData<'doughnut'> = {
-  labels,
-  datasets: [
-    {
-      label: 'default',
-      data: [1],
-      borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: '#333',
-    },
-  ],
-};
-
-const options = {
-  responsive: true,
-
-  layout: {
-    padding: 20,
-  },
-  plugins: {
-    legend: {
-      position: 'right' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
+const options = getDefaultOptions() as ChartOptions;
 
 const DoughnutChart: FC<DoughnutProps> = ({
   description,

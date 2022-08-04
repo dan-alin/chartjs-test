@@ -1,4 +1,4 @@
-import { defaults, PointStyle } from 'chart.js';
+import { ChartData, defaults, PointStyle } from 'chart.js';
 
 export const yAxeRight = {
   type: 'linear' as const,
@@ -7,6 +7,41 @@ export const yAxeRight = {
   grid: {
     drawOnChartArea: false,
   },
+};
+
+const labels = ['default'];
+
+export const getDefaultData = () => {
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'default',
+        data: [1],
+        borderColor: 'rgb(255, 255, 255)',
+        backgroundColor: '#333',
+      },
+    ],
+  } as ChartData;
+};
+
+export const getDefaultOptions = () => {
+  return {
+    responsive: true,
+
+    layout: {
+      padding: 20,
+    },
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart',
+      },
+    },
+  };
 };
 
 const chartConfigurations = () => {
