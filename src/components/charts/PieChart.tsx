@@ -12,6 +12,11 @@ import {
   ArcElement,
 } from 'chart.js';
 
+import './charts.style.scss';
+
+import type { PieOptions } from '@typings/charts';
+import { Card } from 'react-bootstrap';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -56,15 +61,31 @@ export const options = {
 };
 
 type PieChartProps = {
-  title?: string;
+  description?: string | undefined;
+  customOptions?: PieOptions;
+  size?: 'xs' | 'md' | 'xl';
 };
 
-const PieChart: FC<PieChartProps> = ({ title }) => {
+const PieChart: FC<PieChartProps> = ({
+  size,
+  description,
+  customOptions = {},
+}) => {
+  const chartOptions = {
+    ...options,
+    ...customOptions,
+  };
   return (
-    <>
-      {title && <h5>{title}</h5>}
-      <Pie options={options} data={data} />
-    </>
+    <div className={`chart__container chart__container--${size}`}>
+      {description && (
+        <Card>
+          <Card.Body>
+            <Card.Text>{description}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
+      <Pie options={chartOptions} data={data} />
+    </div>
   );
 };
 

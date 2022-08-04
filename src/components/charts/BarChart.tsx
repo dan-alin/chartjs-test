@@ -56,15 +56,20 @@ export const data = {
 export type BarChartProps = {
   description?: string | undefined;
   customOptions?: BarOptions;
+  size?: 'xs' | 'md' | 'xl';
 };
 
-const BarChart: FC<BarChartProps> = ({ description, customOptions = {} }) => {
+const BarChart: FC<BarChartProps> = ({
+  size,
+  description,
+  customOptions = {},
+}) => {
   const chartOptions = {
     ...options,
     ...customOptions,
   };
   return (
-    <>
+    <div className={`chart__container chart__container--${size}`}>
       {description && (
         <Card>
           <Card.Body>
@@ -73,7 +78,7 @@ const BarChart: FC<BarChartProps> = ({ description, customOptions = {} }) => {
         </Card>
       )}
       <Bar options={chartOptions} data={data} />
-    </>
+    </div>
   );
 };
 

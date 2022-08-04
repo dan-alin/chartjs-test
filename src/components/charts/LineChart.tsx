@@ -14,6 +14,7 @@ import {
 import { Card } from 'react-bootstrap';
 import { yAxeRight } from 'src/utils';
 import { LineOptions } from '@typings/charts.d';
+import './charts.style.scss';
 
 ChartJS.register(
   CategoryScale,
@@ -74,15 +75,20 @@ export const options: LineOptions = {
 export type LineChartProps = {
   description?: string | undefined;
   customOptions?: LineOptions;
+  size?: 'xs' | 'md' | 'xl';
 };
 
-const LineChart: FC<LineChartProps> = ({ description, customOptions = {} }) => {
+const LineChart: FC<LineChartProps> = ({
+  size,
+  description,
+  customOptions = {},
+}) => {
   const chartOptions = {
     ...options,
     ...customOptions,
   };
   return (
-    <>
+    <div className={`chart__container chart__container--${size}`}>
       {description && (
         <Card>
           <Card.Body>
@@ -91,7 +97,7 @@ const LineChart: FC<LineChartProps> = ({ description, customOptions = {} }) => {
         </Card>
       )}
       <Line options={chartOptions} data={data} />
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import type { DoughnutOptions } from '../../typings/charts';
 import { faker } from '@faker-js/faker';
 import {
   Chart as ChartJS,
@@ -12,6 +13,9 @@ import {
   ArcElement,
 } from 'chart.js';
 
+import './charts.style.scss';
+import { Card } from 'react-bootstrap';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,34 +25,31 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-type Dataset = {
-  label: string;
-  data: number[];
-  borderColor: string;
-  backgroundColor: string | string[];
-};
+//
 
 type DoughnutProps = {
-  title?: string;
-  labels?: string[];
-  datasets?: Dataset;
-  size?: number;
+  size?: 'xs' | 'md' | 'xl';
+  description?: string | undefined;
+  customOptions?: DoughnutOptions;
 };
 
 const labels = ['January', 'February', 'March'];
+
+const colors = [
+  faker.color.rgb(),
+  faker.color.rgb(),
+  faker.color.rgb(),
+  faker.color.rgb(),
+];
 
 const data = {
   labels,
   datasets: [
     {
       label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
       borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)',
-      ],
+      backgroundColor: colors,
       hoverOffset: 20,
     },
   ],
@@ -56,7 +57,7 @@ const data = {
 
 const options = {
   responsive: true,
-  cutout: '85%',
+
   layout: {
     padding: 20,
   },
@@ -71,11 +72,26 @@ const options = {
   },
 };
 
-const DoughnutChart: FC<DoughnutProps> = ({ title, size = 300 }) => {
+const DoughnutChart: FC<DoughnutProps> = ({
+  description,
+  size,
+  customOptions = {},
+}) => {
+  const chartOptions = {
+    ...options,
+    ...customOptions,
+  };
+  console.log(chartOptions);
   return (
-    <div style={{ width: `${size}px` }}>
-      {title && <h5>{title}</h5>}
-      <Doughnut options={options} data={data} />
+    <div className={`chart__container chart__container--${size}`}>
+      {description && (
+        <Card>
+          <Card.Body>
+            <Card.Text>{description}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
+      <Doughnut options={chartOptions} data={data} />
     </div>
   );
 };
