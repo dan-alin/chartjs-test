@@ -28,10 +28,16 @@ ChartJS.register(
 );
 //
 
+type GraphData = {
+  labels: string[];
+  data: unknown;
+};
+
 type DoughnutProps = {
   size?: 'xs' | 'md' | 'xl';
   description?: string | undefined;
   customOptions?: DoughnutOptions;
+  data?: GraphData;
 };
 
 const labels = ['January', 'February', 'March'];
