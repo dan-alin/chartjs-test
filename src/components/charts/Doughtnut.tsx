@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
+import './charts.style.scss';
 import { Doughnut } from 'react-chartjs-2';
-import type { ChartData, ChartOptions } from 'chart.js';
-
+import { Card } from 'react-bootstrap';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,10 +12,9 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
-
-import './charts.style.scss';
-import { Card } from 'react-bootstrap';
 import _ from 'lodash';
+import type { DoughnutChartProps } from '@typings/charts';
+import type { ChartData, ChartOptions } from 'chart.js';
 import {
   getDefaultData,
   getDefaultOptions,
@@ -30,20 +29,12 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-//
-
-type DoughnutProps = {
-  size?: 'xs' | 'md' | 'xl';
-  description?: string | undefined;
-  customOptions?: ChartOptions;
-  customData?: ChartData;
-};
 
 const data = getDefaultData() as ChartData<'doughnut'>;
 
 const options = getDefaultOptions() as ChartOptions;
 
-const DoughnutChart: FC<DoughnutProps> = ({
+const DoughnutChart: FC<DoughnutChartProps> = ({
   description,
   size,
   customOptions = {},

@@ -5,18 +5,12 @@ import LineChart from '@components/charts/LineChart';
 import PieChart from '@components/charts/PieChart';
 import DoughnutChart from '@components/charts/Doughtnut';
 import BarChart from '@components/charts/BarChart';
-import { chartConfigurations } from '../utils';
-import { Charts } from '@typings/charts.d';
+import { chartConfigurations, yAxeRight } from '../utils';
+import { ChartInfoProps } from '@typings/charts.d';
 import { ChartData, ChartOptions } from 'chart.js';
 import { faker } from '@faker-js/faker';
 
-export type ChartProps = {
-  id: Charts;
-  label: string;
-  description?: string;
-};
-
-const charts: ChartProps[] = [
+const charts: ChartInfoProps[] = [
   {
     id: 'line',
     label: 'Line Chart',
@@ -47,6 +41,12 @@ const customLineOptions: ChartOptions<'line'> = {
       display: true,
       text: 'Custom title',
     },
+  },
+  scales: {
+    y: yAxeRight,
+  },
+  interaction: {
+    intersect: false,
   },
 };
 
@@ -85,7 +85,7 @@ const customDoughnutData: ChartData<'doughnut'> = {
   datasets: [
     {
       label: 'custom',
-      data: [1, 4, 7],
+      data: customLabels.map(() => faker.datatype.number()),
       borderColor: 'rgb(255, 255, 255)',
       backgroundColor: customLabels.map(() => faker.color.rgb()),
       hoverOffset: 20,
@@ -93,14 +93,70 @@ const customDoughnutData: ChartData<'doughnut'> = {
   ],
 };
 
-const renderSwitch = (chart: ChartProps) => {
+const customLineData: ChartData<'line'> = {
+  labels: customLabels,
+  datasets: [
+    {
+      label: 'custom',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+    },
+
+    {
+      label: 'custom 2',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+    },
+  ],
+};
+
+const customBarData: ChartData<'bar'> = {
+  labels: customLabels,
+  datasets: [
+    {
+      label: 'custom',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+    },
+    {
+      label: 'custom 2',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+    },
+    {
+      label: 'custom 3',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+    },
+  ],
+};
+
+const customPieData: ChartData<'pie'> = {
+  labels: customLabels,
+  datasets: [
+    {
+      label: 'custom',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: 'rgb(255, 255, 255)',
+      backgroundColor: customLabels.map(() => faker.color.rgb()),
+    },
+  ],
+};
+
+const renderSwitch = (chart: ChartInfoProps) => {
   switch (chart.id) {
     case 'line':
       return (
         <LineChart
-          size='md'
+          size='xl'
           description={chart.description}
           customOptions={customLineOptions}
+          customData={customLineData}
         />
       );
     case 'pie':
@@ -109,6 +165,7 @@ const renderSwitch = (chart: ChartProps) => {
           size='xs'
           description={chart.description}
           customOptions={customPieOptions}
+          customData={customPieData}
         />
       );
 
@@ -125,9 +182,10 @@ const renderSwitch = (chart: ChartProps) => {
     case 'bar':
       return (
         <BarChart
-          size='md'
+          size='xl'
           description={chart.description}
           customOptions={customBarOptions}
+          customData={customBarData}
         />
       );
     default:
@@ -136,13 +194,13 @@ const renderSwitch = (chart: ChartProps) => {
 };
 
 const Home: FC = () => {
-  const [chartType, setChartType] = useState<ChartProps>(charts[0]);
+  const [chartType, setChartType] = useState<ChartInfoProps>(charts[0]);
 
   chartConfigurations();
 
   const changeChart = (target: EventTarget & HTMLSelectElement) => {
     const selected = charts.find(
-      (chart: ChartProps) => chart.id === target.value
+      (chart: ChartInfoProps) => chart.id === target.value
     );
     if (selected) {
       setChartType(selected);

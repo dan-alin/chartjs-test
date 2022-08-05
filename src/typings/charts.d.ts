@@ -8,6 +8,12 @@ export type ChartProps = {
   customData?;
 };
 
+export type ChartInfoProps = {
+  id: Charts;
+  label: string;
+  description?: string;
+};
+
 export type LineChartProps = ChartProps & {
   customOptions?: ChartOptions<'line'>;
 };
