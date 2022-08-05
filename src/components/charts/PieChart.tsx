@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -33,6 +33,38 @@ ChartJS.register(
   Legend
 );
 
+// const showTooltip = (chart: ChartJS | null) => {
+//   console.log(chart)
+//   const tooltip = chart?.tooltip;
+
+//   if (!tooltip) {
+//     return;
+//   }
+
+//   if (tooltip.getActiveElements().length > 0) {
+
+//     tooltip.setActiveElements([], { x: 0, y: 0 });
+//   } else {
+
+//     const { chartArea } = chart;
+//     tooltip.setActiveElements(
+
+//       [
+//         {
+//           datasetIndex: 0,
+//           index: 2,
+//         }
+//       ],
+//       {
+//         x: (chartArea.left + chartArea.right) / 2,
+//         y: (chartArea.top + chartArea.bottom) / 2,
+//       }
+//     );
+
+//   }
+//   chart.update();
+// }
+
 const data = getDefaultData() as ChartData<'pie'>;
 
 const options: ChartOptions = getDefaultOptions();
@@ -43,9 +75,17 @@ const PieChart: FC<PieChartProps> = ({
   customOptions = {},
   customData = {},
 }) => {
+  const chartRef = useRef<ChartJS<'pie'>>(null);
+
   const chartOptions = _.merge(options, customOptions);
   const chartData = _.merge(data, customData);
-  console.log(data, options);
+
+  // useEffect(() => {
+  //   const chart = chartRef.current;
+
+  //   showTooltip(chart)
+  // }, []);
+
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -55,7 +95,7 @@ const PieChart: FC<PieChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Pie options={chartOptions} data={chartData} />
+      <Pie ref={chartRef} options={chartOptions} data={chartData} />
     </div>
   );
 };

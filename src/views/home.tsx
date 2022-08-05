@@ -58,6 +58,15 @@ const customPieOptions: ChartOptions<'pie'> = {
       display: true,
       text: 'Custom title',
     },
+    tooltip: {
+      backgroundColor: '#FFF',
+      boxHeight: 20,
+      boxWidth: 20,
+      bodyColor: '#333',
+      bodyFont: { weight: 'bold' },
+
+      borderColor: '#f4f4f4',
+    },
   },
 };
 
