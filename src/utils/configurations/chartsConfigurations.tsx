@@ -1,4 +1,4 @@
-import { ChartData, defaults, PointStyle } from 'chart.js';
+import { ChartData, ChartOptions, defaults, PointStyle } from 'chart.js';
 
 export const yAxeRight = {
   type: 'linear' as const,
@@ -25,10 +25,9 @@ export const getDefaultData = () => {
   } as ChartData;
 };
 
-export const getDefaultOptions = () => {
+export const getDefaultOptions = (): ChartOptions => {
   return {
     responsive: true,
-
     layout: {
       padding: 20,
     },

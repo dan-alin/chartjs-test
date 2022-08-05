@@ -1,1 +1,21 @@
-{}
+{
+  "title": "Chart.js Demo",
+  "charts": {
+    "line": {
+      "label": "Line chart",
+      "description": "A line chart is a way of plotting data points on a line. Often, it is used to show trend data, or the comparison of two data sets."
+    },
+    "bar": {
+      "label": "Bar Chart",
+      "description": "A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side."
+    },
+    "pie": {
+      "label": "Pie Chart",
+      "description": "A pie chart."
+    },
+    "doughnut": {
+      "label": "Doughnut Chart",
+      "description": "A doughnut chart."
+    }
+  }
+}

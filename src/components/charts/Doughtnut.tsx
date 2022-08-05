@@ -32,7 +32,7 @@ ChartJS.register(
 
 const data = getDefaultData() as ChartData<'doughnut'>;
 
-const options = getDefaultOptions() as ChartOptions;
+const options = getDefaultOptions() as ChartOptions<'doughnut'>;
 
 const DoughnutChart: FC<DoughnutChartProps> = ({
   description,

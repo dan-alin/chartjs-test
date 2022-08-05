@@ -14,7 +14,10 @@ import {
 import { Card } from 'react-bootstrap';
 import { BarChartProps } from '@typings/charts.d';
 import _ from 'lodash';
-import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import {
+  getDefaultData,
+  getDefaultOptions,
+} from 'src/utils/configurations/chartsConfigurations';
 
 ChartJS.register(
   CategoryScale,
@@ -26,7 +29,7 @@ ChartJS.register(
 );
 
 export const data = getDefaultData() as ChartData<'bar'>;
-export const options = getDefaultData() as ChartOptions;
+export const options = getDefaultOptions() as ChartOptions<'bar'>;
 
 const BarChart: FC<BarChartProps> = ({
   size,

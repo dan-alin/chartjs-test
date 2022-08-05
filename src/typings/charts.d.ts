@@ -10,8 +10,6 @@ export type ChartProps = {
 
 export type ChartInfoProps = {
   id: Charts;
-  label: string;
-  description?: string;
 };
 
 export type LineChartProps = ChartProps & {
