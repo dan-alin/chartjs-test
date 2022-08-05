@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +9,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  ChartData,
+  ChartOptions,
 } from 'chart.js';
 
 import './charts.style.scss';
@@ -17,6 +18,10 @@ import './charts.style.scss';
 import type { PieChartProps } from '@typings/charts';
 import { Card } from 'react-bootstrap';
 import _ from 'lodash';
+import {
+  getDefaultData,
+  getDefaultOptions,
+} from 'src/utils/configurations/chartsConfigurations';
 
 ChartJS.register(
   CategoryScale,
@@ -28,46 +33,19 @@ ChartJS.register(
   Legend
 );
 
-const labels = ['January', 'February', 'March'];
+const data = getDefaultData() as ChartData<'pie'>;
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)',
-      ],
-
-      hoverOffset: 4,
-    },
-  ],
-};
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'right' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
+const options = getDefaultOptions() as ChartOptions<'pie'>;
 
 const PieChart: FC<PieChartProps> = ({
   size,
   description,
   customOptions = {},
+  customData = {},
 }) => {
   const chartOptions = _.merge(options, customOptions);
-
+  const chartData = _.merge(data, customData);
+  console.log(data, options);
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -77,7 +55,7 @@ const PieChart: FC<PieChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Pie options={chartOptions} data={data} />
+      <Pie options={chartOptions} data={chartData} />
     </div>
   );
 };
