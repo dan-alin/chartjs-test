@@ -32,7 +32,7 @@ ChartJS.register(
 );
 
 const data = getDefaultData() as ChartData<'line'>;
-const options = getDefaultOptions() as ChartOptions<'line'>;
+const options: ChartOptions = getDefaultOptions();
 
 const LineChart: FC<LineChartProps> = ({
   size,

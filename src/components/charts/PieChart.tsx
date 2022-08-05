@@ -35,7 +35,7 @@ ChartJS.register(
 
 const data = getDefaultData() as ChartData<'pie'>;
 
-const options = getDefaultOptions() as ChartOptions<'pie'>;
+const options: ChartOptions = getDefaultOptions();
 
 const PieChart: FC<PieChartProps> = ({
   size,

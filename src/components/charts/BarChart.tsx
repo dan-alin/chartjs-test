@@ -29,7 +29,7 @@ ChartJS.register(
 );
 
 export const data = getDefaultData() as ChartData<'bar'>;
-export const options = getDefaultOptions() as ChartOptions<'bar'>;
+export const options: ChartOptions = getDefaultOptions();
 
 const BarChart: FC<BarChartProps> = ({
   size,
