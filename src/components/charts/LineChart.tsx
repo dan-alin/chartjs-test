@@ -11,6 +11,7 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  Filler,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
 import { LineChartProps } from '@typings/charts.d';
@@ -28,20 +29,22 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-const data = getDefaultData() as ChartData<'line'>;
+const defaultData = getDefaultData() as ChartData<'line'>;
 const options: ChartOptions = getDefaultOptions();
 
 const LineChart: FC<LineChartProps> = ({
   size,
   description,
   customOptions = {},
-  customData = {},
+  customData = defaultData,
 }) => {
   const chartOptions = _.merge(options, customOptions);
-  const chartData = _.merge(data, customData);
+  //const chartData = _.merge(data, customData);
+  console.log(customData);
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -51,7 +54,7 @@ const LineChart: FC<LineChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Line options={chartOptions} data={chartData} />
+      <Line options={chartOptions} data={customData} />
     </div>
   );
 };

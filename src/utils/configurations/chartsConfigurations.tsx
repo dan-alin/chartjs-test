@@ -58,9 +58,7 @@ const chartConfigurations = () => {
   defaults.elements.line = {
     ...defaults.elements.line,
     stepped: false,
-    tension: 0,
-    fill: 'end',
-    //borderDash: [7]
+    tension: 0, //borderDash: [7]
   };
 };
 export default chartConfigurations;

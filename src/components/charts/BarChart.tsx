@@ -28,17 +28,16 @@ ChartJS.register(
   Legend
 );
 
-export const data = getDefaultData() as ChartData<'bar'>;
+export const defaultData = getDefaultData() as ChartData<'bar'>;
 export const options: ChartOptions = getDefaultOptions();
 
 const BarChart: FC<BarChartProps> = ({
   size,
   description,
   customOptions = {},
-  customData = {},
+  customData = defaultData,
 }) => {
   const chartOptions = _.merge(options, customOptions);
-  const chartData = _.merge(data, customData);
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -48,7 +47,7 @@ const BarChart: FC<BarChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Bar options={chartOptions} data={chartData} />
+      <Bar options={chartOptions} data={customData} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { ChartType, ChartOptions } from 'chart.js';
 
-export type Charts = ChartType | 'custom';
+export type Charts = ChartType | 'linearea';
 
 export type ChartProps = {
   description?: string | undefined;

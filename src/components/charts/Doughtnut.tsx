@@ -30,7 +30,7 @@ ChartJS.register(
   Legend
 );
 
-const data = getDefaultData() as ChartData<'doughnut'>;
+const defaultData = getDefaultData() as ChartData<'doughnut'>;
 
 const options: ChartOptions = getDefaultOptions();
 
@@ -38,10 +38,9 @@ const DoughnutChart: FC<DoughnutChartProps> = ({
   description,
   size,
   customOptions = {},
-  customData = {},
+  customData = defaultData,
 }) => {
   const chartOptions = _.merge(options, customOptions);
-  const chartData = _.merge(data, customData);
 
   return (
     <div className={`chart__container chart__container--${size}`}>
@@ -52,7 +51,7 @@ const DoughnutChart: FC<DoughnutChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Doughnut options={chartOptions} data={chartData} />
+      <Doughnut options={chartOptions} data={customData} />
     </div>
   );
 };

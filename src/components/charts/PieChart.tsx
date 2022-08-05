@@ -33,7 +33,7 @@ ChartJS.register(
   Legend
 );
 
-const data = getDefaultData() as ChartData<'pie'>;
+const defaultData = getDefaultData() as ChartData<'pie'>;
 
 const options: ChartOptions = getDefaultOptions();
 
@@ -41,11 +41,10 @@ const PieChart: FC<PieChartProps> = ({
   size,
   description,
   customOptions = {},
-  customData = {},
+  customData = defaultData,
 }) => {
   const chartOptions = _.merge(options, customOptions);
-  const chartData = _.merge(data, customData);
-  console.log(data, options);
+
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -55,7 +54,7 @@ const PieChart: FC<PieChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Pie options={chartOptions} data={chartData} />
+      <Pie options={chartOptions} data={customData} />
     </div>
   );
 };

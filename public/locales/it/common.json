@@ -2,7 +2,7 @@
   "title": "Chart.js Demo",
   "charts": {
     "line": {
-      "label": "Line chart",
+      "label": "Line Chart",
       "description": "A line chart is a way of plotting data points on a line. Often, it is used to show trend data, or the comparison of two data sets."
     },
     "bar": {
@@ -16,6 +16,10 @@
     "doughnut": {
       "label": "Doughnut Chart",
       "description": "A doughnut chart."
+    },
+    "linearea": {
+      "label": "Line Area Chart",
+      "description": "A line chart with filling."
     }
   }
 }

@@ -25,6 +25,9 @@ const charts: ChartInfoProps[] = [
   {
     id: 'bar',
   },
+  {
+    id: 'linearea',
+  },
 ];
 
 const customLineOptions: ChartOptions<'line'> = {
@@ -89,17 +92,36 @@ const customLineData: ChartData<'line'> = {
   labels: customLabels,
   datasets: [
     {
-      label: 'custom',
+      label: 'set 1',
       data: customLabels.map(() => faker.datatype.number()),
       borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
+      backgroundColor: faker.color.rgb(),
     },
 
     {
-      label: 'custom 2',
+      label: 'set 2',
       data: customLabels.map(() => faker.datatype.number()),
       borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
+      backgroundColor: faker.color.rgb(),
+    },
+    {
+      label: 'set 3',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: faker.color.rgb(),
+    },
+  ],
+};
+
+const customLineAreaData: ChartData<'line'> = {
+  labels: customLabels,
+  datasets: [
+    {
+      label: 'set',
+      data: customLabels.map(() => faker.datatype.number()),
+      borderColor: faker.color.rgb(),
+      backgroundColor: faker.color.rgb(),
+      fill: true,
     },
   ],
 };
@@ -179,6 +201,15 @@ const renderSwitch = (chart: ChartInfoProps) => {
           description={description}
           customOptions={customBarOptions}
           customData={customBarData}
+        />
+      );
+    case 'linearea':
+      return (
+        <LineChart
+          size='xl'
+          description={description}
+          customOptions={customLineOptions}
+          customData={customLineAreaData}
         />
       );
     default:
