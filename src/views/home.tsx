@@ -9,35 +9,25 @@ import { chartConfigurations } from '../utils';
 import { Charts } from '@typings/charts.d';
 import { ChartData, ChartOptions } from 'chart.js';
 import { faker } from '@faker-js/faker';
+import { useTranslation } from 'react-i18next';
+import i18n from 'src/i18n';
 
 export type ChartProps = {
   id: Charts;
-  label: string;
-  description?: string;
 };
 
 const charts: ChartProps[] = [
   {
     id: 'line',
-    label: 'Line Chart',
-    description:
-      'A line chart is a way of plotting data points on a line. Often, it is used to show trend data, or the comparison of two data sets.',
   },
   {
     id: 'pie',
-    label: 'Pie Chart',
-    description: 'A pie chart.',
   },
   {
     id: 'doughnut',
-    label: 'Doughnut Chart',
-    description: 'A doughnut chart.',
   },
   {
     id: 'bar',
-    label: 'Bar Chart',
-    description:
-      'A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.',
   },
 ];
 
@@ -94,12 +84,13 @@ const customDoughnutData: ChartData<'doughnut'> = {
 };
 
 const renderSwitch = (chart: ChartProps) => {
+  const description = i18n.t(`charts.${chart.id}.description`);
   switch (chart.id) {
     case 'line':
       return (
         <LineChart
           size='md'
-          description={chart.description}
+          description={description}
           customOptions={customLineOptions}
         />
       );
@@ -107,7 +98,7 @@ const renderSwitch = (chart: ChartProps) => {
       return (
         <PieChart
           size='xs'
-          description={chart.description}
+          description={description}
           customOptions={customPieOptions}
         />
       );
@@ -116,7 +107,7 @@ const renderSwitch = (chart: ChartProps) => {
       return (
         <DoughnutChart
           size='xl'
-          description={chart.description}
+          description={description}
           customOptions={customDoughnutOptions}
           customData={customDoughnutData}
         />
@@ -126,7 +117,7 @@ const renderSwitch = (chart: ChartProps) => {
       return (
         <BarChart
           size='md'
-          description={chart.description}
+          description={description}
           customOptions={customBarOptions}
         />
       );
@@ -137,6 +128,7 @@ const renderSwitch = (chart: ChartProps) => {
 
 const Home: FC = () => {
   const [chartType, setChartType] = useState<ChartProps>(charts[0]);
+  const { t } = useTranslation();
 
   chartConfigurations();
 
@@ -154,16 +146,16 @@ const Home: FC = () => {
     <Container>
       <Row className='justify-content-center mb-4'>
         <Col>
-          <h2 className='mb-4 h2 text-center'>Chart.js Demo</h2>
+          <h2 className='mb-4 h2 text-center'>{t('title')}</h2>
           <Form.Select
-            aria-label='Theme selection'
+            aria-label='Chart selection'
             value={chartType.id}
             onChange={(event) => changeChart(event.target)}
           >
             {charts.map((chart) => {
               return (
                 <option value={chart.id} key={chart.id}>
-                  {chart.label}
+                  {t(`charts.${chart.id}.label`)}
                 </option>
               );
             })}
