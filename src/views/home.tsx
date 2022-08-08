@@ -73,7 +73,14 @@ const customBarOptions: ChartOptions<'bar'> = {
   },
 };
 
-const customLabels = ['custom1', 'custom2', 'custom3'];
+const customLabels = [
+  'custom1',
+  'custom2',
+  'custom3',
+  'custom4',
+  'custom5',
+  'custom6',
+];
 
 const customDoughnutData: ChartData<'doughnut'> = {
   labels: customLabels,
@@ -121,7 +128,7 @@ const customLineAreaData: ChartData<'line'> = {
       data: customLabels.map(() => faker.datatype.number()),
       borderColor: faker.color.rgb(),
       backgroundColor: faker.color.rgb(),
-      fill: true,
+      fill: 'gradient',
     },
   ],
 };

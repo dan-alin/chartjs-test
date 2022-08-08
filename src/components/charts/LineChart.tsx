@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,12 +12,15 @@ import {
   ChartData,
   ChartOptions,
   Filler,
+  ChartDataset,
+  ScatterDataPoint,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
 import { LineChartProps } from '@typings/charts.d';
 import './charts.style.scss';
 import _ from 'lodash';
 import {
+  createGradient,
   getDefaultData,
   getDefaultOptions,
 } from 'src/utils/configurations/chartsConfigurations';
@@ -42,9 +45,47 @@ const LineChart: FC<LineChartProps> = ({
   customOptions = {},
   customData = defaultData,
 }) => {
+  const chartRef = useRef<ChartJS<'line'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'line'>>({
+    datasets: [],
+  });
+
   const chartOptions = _.merge(options, customOptions);
-  //const chartData = _.merge(data, customData);
-  console.log(customData);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+
+    if (!chart) {
+      return;
+    }
+
+    console.group('data', customData);
+
+    if (customData.datasets[0].fill === 'gradient') {
+      const customDataGradient = {
+        ...customData,
+        datasets: customData.datasets.map(
+          (
+            dataset: ChartDataset<'line', (number | ScatterDataPoint | null)[]>
+          ) => ({
+            ...dataset,
+            fill: {
+              target: 'origin',
+              above: createGradient(chart.ctx, chart.chartArea, [
+                '#ffffff',
+                dataset.borderColor as string,
+              ]),
+            },
+          })
+        ),
+      };
+      setChartData(customDataGradient);
+      console.log('gradient data', customDataGradient);
+    } else {
+      setChartData(customData);
+    }
+  }, [customData]);
+
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -54,7 +95,7 @@ const LineChart: FC<LineChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Line options={chartOptions} data={customData} />
+      <Line options={chartOptions} data={chartData} ref={chartRef} />
     </div>
   );
 };
