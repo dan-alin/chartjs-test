@@ -1,4 +1,4 @@
-import { ChartType, ChartOptions } from 'chart.js';
+import { ChartType, ChartOptions, ComplexFillTarget } from 'chart.js';
 
 export type Charts = ChartType | 'linearea';
 
@@ -14,6 +14,7 @@ export type ChartInfoProps = {
 
 export type LineChartProps = ChartProps & {
   customOptions?: ChartOptions<'line'>;
+  customFill?: ComplexFillTarget;
 };
 export type BarChartProps = ChartProps & {
   customOptions?: ChartOptions<'bar'>;

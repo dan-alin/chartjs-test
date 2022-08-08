@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
-import LineChart from '@components/charts/LineChart';
-import PieChart from '@components/charts/PieChart';
-import DoughnutChart from '@components/charts/Doughtnut';
-import BarChart from '@components/charts/BarChart';
 import { chartConfigurations, yAxeRight } from '../utils';
 import { ChartInfoProps } from '@typings/charts.d';
-import { ChartData, ChartOptions } from 'chart.js';
-import { faker } from '@faker-js/faker';
+import { ChartData, ChartOptions, ComplexFillTarget } from 'chart.js';
 import { useTranslation } from 'react-i18next';
 import i18n from 'src/i18n';
+import {
+  LineChart,
+  PieChart,
+  DoughnutChart,
+  BarChart,
+} from '@components/charts';
+import chartDataGenerator from 'src/utils/generators/generators';
 
 const charts: ChartInfoProps[] = [
   {
@@ -73,101 +75,30 @@ const customBarOptions: ChartOptions<'bar'> = {
   },
 };
 
-const customLabels = [
-  'custom1',
-  'custom2',
-  'custom3',
-  'custom4',
-  'custom5',
-  'custom6',
-];
+const customDoughnutData: ChartData<'doughnut'> = chartDataGenerator(
+  1,
+  3,
+  'doughnut'
+) as ChartData<'doughnut'>;
 
-const customDoughnutData: ChartData<'doughnut'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-      hoverOffset: 20,
-    },
-  ],
-};
+const customLineData: ChartData<'line'> =
+  chartDataGenerator() as ChartData<'line'>;
 
-const customLineData: ChartData<'line'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'set 1',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: faker.color.rgb(),
-    },
+const customLineAreaData: ChartData<'line'> = chartDataGenerator(
+  1,
+  12
+) as ChartData<'line'>;
 
-    {
-      label: 'set 2',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: faker.color.rgb(),
-    },
-    {
-      label: 'set 3',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: faker.color.rgb(),
-    },
-  ],
-};
+const customBarData: ChartData<'bar'> = chartDataGenerator(
+  3,
+  4
+) as ChartData<'bar'>;
 
-const customLineAreaData: ChartData<'line'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'set',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: faker.color.rgb(),
-      fill: 'gradient',
-    },
-  ],
-};
-
-const customBarData: ChartData<'bar'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-    {
-      label: 'custom 2',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-    {
-      label: 'custom 3',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-  ],
-};
-
-const customPieData: ChartData<'pie'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-  ],
-};
+const customPieData: ChartData<'pie'> = chartDataGenerator(
+  1,
+  3,
+  'pie'
+) as ChartData<'pie'>;
 
 const renderSwitch = (chart: ChartInfoProps) => {
   const description = i18n.t(`charts.${chart.id}.description`);
@@ -210,15 +141,22 @@ const renderSwitch = (chart: ChartInfoProps) => {
           customData={customBarData}
         />
       );
-    case 'linearea':
+    case 'linearea': {
+      const areaFill: ComplexFillTarget = {
+        target: 'origin',
+        above: '',
+        below: '',
+      };
       return (
         <LineChart
           size='xl'
           description={description}
           customOptions={customLineOptions}
           customData={customLineAreaData}
+          customFill={areaFill}
         />
       );
+    }
     default:
       return <div>no chart</div>;
   }

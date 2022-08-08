@@ -20,10 +20,10 @@ import { LineChartProps } from '@typings/charts.d';
 import './charts.style.scss';
 import _ from 'lodash';
 import {
-  createGradient,
   getDefaultData,
   getDefaultOptions,
 } from 'src/utils/configurations/chartsConfigurations';
+import { createGradient } from 'src/utils';
 
 ChartJS.register(
   CategoryScale,
@@ -36,14 +36,14 @@ ChartJS.register(
   Filler
 );
 
-const defaultData = getDefaultData() as ChartData<'line'>;
 const options: ChartOptions = getDefaultOptions();
 
 const LineChart: FC<LineChartProps> = ({
   size,
   description,
   customOptions = {},
-  customData = defaultData,
+  customData = getDefaultData(),
+  customFill,
 }) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const [chartData, setChartData] = useState<ChartData<'line'>>({
@@ -59,10 +59,10 @@ const LineChart: FC<LineChartProps> = ({
       return;
     }
 
-    console.group('data', customData);
+    let chartData = customData;
 
-    if (customData.datasets[0].fill === 'gradient') {
-      const customDataGradient = {
+    if (customFill) {
+      chartData = {
         ...customData,
         datasets: customData.datasets.map(
           (
@@ -70,7 +70,7 @@ const LineChart: FC<LineChartProps> = ({
           ) => ({
             ...dataset,
             fill: {
-              target: 'origin',
+              target: customFill.target,
               above: createGradient(chart.ctx, chart.chartArea, [
                 '#ffffff',
                 dataset.borderColor as string,
@@ -79,12 +79,9 @@ const LineChart: FC<LineChartProps> = ({
           })
         ),
       };
-      setChartData(customDataGradient);
-      console.log('gradient data', customDataGradient);
-    } else {
-      setChartData(customData);
     }
-  }, [customData]);
+    setChartData(chartData);
+  }, [customData, customFill]);
 
   return (
     <div className={`chart__container chart__container--${size}`}>

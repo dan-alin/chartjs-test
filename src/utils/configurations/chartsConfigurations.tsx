@@ -1,10 +1,4 @@
-import {
-  ChartArea,
-  ChartData,
-  ChartOptions,
-  defaults,
-  PointStyle,
-} from 'chart.js';
+import { ChartData, ChartOptions, defaults, PointStyle } from 'chart.js';
 
 export const yAxeRight = {
   type: 'linear' as const,
@@ -47,21 +41,6 @@ export const getDefaultOptions = (): ChartOptions => {
       },
     },
   };
-};
-
-export const createGradient = (
-  ctx: CanvasRenderingContext2D,
-  area: ChartArea,
-  colors: [string, string, string?]
-) => {
-  const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
-  if (colors.length > 2) {
-    gradient.addColorStop(0.5, colors[1]);
-  }
-  gradient.addColorStop(0, colors[0]);
-  gradient.addColorStop(1, colors[colors.length - 1] as string);
-
-  return gradient;
 };
 
 const chartConfigurations = () => {
