@@ -20,6 +20,10 @@
     "linearea": {
       "label": "Line Area Chart",
       "description": "A line chart with filling."
+    },
+    "scatter": {
+      "label": "Scatter Chart",
+      "description": "A scatter chart"
     }
   }
 }

@@ -25,3 +25,6 @@ export type DoughnutChartProps = ChartProps & {
 export type PieChartProps = ChartProps & {
   customOptions?: ChartOptions<'pie'>;
 };
+export type ScatterChartProps = ChartProps & {
+  customOptions?: ChartOptions<'scatter'>;
+};

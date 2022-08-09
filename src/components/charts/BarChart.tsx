@@ -9,7 +9,6 @@ import {
   Legend,
   BarElement,
   ChartOptions,
-  ChartData,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
 import { BarChartProps } from '@typings/charts.d';
@@ -28,14 +27,13 @@ ChartJS.register(
   Legend
 );
 
-export const defaultData = getDefaultData() as ChartData<'bar'>;
 export const options: ChartOptions = getDefaultOptions();
 
 const BarChart: FC<BarChartProps> = ({
   size,
   description,
   customOptions = {},
-  customData = defaultData,
+  customData = getDefaultData(),
 }) => {
   const chartOptions = _.merge(options, customOptions);
   return (

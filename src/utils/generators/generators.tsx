@@ -1,4 +1,10 @@
-import { ChartArea, ChartData, ChartType } from 'chart.js';
+import {
+  BubbleDataPoint,
+  ChartArea,
+  ChartData,
+  ChartDataset,
+  ChartType,
+} from 'chart.js';
 import _ from 'lodash';
 import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
@@ -49,25 +55,43 @@ const chartDataGenerator = (
   };
 
   for (let _i = 0; _i < datasetsRange; _i++) {
-    let dataset;
+    let dataset: ChartDataset;
+    const datasetColor: string | number[] | Color | RGBA = faker.color.rgb();
 
     switch (chartType) {
       case 'pie':
       case 'doughnut':
         dataset = {
-          label: `Set ${_i}`,
+          label: `Set ${_i + 1}`,
           data: _.range(labels).map(() => faker.datatype.number()),
           borderColor: 'rgb(255, 255, 255)',
           backgroundColor: _.range(labels).map(() => faker.color.rgb()),
           hoverOffset: 4,
         };
         break;
+      case 'scatter':
+        dataset = {
+          label: `Set ${_i + 1}`,
+          data: _.range(labels).map(() => {
+            const point: BubbleDataPoint = {
+              x: faker.datatype.number({ min: -100, max: 100 }),
+              y: faker.datatype.number({ min: -100, max: 100 }),
+              r: 10,
+            };
+            return point;
+          }),
+          backgroundColor: transparentize(datasetColor, 0.3),
+          borderColor: datasetColor,
+          borderWidth: 2,
+          pointRadius: 7,
+        };
+        break;
       default:
         dataset = {
-          label: `Set ${_i}`,
+          label: `Set ${_i + 1}`,
           data: _.range(labels).map(() => faker.datatype.number()),
-          borderColor: faker.color.rgb(),
-          backgroundColor: transparentize(faker.color.rgb(), 0.7),
+          borderColor: datasetColor,
+          backgroundColor: transparentize(datasetColor, 0.7),
         };
     }
 

@@ -13,6 +13,7 @@ import {
   BarChart,
 } from '@components/charts';
 import chartDataGenerator from 'src/utils/generators/generators';
+import ScatterChart from '@components/charts/ScatterChart';
 
 const charts: ChartInfoProps[] = [
   {
@@ -29,6 +30,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'linearea',
+  },
+  {
+    id: 'scatter',
   },
 ];
 
@@ -78,6 +82,19 @@ const customBarOptions: ChartOptions<'bar'> = {
   },
 };
 
+const customScatterOptions: ChartOptions<'scatter'> = {
+  scales: {
+    x: {
+      ticks: { stepSize: 1 },
+    },
+    y: {
+      beginAtZero: true,
+      ticks: { stepSize: 10 },
+      //grid: { display: false }
+    },
+  },
+};
+
 const customDoughnutData: ChartData<'doughnut'> = chartDataGenerator(
   1,
   3,
@@ -102,6 +119,12 @@ const customPieData: ChartData<'pie'> = chartDataGenerator(
   3,
   'pie'
 ) as ChartData<'pie'>;
+
+const customScatterData: ChartData<'scatter'> = chartDataGenerator(
+  3,
+  9,
+  'scatter'
+) as ChartData<'scatter'>;
 
 const renderSwitch = (chart: ChartInfoProps) => {
   const description = i18n.t(`charts.${chart.id}.description`);
@@ -128,13 +151,12 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'doughnut':
       return (
         <DoughnutChart
-          size='xl'
+          size='xs'
           description={description}
           customOptions={customDoughnutOptions}
           customData={customDoughnutData}
         />
       );
-
     case 'bar':
       return (
         <BarChart
@@ -160,6 +182,15 @@ const renderSwitch = (chart: ChartInfoProps) => {
         />
       );
     }
+    case 'scatter':
+      return (
+        <ScatterChart
+          size='md'
+          description={description}
+          customOptions={customScatterOptions}
+          customData={customScatterData}
+        />
+      );
     default:
       return <div>no chart</div>;
   }
@@ -178,7 +209,7 @@ const Home: FC = () => {
     if (selected) {
       setChartType(selected);
     }
-    console.log('chart selected ', chartType);
+    console.log('chart selected ', selected);
   };
 
   return (
