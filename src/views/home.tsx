@@ -38,6 +38,9 @@ const customLineOptions: ChartOptions<'line'> = {
       display: true,
       text: 'Custom title',
     },
+    tooltip: {
+      usePointStyle: true,
+    },
   },
   scales: {
     y: yAxeRight,

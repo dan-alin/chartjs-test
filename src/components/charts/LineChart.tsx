@@ -59,7 +59,7 @@ const LineChart: FC<LineChartProps> = ({
       return;
     }
 
-    let chartData = customData;
+    let chartData;
 
     if (customFill) {
       chartData = {
@@ -71,11 +71,25 @@ const LineChart: FC<LineChartProps> = ({
             ...dataset,
             fill: {
               target: customFill.target,
-              above: createGradient(chart.ctx, chart.chartArea, [
-                '#ffffff',
-                dataset.borderColor as string,
-              ]),
+              above: createGradient(
+                chart.ctx,
+                chart.chartArea,
+                ['#ffffff', dataset.borderColor as string],
+                [0.5, 0.1]
+              ),
             },
+          })
+        ),
+      };
+    } else {
+      chartData = {
+        ...customData,
+        datasets: customData.datasets.map(
+          (
+            dataset: ChartDataset<'line', (number | ScatterDataPoint | null)[]>
+          ) => ({
+            ...dataset,
+            fill: dataset.fill,
           })
         ),
       };
