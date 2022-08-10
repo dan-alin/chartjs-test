@@ -34,6 +34,9 @@ const charts: ChartInfoProps[] = [
   {
     id: 'scatter',
   },
+  {
+    id: 'horizontalbar',
+  },
 ];
 
 const customLineOptions: ChartOptions<'line'> = {
@@ -43,7 +46,9 @@ const customLineOptions: ChartOptions<'line'> = {
       text: 'Custom title',
     },
     tooltip: {
+      yAlign: 'bottom',
       usePointStyle: true,
+      position: 'myCustomPositioner',
     },
   },
   scales: {
@@ -73,11 +78,20 @@ const customPieOptions: ChartOptions<'pie'> = {
   },
 };
 
-const customBarOptions: ChartOptions<'bar'> = {
+let customBarOptions: ChartOptions<'bar'> = {
+  responsive: true,
+  elements: {
+    bar: {
+      borderWidth: 2,
+    },
+  },
   plugins: {
     title: {
       display: true,
-      text: 'Custom title',
+      text: 'Chart.js Bar Chart',
+    },
+    legend: {
+      position: 'right' as const,
     },
   },
 };
@@ -109,10 +123,7 @@ const customLineAreaData: ChartData<'line'> = chartDataGenerator(
   12
 ) as ChartData<'line'>;
 
-const customBarData: ChartData<'bar'> = chartDataGenerator(
-  3,
-  4
-) as ChartData<'bar'>;
+let customBarData: ChartData;
 
 const customPieData: ChartData<'pie'> = chartDataGenerator(
   1,
@@ -127,7 +138,9 @@ const customScatterData: ChartData<'scatter'> = chartDataGenerator(
 ) as ChartData<'scatter'>;
 
 const renderSwitch = (chart: ChartInfoProps) => {
-  const description = i18n.t(`charts.${chart.id}.description`);
+  const description = i18n.t(`charts.${chart.id}.description`, {
+    interpolation: { escapeValue: false },
+  });
   switch (chart.id) {
     case 'line':
       return (
@@ -158,12 +171,20 @@ const renderSwitch = (chart: ChartInfoProps) => {
         />
       );
     case 'bar':
+    case 'horizontalbar':
+      if (chart.id === 'horizontalbar') {
+        customBarOptions = { ...customBarOptions, indexAxis: 'y' as const };
+        customBarData = chartDataGenerator(2, 5);
+      } else {
+        customBarOptions = { ...customBarOptions, indexAxis: 'x' as const };
+        customBarData = chartDataGenerator(3, 4);
+      }
       return (
         <BarChart
           size='xl'
           description={description}
           customOptions={customBarOptions}
-          customData={customBarData}
+          customData={customBarData as ChartData<'bar'>}
         />
       );
     case 'linearea': {

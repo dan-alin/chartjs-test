@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -9,6 +9,7 @@ import {
   Legend,
   BarElement,
   ChartOptions,
+  ChartData,
 } from 'chart.js';
 import { Card } from 'react-bootstrap';
 import { BarChartProps } from '@typings/charts.d';
@@ -35,7 +36,26 @@ const BarChart: FC<BarChartProps> = ({
   customOptions = {},
   customData = getDefaultData(),
 }) => {
+  const chartRef = useRef<ChartJS<'bar'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'bar'>>({
+    labels: [],
+    datasets: [],
+  });
   const chartOptions = _.merge(options, customOptions);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+
+    if (!chart) {
+      return;
+    }
+
+    const newOptions = _.merge(options, customOptions);
+    chart.options = newOptions;
+    chart.data = customData;
+    setChartData(customData);
+  }, [customData, customOptions]);
+
   return (
     <div className={`chart__container chart__container--${size}`}>
       {description && (
@@ -45,7 +65,13 @@ const BarChart: FC<BarChartProps> = ({
           </Card.Body>
         </Card>
       )}
-      <Bar options={chartOptions} data={customData} />
+      <Bar
+        key={Math.random()}
+        redraw
+        options={chartOptions}
+        data={chartData}
+        ref={chartRef}
+      />
     </div>
   );
 };

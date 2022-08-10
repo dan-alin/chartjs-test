@@ -15,15 +15,19 @@
     },
     "doughnut": {
       "label": "Doughnut Chart",
-      "description": "A doughnut chart."
+      "description": "Pie and doughnut charts are probably the most commonly used charts. They are divided into segments, the arc of each segment shows the proportional value of each piece of data. They are excellent at showing the relational proportions between data. <br /> Pie and doughnut charts are effectively the same class in Chart.js, but have one different default value - their cutout. This equates to what portion of the inner should be cut out. This defaults to 0 for pie charts, and '50%' for doughnuts."
     },
     "linearea": {
       "label": "Line Area Chart",
-      "description": "A line chart with filling."
+      "description": "Both line and radar charts support a fill option on the dataset object which can be used to create space between two datasets or a dataset and a boundary, i.e. the scale origin, start, or end (see filling modes)."
     },
     "scatter": {
       "label": "Scatter Chart",
-      "description": "A scatter chart"
+      "description": "Scatter charts are based on basic line charts with the x axis changed to a linear axis. To use a scatter chart, data must be passed as objects containing X and Y properties."
+    },
+    "horizontalbar": {
+      "label": "Horizontal Bar Chart",
+      "description": "A horizontal bar chart is a variation on a vertical bar chart. It is sometimes used to show trend data, and the comparison of multiple data sets side by side. To achieve this you will have to set the indexAxis property in the options object to 'y'. The default for this property is 'x' and thus will show vertical bars."
     }
   }
 }

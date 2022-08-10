@@ -1,4 +1,10 @@
-import { ChartData, ChartOptions, defaults, PointStyle } from 'chart.js';
+import {
+  ChartData,
+  ChartOptions,
+  defaults,
+  PointStyle,
+  Tooltip,
+} from 'chart.js';
 
 export const yAxeRight = {
   type: 'linear' as const,
@@ -37,7 +43,7 @@ export const getDefaultOptions = (): ChartOptions => {
       },
       title: {
         display: true,
-        text: 'Chart.js Line Chart',
+        text: 'Chart.js custom title Chart',
       },
     },
   };
@@ -61,4 +67,16 @@ const chartConfigurations = () => {
     tension: 0, //borderDash: [7]
   };
 };
+
+Tooltip.positioners.myCustomPositioner = function (this) {
+  // ( this, elements, eventPosition
+  // const ymax = this.chart.scales.y.max
+
+  return {
+    x: this.getActiveElements()[0]?.element?.x,
+    y: 100,
+    // You may also include xAlign and yAlign to override those tooltip options.
+  };
+};
+
 export default chartConfigurations;
