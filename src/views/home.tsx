@@ -15,9 +15,9 @@ import {
   PieChart,
   DoughnutChart,
   BarChart,
+  ScatterChart,
 } from '@components/charts';
 import chartDataGenerator from 'src/utils/generators/generators';
-import ScatterChart from '@components/charts/ScatterChart';
 import { CardBox } from '@components/CardBox';
 
 const charts: ChartInfoProps[] = [
