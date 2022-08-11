@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import './charts.style.scss';
 import { Doughnut } from 'react-chartjs-2';
 import {
@@ -38,11 +38,26 @@ const DoughnutChart: FC<DoughnutChartProps> = ({
   customOptions = {},
   customData = defaultData,
 }) => {
+  const chartRef = useRef<ChartJS<'doughnut'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'doughnut'>>({
+    labels: [],
+    datasets: [],
+  });
   const chartOptions = _.merge(options, customOptions);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) {
+      return;
+    }
+
+    chart.options = _.merge(options, customOptions);
+    setChartData(customData);
+  }, [customData, customOptions]);
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Doughnut options={chartOptions} data={customData} />
+      <Doughnut options={chartOptions} data={chartData} ref={chartRef} />
     </div>
   );
 };

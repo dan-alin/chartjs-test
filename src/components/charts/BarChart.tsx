@@ -43,14 +43,11 @@ const BarChart: FC<BarChartProps> = ({
 
   useEffect(() => {
     const chart = chartRef.current;
-
     if (!chart) {
       return;
     }
 
-    const newOptions = _.merge(options, customOptions);
-    chart.options = newOptions;
-    chart.data = customData;
+    chart.options = _.merge(options, customOptions);
     setChartData(customData);
   }, [customData, customOptions]);
 

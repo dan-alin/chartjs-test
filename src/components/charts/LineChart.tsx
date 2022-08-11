@@ -45,6 +45,7 @@ const LineChart: FC<LineChartProps> = ({
 }) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const [chartData, setChartData] = useState<ChartData<'line'>>({
+    labels: [],
     datasets: [],
   });
 

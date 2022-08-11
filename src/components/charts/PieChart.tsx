@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -41,11 +41,26 @@ const PieChart: FC<PieChartProps> = ({
   customOptions = {},
   customData = defaultData,
 }) => {
+  const chartRef = useRef<ChartJS<'pie'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'pie'>>({
+    labels: [],
+    datasets: [],
+  });
   const chartOptions = _.merge(options, customOptions);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) {
+      return;
+    }
+
+    chart.options = _.merge(options, customOptions);
+    setChartData(customData);
+  }, [customData, customOptions]);
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Pie options={chartOptions} data={customData} />
+      <Pie options={chartOptions} data={chartData} ref={chartRef} />
     </div>
   );
 };

@@ -18,7 +18,7 @@ export type ChartInfoProps = {
 
 export type LineChartProps = ChartProps & {
   customOptions?: ChartOptions<'line'>;
-  customFill?: ComplexFillTarget;
+  customFill?: ComplexFillTarget | undefined;
 };
 export type BarChartProps = ChartProps & {
   customOptions?: ChartOptions<'bar'>;

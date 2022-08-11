@@ -1,14 +1,9 @@
-import {
-  BubbleDataPoint,
-  ChartArea,
-  ChartData,
-  ChartDataset,
-  ChartType,
-} from 'chart.js';
+import { BubbleDataPoint, ChartArea, ChartData, ChartDataset } from 'chart.js';
 import _ from 'lodash';
 import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
 import colorLib, { Color, RGBA } from '@kurkle/color';
+import { Charts } from '@typings/charts';
 
 export const generateLabels = (arrayRange = 3, label = 'label'): string[] => {
   return _.range(arrayRange).map((index) => `${label} ${index + 1}`);
@@ -47,7 +42,7 @@ export function transparentize(
 const chartDataGenerator = (
   datasetsRange = 3,
   labels = 6,
-  chartType?: ChartType
+  chartType?: Charts
 ): ChartData => {
   let data: ChartData = {
     labels: generateLabels(labels),
@@ -59,6 +54,15 @@ const chartDataGenerator = (
     const datasetColor: string | number[] | Color | RGBA = faker.color.rgb();
 
     switch (chartType) {
+      case 'linearea':
+        dataset = {
+          label: `Set ${_i + 1}`,
+          data: _.range(labels).map(() => faker.datatype.number()),
+          borderColor: datasetColor,
+          backgroundColor: transparentize(datasetColor, 0.7),
+          fill: true,
+        };
+        break;
       case 'pie':
       case 'doughnut':
         dataset = {
@@ -92,6 +96,7 @@ const chartDataGenerator = (
           data: _.range(labels).map(() => faker.datatype.number()),
           borderColor: datasetColor,
           backgroundColor: transparentize(datasetColor, 0.7),
+          fill: false,
         };
     }
 

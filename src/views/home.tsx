@@ -3,7 +3,12 @@ import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { chartConfigurations, yAxeRight } from '../utils';
 import { ChartInfoProps } from '@typings/charts.d';
-import { ChartData, ChartOptions, ComplexFillTarget } from 'chart.js';
+import {
+  ChartData,
+  ChartOptions,
+  ComplexFillTarget,
+  TitleOptions,
+} from 'chart.js';
 import { Trans, useTranslation } from 'react-i18next';
 import {
   LineChart,
@@ -39,12 +44,14 @@ const charts: ChartInfoProps[] = [
   },
 ];
 
+const title: Partial<TitleOptions> = {
+  display: true,
+  text: 'Custom title',
+};
+
 const customLineOptions: ChartOptions<'line'> = {
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
-    },
+    title,
     tooltip: {
       yAlign: 'bottom',
       usePointStyle: true,
@@ -62,19 +69,13 @@ const customLineOptions: ChartOptions<'line'> = {
 const customDoughnutOptions: ChartOptions<'doughnut'> = {
   cutout: '85%',
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
-    },
+    title,
   },
 };
 
 const customPieOptions: ChartOptions<'pie'> = {
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
-    },
+    title,
   },
 };
 
@@ -86,10 +87,7 @@ let customBarOptions: ChartOptions<'bar'> = {
     },
   },
   plugins: {
-    title: {
-      display: true,
-      text: 'Chart.js Bar Chart',
-    },
+    title,
     legend: {
       position: 'right' as const,
     },
@@ -115,14 +113,7 @@ const customDoughnutData: ChartData<'doughnut'> = chartDataGenerator(
   'doughnut'
 ) as ChartData<'doughnut'>;
 
-const customLineData: ChartData<'line'> =
-  chartDataGenerator() as ChartData<'line'>;
-
-const customLineAreaData: ChartData<'line'> = chartDataGenerator(
-  1,
-  12
-) as ChartData<'line'>;
-
+let customLineData: ChartData;
 let customBarData: ChartData;
 
 const customPieData: ChartData<'pie'> = chartDataGenerator(
@@ -137,17 +128,29 @@ const customScatterData: ChartData<'scatter'> = chartDataGenerator(
   'scatter'
 ) as ChartData<'scatter'>;
 
+let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
-  // const description = i18n.t(`charts.${chart.id}.description`, {
-  //   interpolation: { escapeValue: false },
-  // });
+  // const description = i18n.t(`charts.${chart.id}.description`);
   switch (chart.id) {
     case 'line':
+    case 'linearea':
+      if (chart.id === 'linearea') {
+        customLineData = chartDataGenerator(1, 12, chart.id);
+        customFill = {
+          target: 'origin',
+          above: '',
+          below: '',
+        };
+      } else {
+        customFill = undefined;
+        customLineData = chartDataGenerator(3, 4);
+      }
       return (
         <LineChart
           size='xl'
           customOptions={customLineOptions}
-          customData={customLineData}
+          customData={customLineData as ChartData<'line'>}
+          customFill={customFill}
         />
       );
     case 'pie':
@@ -183,21 +186,6 @@ const renderSwitch = (chart: ChartInfoProps) => {
           customData={customBarData as ChartData<'bar'>}
         />
       );
-    case 'linearea': {
-      const areaFill: ComplexFillTarget = {
-        target: 'origin',
-        above: '',
-        below: '',
-      };
-      return (
-        <LineChart
-          size='xl'
-          customOptions={customLineOptions}
-          customData={customLineAreaData}
-          customFill={areaFill}
-        />
-      );
-    }
     case 'scatter':
       return (
         <ScatterChart
@@ -224,7 +212,6 @@ const Home: FC = () => {
     if (selected) {
       setChartType(selected);
     }
-    console.log('chart selected ', selected);
   };
 
   return (

@@ -27,8 +27,11 @@ const ScatterChart: FC<ScatterChartProps> = ({
   customOptions = {},
   customData = getDefaultData(),
 }) => {
-  const [chartData, setChartData] = useState<ChartData<'scatter'>>(customData);
   const chartRef = useRef<ChartJS<'scatter'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'scatter'>>({
+    labels: [],
+    datasets: [],
+  });
 
   const chartOptions = _.merge(options, customOptions);
 
@@ -38,7 +41,7 @@ const ScatterChart: FC<ScatterChartProps> = ({
     if (!chart) {
       return;
     }
-    setChartData(chartData);
+    setChartData(customData);
   }, [chartData, customData]);
 
   return (
