@@ -16,9 +16,12 @@ import {
   DoughnutChart,
   BarChart,
   ScatterChart,
+  CircularPacking,
 } from '@components/charts';
 import chartDataGenerator from 'src/utils/generators/generators';
 import { CardBox } from '@components/CardBox';
+import { Tree } from '@components/charts/CircularPacking';
+import { faker } from '@faker-js/faker';
 
 const charts: ChartInfoProps[] = [
   {
@@ -41,6 +44,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'horizontalbar',
+  },
+  {
+    id: 'D3_circular',
   },
 ];
 
@@ -128,6 +134,74 @@ const customScatterData: ChartData<'scatter'> = chartDataGenerator(
   'scatter'
 ) as ChartData<'scatter'>;
 
+export const circularPackingData: Tree = {
+  type: 'node',
+  name: 'boss',
+  value: 2300,
+  children: [
+    {
+      type: 'leaf',
+      name: 'Mark',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Robert',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Emily',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Marion',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Nicolas',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Malki',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Djé',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Mélanie',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'leaf',
+      name: 'Einstein',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'fruit',
+      name: 'apple',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'fruit',
+      name: 'peach',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+    {
+      type: 'fruit',
+      name: 'lime',
+      value: faker.datatype.number({ min: 0, max: 100 }),
+    },
+  ],
+};
+
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
   // const description = i18n.t(`charts.${chart.id}.description`);
@@ -194,8 +268,12 @@ const renderSwitch = (chart: ChartInfoProps) => {
           customData={customScatterData}
         />
       );
+    case 'D3_circular':
+      return (
+        <CircularPacking data={circularPackingData} width={400} height={400} />
+      );
     default:
-      return <div>no chart</div>;
+      return <div>No chart</div>;
   }
 };
 

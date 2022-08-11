@@ -5,7 +5,7 @@ import {
   TooltipPositionerFunction,
 } from 'chart.js';
 
-export type Charts = ChartType | 'linearea' | 'horizontalbar';
+export type Charts = ChartType | 'linearea' | 'horizontalbar' | 'D3_circular';
 
 export type ChartProps = {
   size?: 'xs' | 'md' | 'xl';
