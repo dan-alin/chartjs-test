@@ -11,7 +11,6 @@ import {
   ChartOptions,
   ChartData,
 } from 'chart.js';
-import { Card } from 'react-bootstrap';
 import { BarChartProps } from '@typings/charts.d';
 import _ from 'lodash';
 import {
@@ -32,7 +31,6 @@ export const options: ChartOptions = getDefaultOptions();
 
 const BarChart: FC<BarChartProps> = ({
   size,
-  description,
   customOptions = {},
   customData = getDefaultData(),
 }) => {
@@ -58,13 +56,6 @@ const BarChart: FC<BarChartProps> = ({
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      {description && (
-        <Card>
-          <Card.Body>
-            <Card.Text>{description}</Card.Text>
-          </Card.Body>
-        </Card>
-      )}
       <Bar
         key={Math.random()}
         redraw

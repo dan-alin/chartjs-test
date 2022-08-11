@@ -15,7 +15,6 @@ import {
   ChartDataset,
   ScatterDataPoint,
 } from 'chart.js';
-import { Card } from 'react-bootstrap';
 import { LineChartProps } from '@typings/charts.d';
 import './charts.style.scss';
 import _ from 'lodash';
@@ -40,7 +39,6 @@ const options: ChartOptions = getDefaultOptions();
 
 const LineChart: FC<LineChartProps> = ({
   size,
-  description,
   customOptions = {},
   customData = getDefaultData(),
   customFill,
@@ -99,13 +97,6 @@ const LineChart: FC<LineChartProps> = ({
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      {description && (
-        <Card>
-          <Card.Body>
-            <Card.Text>{description}</Card.Text>
-          </Card.Body>
-        </Card>
-      )}
       <Line options={chartOptions} data={chartData} ref={chartRef} />
     </div>
   );

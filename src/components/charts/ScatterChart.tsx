@@ -10,7 +10,6 @@ import {
   ChartData,
 } from 'chart.js';
 
-import { Card } from 'react-bootstrap';
 import { ScatterChartProps } from '@typings/charts.d';
 import _ from 'lodash';
 import {
@@ -25,7 +24,6 @@ const options: ChartOptions = getDefaultOptions();
 
 const ScatterChart: FC<ScatterChartProps> = ({
   size,
-  description,
   customOptions = {},
   customData = getDefaultData(),
 }) => {
@@ -45,13 +43,6 @@ const ScatterChart: FC<ScatterChartProps> = ({
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      {description && (
-        <Card>
-          <Card.Body>
-            <Card.Text>{description}</Card.Text>
-          </Card.Body>
-        </Card>
-      )}
       <Scatter options={chartOptions} data={chartData} ref={chartRef} />
     </div>
   );

@@ -16,7 +16,6 @@ import {
 import './charts.style.scss';
 
 import type { PieChartProps } from '@typings/charts';
-import { Card } from 'react-bootstrap';
 import _ from 'lodash';
 import {
   getDefaultData,
@@ -39,7 +38,6 @@ const options: ChartOptions = getDefaultOptions();
 
 const PieChart: FC<PieChartProps> = ({
   size,
-  description,
   customOptions = {},
   customData = defaultData,
 }) => {
@@ -47,13 +45,6 @@ const PieChart: FC<PieChartProps> = ({
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      {description && (
-        <Card>
-          <Card.Body>
-            <Card.Text>{description}</Card.Text>
-          </Card.Body>
-        </Card>
-      )}
       <Pie options={chartOptions} data={customData} />
     </div>
   );

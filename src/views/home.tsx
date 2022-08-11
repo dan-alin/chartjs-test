@@ -4,8 +4,7 @@ import { Col, Container, Form, Row } from 'react-bootstrap';
 import { chartConfigurations, yAxeRight } from '../utils';
 import { ChartInfoProps } from '@typings/charts.d';
 import { ChartData, ChartOptions, ComplexFillTarget } from 'chart.js';
-import { useTranslation } from 'react-i18next';
-import i18n from 'src/i18n';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   LineChart,
   PieChart,
@@ -14,6 +13,7 @@ import {
 } from '@components/charts';
 import chartDataGenerator from 'src/utils/generators/generators';
 import ScatterChart from '@components/charts/ScatterChart';
+import { CardBox } from '@components/CardBox';
 
 const charts: ChartInfoProps[] = [
   {
@@ -138,15 +138,14 @@ const customScatterData: ChartData<'scatter'> = chartDataGenerator(
 ) as ChartData<'scatter'>;
 
 const renderSwitch = (chart: ChartInfoProps) => {
-  const description = i18n.t(`charts.${chart.id}.description`, {
-    interpolation: { escapeValue: false },
-  });
+  // const description = i18n.t(`charts.${chart.id}.description`, {
+  //   interpolation: { escapeValue: false },
+  // });
   switch (chart.id) {
     case 'line':
       return (
         <LineChart
           size='xl'
-          description={description}
           customOptions={customLineOptions}
           customData={customLineData}
         />
@@ -155,7 +154,6 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return (
         <PieChart
           size='xs'
-          description={description}
           customOptions={customPieOptions}
           customData={customPieData}
         />
@@ -165,7 +163,6 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return (
         <DoughnutChart
           size='xs'
-          description={description}
           customOptions={customDoughnutOptions}
           customData={customDoughnutData}
         />
@@ -182,7 +179,6 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return (
         <BarChart
           size='xl'
-          description={description}
           customOptions={customBarOptions}
           customData={customBarData as ChartData<'bar'>}
         />
@@ -196,7 +192,6 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return (
         <LineChart
           size='xl'
-          description={description}
           customOptions={customLineOptions}
           customData={customLineAreaData}
           customFill={areaFill}
@@ -207,7 +202,6 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return (
         <ScatterChart
           size='md'
-          description={description}
           customOptions={customScatterOptions}
           customData={customScatterData}
         />
@@ -251,6 +245,14 @@ const Home: FC = () => {
               );
             })}
           </Form.Select>
+        </Col>
+      </Row>
+      <Row className='justify-content-center'>
+        <Col xs={12} lg={10}>
+          <CardBox bg={'secondary'} text={'white'}>
+            {' '}
+            <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
+          </CardBox>
         </Col>
       </Row>
       <Row className='justify-content-center'>

@@ -8,7 +8,6 @@ import {
 export type Charts = ChartType | 'linearea' | 'horizontalbar';
 
 export type ChartProps = {
-  description?: string | undefined;
   size?: 'xs' | 'md' | 'xl';
   customData?;
 };
