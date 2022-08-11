@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
-import LineChart from '@components/charts/LineChart';
-import PieChart from '@components/charts/PieChart';
-import DoughnutChart from '@components/charts/Doughtnut';
-import BarChart from '@components/charts/BarChart';
 import { chartConfigurations, yAxeRight } from '../utils';
 import { ChartInfoProps } from '@typings/charts.d';
-import { ChartData, ChartOptions } from 'chart.js';
-import { faker } from '@faker-js/faker';
-import { useTranslation } from 'react-i18next';
-import i18n from 'src/i18n';
+import {
+  ChartData,
+  ChartOptions,
+  ComplexFillTarget,
+  TitleOptions,
+} from 'chart.js';
+import { Trans, useTranslation } from 'react-i18next';
+import {
+  LineChart,
+  PieChart,
+  DoughnutChart,
+  BarChart,
+} from '@components/charts';
+import chartDataGenerator from 'src/utils/generators/generators';
+import ScatterChart from '@components/charts/ScatterChart';
+import { CardBox } from '@components/CardBox';
 
 const charts: ChartInfoProps[] = [
   {
@@ -25,13 +33,29 @@ const charts: ChartInfoProps[] = [
   {
     id: 'bar',
   },
+  {
+    id: 'linearea',
+  },
+  {
+    id: 'scatter',
+  },
+  {
+    id: 'horizontalbar',
+  },
 ];
+
+const title: Partial<TitleOptions> = {
+  display: true,
+  text: 'Custom title',
+};
 
 const customLineOptions: ChartOptions<'line'> = {
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
+    title,
+    tooltip: {
+      yAlign: 'bottom',
+      usePointStyle: true,
+      position: 'myCustomPositioner',
     },
   },
   scales: {
@@ -45,118 +69,94 @@ const customLineOptions: ChartOptions<'line'> = {
 const customDoughnutOptions: ChartOptions<'doughnut'> = {
   cutout: '85%',
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
-    },
+    title,
   },
 };
 
 const customPieOptions: ChartOptions<'pie'> = {
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
-    },
+    title,
   },
 };
 
-const customBarOptions: ChartOptions<'bar'> = {
+let customBarOptions: ChartOptions<'bar'> = {
+  responsive: true,
+  elements: {
+    bar: {
+      borderWidth: 2,
+    },
+  },
   plugins: {
-    title: {
-      display: true,
-      text: 'Custom title',
+    title,
+    legend: {
+      position: 'right' as const,
     },
   },
 };
 
-const customLabels = ['custom1', 'custom2', 'custom3'];
-
-const customDoughnutData: ChartData<'doughnut'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-      hoverOffset: 20,
+const customScatterOptions: ChartOptions<'scatter'> = {
+  scales: {
+    x: {
+      ticks: { stepSize: 1 },
     },
-  ],
+    y: {
+      beginAtZero: true,
+      ticks: { stepSize: 10 },
+      //grid: { display: false }
+    },
+  },
 };
 
-const customLineData: ChartData<'line'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
+const customDoughnutData: ChartData<'doughnut'> = chartDataGenerator(
+  1,
+  3,
+  'doughnut'
+) as ChartData<'doughnut'>;
 
-    {
-      label: 'custom 2',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-  ],
-};
+let customLineData: ChartData;
+let customBarData: ChartData;
 
-const customBarData: ChartData<'bar'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-    {
-      label: 'custom 2',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-    {
-      label: 'custom 3',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: faker.color.rgb(),
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-  ],
-};
+const customPieData: ChartData<'pie'> = chartDataGenerator(
+  1,
+  3,
+  'pie'
+) as ChartData<'pie'>;
 
-const customPieData: ChartData<'pie'> = {
-  labels: customLabels,
-  datasets: [
-    {
-      label: 'custom',
-      data: customLabels.map(() => faker.datatype.number()),
-      borderColor: 'rgb(255, 255, 255)',
-      backgroundColor: customLabels.map(() => faker.color.rgb()),
-    },
-  ],
-};
+const customScatterData: ChartData<'scatter'> = chartDataGenerator(
+  3,
+  9,
+  'scatter'
+) as ChartData<'scatter'>;
 
+let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
-  const description = i18n.t(`charts.${chart.id}.description`);
+  // const description = i18n.t(`charts.${chart.id}.description`);
   switch (chart.id) {
     case 'line':
+    case 'linearea':
+      if (chart.id === 'linearea') {
+        customLineData = chartDataGenerator(1, 12, chart.id);
+        customFill = {
+          target: 'origin',
+          above: '',
+          below: '',
+        };
+      } else {
+        customFill = undefined;
+        customLineData = chartDataGenerator(3, 4);
+      }
       return (
         <LineChart
           size='xl'
-          description={description}
           customOptions={customLineOptions}
-          customData={customLineData}
+          customData={customLineData as ChartData<'line'>}
+          customFill={customFill}
         />
       );
     case 'pie':
       return (
         <PieChart
           size='xs'
-          description={description}
           customOptions={customPieOptions}
           customData={customPieData}
         />
@@ -165,20 +165,33 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'doughnut':
       return (
         <DoughnutChart
-          size='xl'
-          description={description}
+          size='xs'
           customOptions={customDoughnutOptions}
           customData={customDoughnutData}
         />
       );
-
     case 'bar':
+    case 'horizontalbar':
+      if (chart.id === 'horizontalbar') {
+        customBarOptions = { ...customBarOptions, indexAxis: 'y' as const };
+        customBarData = chartDataGenerator(2, 5);
+      } else {
+        customBarOptions = { ...customBarOptions, indexAxis: 'x' as const };
+        customBarData = chartDataGenerator(3, 4);
+      }
       return (
         <BarChart
           size='xl'
-          description={description}
           customOptions={customBarOptions}
-          customData={customBarData}
+          customData={customBarData as ChartData<'bar'>}
+        />
+      );
+    case 'scatter':
+      return (
+        <ScatterChart
+          size='md'
+          customOptions={customScatterOptions}
+          customData={customScatterData}
         />
       );
     default:
@@ -199,7 +212,6 @@ const Home: FC = () => {
     if (selected) {
       setChartType(selected);
     }
-    console.log('chart selected ', chartType);
   };
 
   return (
@@ -220,6 +232,14 @@ const Home: FC = () => {
               );
             })}
           </Form.Select>
+        </Col>
+      </Row>
+      <Row className='justify-content-center'>
+        <Col xs={12} lg={10}>
+          <CardBox bg={'secondary'} text={'white'}>
+            {' '}
+            <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
+          </CardBox>
         </Col>
       </Row>
       <Row className='justify-content-center'>
