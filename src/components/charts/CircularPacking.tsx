@@ -6,7 +6,7 @@ import { CircularPackingData, CircularPackingProps } from '@typings/charts';
 import { faker } from '@faker-js/faker';
 
 const CircularPacking: FC<CircularPackingProps> = ({ width, height, data }) => {
-  const chartId = faker.unique(faker.random.alpha);
+  const chartId = faker.random.alpha(10);
 
   const hierarchy = useMemo(() => {
     return d3

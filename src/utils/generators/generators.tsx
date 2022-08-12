@@ -150,7 +150,7 @@ export const d3ChartDataGenerator = (
             type: faker.helpers.arrayElement(groups),
             name: `${faker.helpers.arrayElement(names)}`,
             value: faker.datatype.number({ min: 10, max: 100 }),
-            id: faker.unique(faker.random.alphaNumeric),
+            id: faker.random.alphaNumeric(7),
           };
           return circleData;
         }),
