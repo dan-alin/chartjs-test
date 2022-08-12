@@ -18,10 +18,10 @@ import {
   ScatterChart,
   CircularPacking,
 } from '@components/charts';
-import chartDataGenerator from 'src/utils/generators/generators';
+import chartDataGenerator, {
+  d3ChartDataGenerator,
+} from 'src/utils/generators/generators';
 import { CardBox } from '@components/CardBox';
-import { Tree } from '@components/charts/CircularPacking';
-import { faker } from '@faker-js/faker';
 
 const charts: ChartInfoProps[] = [
   {
@@ -134,73 +134,7 @@ const customScatterData: ChartData<'scatter'> = chartDataGenerator(
   'scatter'
 ) as ChartData<'scatter'>;
 
-export const circularPackingData: Tree = {
-  type: 'node',
-  name: 'boss',
-  value: 2300,
-  children: [
-    {
-      type: 'leaf',
-      name: 'Mark',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Robert',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Emily',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Marion',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Nicolas',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Malki',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Djé',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Mélanie',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'leaf',
-      name: 'Einstein',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'fruit',
-      name: 'apple',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'fruit',
-      name: 'peach',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-    {
-      type: 'fruit',
-      name: 'lime',
-      value: faker.datatype.number({ min: 0, max: 100 }),
-    },
-  ],
-};
+const circularPackingData = d3ChartDataGenerator('D3_circular');
 
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {

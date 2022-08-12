@@ -13,3 +13,22 @@
     width: 1000px;
   }
 }
+
+svg {
+  display: inline-block;
+}
+
+circle {
+  stroke: transparent;
+  transition: stroke 0.2s;
+  &:hover {
+    stroke: black;
+  }
+}
+text {
+  line-break: normal;
+  word-break: break-all;
+}
+tspan {
+  display: block;
+}
