@@ -82,6 +82,15 @@ const customDoughnutOptions: ChartOptions<'doughnut'> = {
 const customPieOptions: ChartOptions<'pie'> = {
   plugins: {
     title,
+    tooltip: {
+      backgroundColor: '#FFF',
+      boxHeight: 20,
+      boxWidth: 20,
+      bodyColor: '#333',
+      bodyFont: { weight: 'bold' },
+
+      borderColor: '#f4f4f4',
+    },
   },
 };
 
