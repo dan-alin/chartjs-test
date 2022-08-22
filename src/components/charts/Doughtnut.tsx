@@ -38,6 +38,7 @@ const DoughnutChart: FC<DoughnutChartProps> = ({
   customOptions = {},
   customData = defaultData,
 }) => {
+  // to handle with a custom hook
   const chartRef = useRef<ChartJS<'doughnut'>>(null);
   const [chartData, setChartData] = useState<ChartData<'doughnut'>>({
     labels: [],
