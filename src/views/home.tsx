@@ -213,7 +213,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
       );
     case 'D3_circular':
       return (
-        <CircularPacking data={circularPackingData} width={400} height={400} />
+        <CircularPacking data={circularPackingData} width={600} height={600} />
       );
     default:
       return <div>No chart</div>;

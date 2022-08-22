@@ -28,7 +28,13 @@ circle {
 text {
   line-break: normal;
   word-break: break-all;
+  display: block;
+  &.d-none {
+    display: none !important;
+  }
 }
 tspan {
   display: block;
+  line-break: normal;
+  word-break: break-all;
 }
