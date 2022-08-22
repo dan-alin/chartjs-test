@@ -1,7 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import './charts.style.scss';
 import { Doughnut } from 'react-chartjs-2';
-import { Card } from 'react-bootstrap';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,29 +29,35 @@ ChartJS.register(
   Legend
 );
 
-const data = getDefaultData() as ChartData<'doughnut'>;
+const defaultData = getDefaultData() as ChartData<'doughnut'>;
 
 const options: ChartOptions = getDefaultOptions();
 
 const DoughnutChart: FC<DoughnutChartProps> = ({
-  description,
   size,
   customOptions = {},
-  customData = {},
+  customData = defaultData,
 }) => {
+  const chartRef = useRef<ChartJS<'doughnut'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'doughnut'>>({
+    labels: [],
+    datasets: [],
+  });
   const chartOptions = _.merge(options, customOptions);
-  const chartData = _.merge(data, customData);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) {
+      return;
+    }
+
+    chart.options = _.merge(options, customOptions);
+    setChartData(customData);
+  }, [customData, customOptions]);
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      {description && (
-        <Card>
-          <Card.Body>
-            <Card.Text>{description}</Card.Text>
-          </Card.Body>
-        </Card>
-      )}
-      <Doughnut options={chartOptions} data={chartData} />
+      <Doughnut options={chartOptions} data={chartData} ref={chartRef} />
     </div>
   );
 };

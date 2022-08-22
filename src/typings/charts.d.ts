@@ -1,9 +1,13 @@
-import { ChartType, ChartOptions } from 'chart.js';
+import {
+  ChartType,
+  ChartOptions,
+  ComplexFillTarget,
+  TooltipPositionerFunction,
+} from 'chart.js';
 
-export type Charts = ChartType | 'custom';
+export type Charts = ChartType | 'linearea' | 'horizontalbar';
 
 export type ChartProps = {
-  description?: string | undefined;
   size?: 'xs' | 'md' | 'xl';
   customData?;
 };
@@ -14,6 +18,7 @@ export type ChartInfoProps = {
 
 export type LineChartProps = ChartProps & {
   customOptions?: ChartOptions<'line'>;
+  customFill?: ComplexFillTarget | undefined;
 };
 export type BarChartProps = ChartProps & {
   customOptions?: ChartOptions<'bar'>;
@@ -24,3 +29,12 @@ export type DoughnutChartProps = ChartProps & {
 export type PieChartProps = ChartProps & {
   customOptions?: ChartOptions<'pie'>;
 };
+export type ScatterChartProps = ChartProps & {
+  customOptions?: ChartOptions<'scatter'>;
+};
+
+declare module 'chart.js' {
+  interface TooltipPositionerMap {
+    myCustomPositioner: TooltipPositionerFunction<ChartType>;
+  }
+}

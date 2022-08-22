@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -11,7 +11,6 @@ import {
   ChartOptions,
   ChartData,
 } from 'chart.js';
-import { Card } from 'react-bootstrap';
 import { BarChartProps } from '@typings/charts.d';
 import _ from 'lodash';
 import {
@@ -28,27 +27,39 @@ ChartJS.register(
   Legend
 );
 
-export const data = getDefaultData() as ChartData<'bar'>;
 export const options: ChartOptions = getDefaultOptions();
 
 const BarChart: FC<BarChartProps> = ({
   size,
-  description,
   customOptions = {},
-  customData = {},
+  customData = getDefaultData(),
 }) => {
+  const chartRef = useRef<ChartJS<'bar'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'bar'>>({
+    labels: [],
+    datasets: [],
+  });
   const chartOptions = _.merge(options, customOptions);
-  const chartData = _.merge(data, customData);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) {
+      return;
+    }
+
+    chart.options = _.merge(options, customOptions);
+    setChartData(customData);
+  }, [customData, customOptions]);
+
   return (
     <div className={`chart__container chart__container--${size}`}>
-      {description && (
-        <Card>
-          <Card.Body>
-            <Card.Text>{description}</Card.Text>
-          </Card.Body>
-        </Card>
-      )}
-      <Bar options={chartOptions} data={chartData} />
+      <Bar
+        key={Math.random()}
+        redraw
+        options={chartOptions}
+        data={chartData}
+        ref={chartRef}
+      />
     </div>
   );
 };
