@@ -3,7 +3,12 @@ import _ from 'lodash';
 import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
 import colorLib, { Color, RGBA } from '@kurkle/color';
-import { Charts } from '@typings/charts';
+import {
+  chartJsCharts,
+  CircularPackingElement,
+  CircularPackingMainData,
+  d3Charts,
+} from '@typings/charts';
 
 export const generateLabels = (arrayRange = 3, label = 'label'): string[] => {
   return _.range(arrayRange).map((index) => `${label} ${index + 1}`);
@@ -42,7 +47,7 @@ export function transparentize(
 const chartDataGenerator = (
   datasetsRange = 3,
   labels = 6,
-  chartType?: Charts
+  chartType?: chartJsCharts
 ): ChartData => {
   let data: ChartData = {
     labels: generateLabels(labels),
@@ -107,6 +112,53 @@ const chartDataGenerator = (
   }
 
   return data;
+};
+
+export const d3ChartDataGenerator = (
+  chartType?: d3Charts,
+  groups = ['CLASSIC', 'X-TEAM', 'TREND'],
+  names = [
+    'Global allocation',
+    'BlackRock',
+    'RedRock',
+    'Income Strategy',
+    'Tecnology',
+    'Gold',
+    'Silver',
+    'Platinum',
+  ]
+): CircularPackingMainData => {
+  let chartData: CircularPackingMainData = {
+    type: 'node',
+    name: 'container',
+    id: 'mainNode',
+    value: 2300,
+    groupsColors: {},
+    children: [],
+  };
+
+  groups.forEach((group) => {
+    chartData.groupsColors[group] = faker.color.rgb();
+  });
+
+  switch (chartType) {
+    case 'D3_circular':
+      chartData = {
+        ...chartData,
+        children: _.range(30).map(() => {
+          const circleData: CircularPackingElement = {
+            type: faker.helpers.arrayElement(groups),
+            name: `${faker.helpers.arrayElement(names)}`,
+            value: faker.datatype.number({ min: 10, max: 100 }),
+            id: faker.random.alphaNumeric(7),
+          };
+          return circleData;
+        }),
+      };
+      break;
+  }
+
+  return chartData;
 };
 
 export default chartDataGenerator;

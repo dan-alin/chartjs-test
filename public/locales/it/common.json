@@ -28,6 +28,10 @@
     "horizontalbar": {
       "label": "Horizontal Bar Chart",
       "description": "A horizontal bar chart is a variation on a vertical bar chart. It is sometimes used to show trend data, and the comparison of multiple data sets side by side. To achieve this you will have to set the indexAxis property in the options object to 'y'. The default for this property is 'x' and thus will show vertical bars."
+    },
+    "D3_circular": {
+      "label": "D3 circular packing Chart",
+      "description": "A circular packing chart displays a hierarchical dataset as a set of nested circles. Nodes are displayed as circles. Size is usually proportional to a numeric variable."
     }
   }
 }

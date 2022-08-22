@@ -4,8 +4,9 @@ import {
   ComplexFillTarget,
   TooltipPositionerFunction,
 } from 'chart.js';
-
-export type Charts = ChartType | 'linearea' | 'horizontalbar';
+export type d3Charts = 'D3_circular';
+export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar';
+export type Charts = chartJsCharts | d3Charts;
 
 export type ChartProps = {
   size?: 'xs' | 'md' | 'xl';
@@ -33,8 +34,34 @@ export type ScatterChartProps = ChartProps & {
   customOptions?: ChartOptions<'scatter'>;
 };
 
+export type CircularPackingProps = {
+  width: number;
+  height: number;
+  data: CircularPackingMainData;
+};
+
 declare module 'chart.js' {
   interface TooltipPositionerMap {
     myCustomPositioner: TooltipPositionerFunction<ChartType>;
   }
 }
+
+export type CircularPackingMainData = {
+  type: 'node';
+  value: number;
+  name: string;
+  groupsColors: { [key: string]: string };
+  id: string;
+  children: CircularPackingElement[];
+};
+
+export type CircularPackingElement = {
+  type: string;
+  name: string;
+  value: number;
+  id: string;
+};
+
+export type CircularPackingData =
+  | CircularPackingMainData
+  | CircularPackingElement;

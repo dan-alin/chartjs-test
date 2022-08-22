@@ -15,9 +15,12 @@ import {
   PieChart,
   DoughnutChart,
   BarChart,
+  ScatterChart,
+  CircularPacking,
 } from '@components/charts';
-import chartDataGenerator from 'src/utils/generators/generators';
-import ScatterChart from '@components/charts/ScatterChart';
+import chartDataGenerator, {
+  d3ChartDataGenerator,
+} from 'src/utils/generators/generators';
 import { CardBox } from '@components/CardBox';
 
 const charts: ChartInfoProps[] = [
@@ -41,6 +44,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'horizontalbar',
+  },
+  {
+    id: 'D3_circular',
   },
 ];
 
@@ -137,6 +143,8 @@ const customScatterData: ChartData<'scatter'> = chartDataGenerator(
   'scatter'
 ) as ChartData<'scatter'>;
 
+const circularPackingData = d3ChartDataGenerator('D3_circular');
+
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
   // const description = i18n.t(`charts.${chart.id}.description`);
@@ -203,8 +211,12 @@ const renderSwitch = (chart: ChartInfoProps) => {
           customData={customScatterData}
         />
       );
+    case 'D3_circular':
+      return (
+        <CircularPacking data={circularPackingData} width={400} height={400} />
+      );
     default:
-      return <div>no chart</div>;
+      return <div>No chart</div>;
   }
 };
 
