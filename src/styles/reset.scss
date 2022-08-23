@@ -1,85 +1,85 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body.loading * {
-    transition: none !important;
+  transition: none !important;
 }
 
 *,
 *:before,
 *:after {
-    box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 html {
-    height: 100%;
-    box-sizing: border-box;
-    touch-action: manipulation;
+  height: 100%;
+  box-sizing: border-box;
+  touch-action: manipulation;
 }
 
 body {
-    position: relative;
-    min-height: 100%;
-    margin: 0;
+  position: relative;
+  min-height: 100%;
+  margin: 0;
 }
 
 html,
 body {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overscroll-behavior-x: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-x: none;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 a,
 button {
-    &:focus {
-        outline: 0;
-    }
+  &:focus {
+    outline: 0;
+  }
 }
 
 button {
-    background-color: transparent;
-    border-radius: 0;
-    color: inherit;
-    border-width: 0;
-    padding: 0;
-    cursor: pointer;
+  background-color: transparent;
+  border-radius: 0;
+  color: inherit;
+  border-width: 0;
+  padding: 0;
+  cursor: pointer;
 
-    &[disabled] {
-        cursor: not-allowed;
-    }
+  &[disabled] {
+    cursor: not-allowed;
+  }
 }
 
 figure {
-    margin: 0;
+  margin: 0;
 }
 
 input::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-    margin: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
 
 ul,
 ol,
 dd {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 h1,
@@ -88,48 +88,52 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 0;
-    font-size: inherit;
-    font-weight: inherit;
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 p {
-    margin: 0;
+  margin: 0;
 }
 
 cite {
-    font-style: normal;
+  font-style: normal;
 }
 
 fieldset {
-    border-width: 0;
-    padding: 0;
-    margin: 0;
+  border-width: 0;
+  padding: 0;
+  margin: 0;
 }
 
 select {
-    border-radius: 0;
-    -webkit-appearance: none;
+  border-radius: 0;
+  -webkit-appearance: none;
 }
 
 select::-ms-expand {
-    display: none;
+  display: none;
 }
-
 
 a,
 button:focus {
-    -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 input {
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
 
-    &:focus {
-        border: none;
-        box-shadow: none;
-    }
+  &:focus {
+    border: none;
+    box-shadow: none;
+  }
+}
+
+canvas {
+  margin: 0;
+  padding: 0;
 }

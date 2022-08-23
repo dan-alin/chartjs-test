@@ -8,6 +8,7 @@ import {
   CircularPackingElement,
   CircularPackingMainData,
   d3Charts,
+  GaugePlugin,
 } from '@typings/charts';
 
 export const generateLabels = (arrayRange = 3, label = 'label'): string[] => {
@@ -55,14 +56,18 @@ const chartDataGenerator = (
   };
 
   for (let _i = 0; _i < datasetsRange; _i++) {
-    let dataset: ChartDataset;
+    let dataset: ChartDataset & GaugePlugin;
     const datasetColor: string | number[] | Color | RGBA = faker.color.rgb();
-
+    //defining custom data fopr gauge
+    const fakeData = _.range(labels).map(() => faker.datatype.number());
+    const gaugeNeedleRange = {
+      max: fakeData.reduce((prev, curr) => prev + curr, 0),
+    };
     switch (chartType) {
       case 'linearea':
         dataset = {
           label: `Set ${_i + 1}`,
-          data: _.range(labels).map(() => faker.datatype.number()),
+          data: fakeData,
           borderColor: datasetColor,
           backgroundColor: transparentize(datasetColor, 0.7),
           fill: true,
@@ -72,11 +77,22 @@ const chartDataGenerator = (
       case 'doughnut':
         dataset = {
           label: `Set ${_i + 1}`,
-          data: _.range(labels).map(() => faker.datatype.number()),
+          data: fakeData,
           borderColor: 'rgb(255, 255, 255)',
           backgroundColor: _.range(labels).map(() => faker.color.rgb()),
           hoverOffset: 4,
         };
+        break;
+      case 'gauge':
+        dataset = {
+          label: `Set ${_i + 1}`,
+          data: fakeData,
+          borderColor: 'rgb(255, 255, 255)',
+          backgroundColor: _.range(labels).map(() => faker.color.rgb()),
+          hoverOffset: 4,
+          needleValue: faker.datatype.number(gaugeNeedleRange),
+        };
+
         break;
       case 'scatter':
         dataset = {
@@ -98,7 +114,7 @@ const chartDataGenerator = (
       default:
         dataset = {
           label: `Set ${_i + 1}`,
-          data: _.range(labels).map(() => faker.datatype.number()),
+          data: fakeData,
           borderColor: datasetColor,
           backgroundColor: transparentize(datasetColor, 0.7),
           fill: false,
