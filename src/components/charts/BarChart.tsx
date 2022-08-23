@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -8,15 +8,11 @@ import {
   Tooltip,
   Legend,
   BarElement,
-  ChartOptions,
-  ChartData,
 } from 'chart.js';
 import { BarChartProps } from '@typings/charts.d';
-import _ from 'lodash';
-import {
-  getDefaultData,
-  getDefaultOptions,
-} from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import useChart from 'src/hooks/use-chart.hook';
+import { Button } from '@components/Button';
 
 ChartJS.register(
   CategoryScale,
@@ -27,40 +23,30 @@ ChartJS.register(
   Legend
 );
 
-export const options: ChartOptions = getDefaultOptions();
-
 const BarChart: FC<BarChartProps> = ({
   size,
   customOptions = {},
   customData = getDefaultData(),
 }) => {
-  const chartRef = useRef<ChartJS<'bar'>>(null);
-  const [chartData, setChartData] = useState<ChartData<'bar'>>({
-    labels: [],
-    datasets: [],
-  });
-  const chartOptions = _.merge(options, customOptions);
-
-  useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) {
-      return;
-    }
-
-    chart.options = _.merge(options, customOptions);
-    setChartData(customData);
-  }, [customData, customOptions]);
+  const { data, chartRef, options, generateNewData } = useChart(
+    'bar',
+    customOptions,
+    customData
+  );
 
   return (
-    <div className={`chart__container chart__container--${size}`}>
-      <Bar
-        key={Math.random()}
-        redraw
-        options={chartOptions}
-        data={chartData}
-        ref={chartRef}
-      />
-    </div>
+    <>
+      <div className={`chart__container chart__container--${size}`}>
+        <Bar
+          key={Math.random()}
+          redraw
+          options={options}
+          data={data}
+          ref={chartRef}
+        />
+      </div>
+      <Button onClick={() => generateNewData(3, 3, 'bar')}>New Data</Button>
+    </>
   );
 };
 
