@@ -5,12 +5,16 @@ import {
   TooltipPositionerFunction,
 } from 'chart.js';
 export type d3Charts = 'D3_circular';
-export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar';
+export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
 export type Charts = chartJsCharts | d3Charts;
 
 export type ChartProps = {
   size?: 'xs' | 'md' | 'xl';
   customData?;
+};
+
+export type GaugePlugin = {
+  needleValue?: number;
 };
 
 export type ChartInfoProps = {
