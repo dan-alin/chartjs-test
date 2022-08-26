@@ -1,43 +1,12 @@
 .button {
   cursor: pointer;
   font-family: 'BentonSans', sans-serif;
+  height: 32px;
+  min-width: 120px;
+  border-radius: 5px;
+}
 
-  &__text {
-    min-width: 195px;
-  }
-
-  &__icon {
-    display: flex;
-    align-content: center;
-    margin-left: 2px;
-  }
-
-  &__change-gallery {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
-    height: 60px;
-    padding: 0 16px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 18px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.6);
-    border-radius: 6px;
-    box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.05);
-
-    span {
-      display: inline-block;
-      text-transform: capitalize;
-
-      &.button__icon {
-        display: flex;
-      }
-    }
-  }
+.primary {
+  background: rgb(17, 67, 131);
+  color: white;
 }

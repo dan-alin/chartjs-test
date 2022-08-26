@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -6,47 +6,29 @@ import {
   LineElement,
   Tooltip,
   Legend,
-  ChartOptions,
-  ChartData,
 } from 'chart.js';
 
 import { ScatterChartProps } from '@typings/charts.d';
-import _ from 'lodash';
-import {
-  getDefaultData,
-  getDefaultOptions,
-} from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
 import { Scatter } from 'react-chartjs-2';
+import useChart from 'src/hooks/use-chart.hook';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
-
-const options: ChartOptions = getDefaultOptions();
 
 const ScatterChart: FC<ScatterChartProps> = ({
   size,
   customOptions = {},
   customData = getDefaultData(),
 }) => {
-  const chartRef = useRef<ChartJS<'scatter'>>(null);
-  const [chartData, setChartData] = useState<ChartData<'scatter'>>({
-    labels: [],
-    datasets: [],
-  });
-
-  const chartOptions = _.merge(options, customOptions);
-
-  useEffect(() => {
-    const chart = chartRef.current;
-
-    if (!chart) {
-      return;
-    }
-    setChartData(customData);
-  }, [chartData, customData]);
+  const { data, chartRef, options } = useChart(
+    'scatter',
+    customOptions,
+    customData
+  );
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Scatter options={chartOptions} data={chartData} ref={chartRef} />
+      <Scatter options={options} data={data} ref={chartRef} />
     </div>
   );
 };

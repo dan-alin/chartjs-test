@@ -137,7 +137,7 @@ const customGaugeOptions: ChartOptions<'doughnut'> = {
     'touchmove',
   ],
   //remove animation to avoid chart flickering and rotation
-  // animation: false,
+  animation: false,
 
   cutout: '95%',
   rotation: 270,
@@ -150,13 +150,13 @@ const customGaugeOptions: ChartOptions<'doughnut'> = {
   },
 };
 
-const customDoughnutData: ChartData<'doughnut'> = chartDataGenerator(
+const customDoughnutData = chartDataGenerator(
   1,
   3,
   'doughnut'
 ) as ChartData<'doughnut'>;
 
-const customGaugeData: ChartData<'doughnut'> = chartDataGenerator(
+const customGaugeData = chartDataGenerator(
   1,
   3,
   'gauge'
@@ -165,13 +165,9 @@ const customGaugeData: ChartData<'doughnut'> = chartDataGenerator(
 let customLineData: ChartData;
 let customBarData: ChartData;
 
-const customPieData: ChartData<'pie'> = chartDataGenerator(
-  1,
-  3,
-  'pie'
-) as ChartData<'pie'>;
+const customPieData = chartDataGenerator(1, 3, 'pie') as ChartData<'pie'>;
 
-const customScatterData: ChartData<'scatter'> = chartDataGenerator(
+const customScatterData = chartDataGenerator(
   3,
   9,
   'scatter'
