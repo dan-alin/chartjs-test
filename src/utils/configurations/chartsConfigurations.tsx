@@ -5,6 +5,8 @@ import {
   PointStyle,
   Tooltip,
 } from 'chart.js';
+import { ThemeType } from 'src/contexts/theme/theme.model';
+import { Color } from 'src/models/color.model';
 
 export const yAxeRight = {
   type: 'linear' as const,
@@ -31,12 +33,14 @@ export const getDefaultData = () => {
   } as ChartData;
 };
 
-export const getDefaultOptions = (): ChartOptions => {
+export const getDefaultOptions = (theme: ThemeType): ChartOptions => {
   return {
     responsive: true,
+    color: theme === 'light' ? Color.DARK_GRAY : Color.WHITE,
     layout: {
       padding: 20,
     },
+
     plugins: {
       legend: {
         position: 'top' as const,

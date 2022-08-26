@@ -260,6 +260,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
 
 const Home: FC = () => {
   const [chartType, setChartType] = useState<ChartInfoProps>(charts[0]);
+
   const { t } = useTranslation();
 
   chartConfigurations();
@@ -275,9 +276,8 @@ const Home: FC = () => {
 
   return (
     <Container>
-      <Row className='justify-content-center mb-4'>
+      <Row className='justify-content-center mb-4 mt-4'>
         <Col>
-          <h2 className='mb-4 h2 text-center'>{t('title')}</h2>
           <Form.Select
             aria-label='Chart selection'
             value={chartType.id}

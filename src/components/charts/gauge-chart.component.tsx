@@ -46,17 +46,17 @@ const gaugeNeedle = {
     const cx = ctx.canvas.offsetWidth / 2;
     const cy = height;
 
-    //needle border
-    ctx.translate(cx, cy);
-    ctx.rotate(Math.PI + degrees);
-    ctx.beginPath();
-    ctx.moveTo(0, -7);
-    ctx.lineTo(height - ctx.canvas.offsetTop + 32, -7);
-    ctx.lineTo(height - ctx.canvas.offsetTop + 32, 7);
-    ctx.lineTo(0, 7);
-    ctx.fillStyle = '#FFF';
-    ctx.fill();
-    ctx.restore();
+    // //needle border
+    // ctx.translate(cx, cy);
+    // ctx.rotate(Math.PI + degrees);
+    // ctx.beginPath();
+    // ctx.moveTo(0, -7);
+    // ctx.lineTo(height - ctx.canvas.offsetTop + 32, -7);
+    // ctx.lineTo(height - ctx.canvas.offsetTop + 32, 7);
+    // ctx.lineTo(0, 7);
+    // ctx.fillStyle = '#FFF';
+    // ctx.fill();
+    // ctx.restore();
 
     //needle
     ctx.save();

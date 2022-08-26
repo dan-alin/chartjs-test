@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { createGradient } from 'src/utils';
 import chartDataGenerator from 'src/utils/generators/generators';
 import { chartJsCharts } from '@typings/charts';
+import { useTheme } from 'src/contexts/theme/theme.context';
 
 const useChart = (
   type: string,
@@ -22,11 +23,12 @@ const useChart = (
   customFill?: ComplexFillTarget
 ) => {
   const chartRef = useRef<ChartJS<any>>(null);
+  const { themeType } = useTheme();
   const [data, setData] = useState<ChartData<any>>({
     labels: [],
     datasets: [],
   });
-  const defaultOptions: ChartOptions = getDefaultOptions();
+  const defaultOptions: ChartOptions = getDefaultOptions(themeType);
   const options = _.merge(defaultOptions, customOptions);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const useChart = (
     } else {
       setData(customData);
     }
-  }, [customOptions, customData, customFill]);
+  }, []);
 
   const generateNewData = (
     datasets: number,
