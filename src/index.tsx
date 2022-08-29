@@ -5,7 +5,6 @@ import App from './App';
 import registerServiceWorker from './serviceWorkerRegistration';
 
 // set language from queryPram
-
 const urlSearchParams = new URLSearchParams(window.location.search);
 if (urlSearchParams) {
   const params = Object.fromEntries(urlSearchParams.entries());
