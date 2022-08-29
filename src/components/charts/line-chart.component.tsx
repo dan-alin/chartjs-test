@@ -1,47 +1,50 @@
 import React, { FC } from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
-  ArcElement,
+  Filler,
 } from 'chart.js';
-
+import { LineChartProps } from '@typings/charts.d';
 import './charts.style.scss';
-
-import type { PieChartProps } from '@typings/charts';
-import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  ArcElement,
+  LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-const PieChart: FC<PieChartProps> = ({
+const LineChart: FC<LineChartProps> = ({
   size,
   customOptions = {},
   customData = getDefaultData(),
+  customFill,
 }) => {
   const { data, chartRef, options } = useChart(
-    'pie',
+    'line',
     customOptions,
-    customData
+    customData,
+    customFill
   );
+
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Pie options={options} data={data} ref={chartRef} />
+      <Line options={options} data={data} ref={chartRef} />
     </div>
   );
 };
 
-export default PieChart;
+export default LineChart;

@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import type { FC, ReactNode } from 'react';
-import './Button.scss';
+import './button.style.scss';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;

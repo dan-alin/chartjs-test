@@ -9,7 +9,7 @@ import {
 } from 'chart.js';
 
 import { ScatterChartProps } from '@typings/charts.d';
-import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chart-config';
 import { Scatter } from 'react-chartjs-2';
 import useChart from 'src/hooks/use-chart.hook';
 

@@ -22,7 +22,7 @@ import {
 import chartDataGenerator, {
   d3ChartDataGenerator,
 } from 'src/utils/generators/generators';
-import { CardBox } from '@components/CardBox';
+import { CardBox } from '@components/card-box';
 
 const charts: ChartInfoProps[] = [
   {

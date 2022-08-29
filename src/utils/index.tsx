@@ -1,3 +1,3 @@
-export { yAxeRight } from './configurations/chartsConfigurations';
-export { default as chartConfigurations } from './configurations/chartsConfigurations';
+export { yAxeRight } from './configurations/chart-config';
+export { default as chartConfigurations } from './configurations/chart-config';
 export * from './generators/generators';

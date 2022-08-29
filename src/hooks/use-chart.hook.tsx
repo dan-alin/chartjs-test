@@ -9,7 +9,7 @@ import {
   ComplexFillTarget,
   ScatterDataPoint,
 } from 'chart.js';
-import { getDefaultOptions } from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultOptions } from 'src/utils/configurations/chart-config';
 import { merge } from 'lodash';
 import { createGradient } from 'src/utils';
 import chartDataGenerator from 'src/utils/generators/generators';

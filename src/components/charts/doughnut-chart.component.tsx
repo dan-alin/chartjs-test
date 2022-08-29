@@ -12,10 +12,10 @@ import {
   ArcElement,
 } from 'chart.js';
 import type { DoughnutChartProps } from '@typings/charts';
-import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
 import chartDataGenerator from 'src/utils/generators/generators';
-import { Button } from '@components/Button';
+import { Button } from '@components/button';
 
 ChartJS.register(
   CategoryScale,

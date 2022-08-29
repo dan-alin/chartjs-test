@@ -10,9 +10,9 @@ import {
   BarElement,
 } from 'chart.js';
 import { BarChartProps } from '@typings/charts.d';
-import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
-import { Button } from '@components/Button';
+import { Button } from '@components/button';
 
 ChartJS.register(
   CategoryScale,

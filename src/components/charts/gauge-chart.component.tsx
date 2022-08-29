@@ -14,9 +14,9 @@ import {
   ChartDataset,
 } from 'chart.js';
 import type { DoughnutChartProps, GaugePlugin } from '@typings/charts';
-import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
-import { Button } from '@components/Button';
+import { Button } from '@components/button';
 const gaugeNeedle = {
   id: 'gaugeNeedle',
 

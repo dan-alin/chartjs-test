@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardImgProps, CardProps } from 'react-bootstrap';
 
 import type { FC, ReactNode } from 'react';
-import './CardBox.component.scss';
+import './card-box.style.scss';
 
 export type CardBoxProps = CardProps & {
   children: ReactNode;
