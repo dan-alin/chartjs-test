@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import './charts.style.scss';
 import { Doughnut } from 'react-chartjs-2';
 import {
@@ -11,13 +11,11 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
-import _ from 'lodash';
 import type { DoughnutChartProps } from '@typings/charts';
-import type { ChartData, ChartOptions } from 'chart.js';
-import {
-  getDefaultData,
-  getDefaultOptions,
-} from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import useChart from 'src/hooks/use-chart.hook';
+import chartDataGenerator from 'src/utils/generators/generators';
+import { Button } from '@components/Button';
 
 ChartJS.register(
   CategoryScale,
@@ -29,37 +27,26 @@ ChartJS.register(
   Legend
 );
 
-const defaultData = getDefaultData() as ChartData<'doughnut'>;
-
-const options: ChartOptions = getDefaultOptions();
-
 const DoughnutChart: FC<DoughnutChartProps> = ({
   size,
   customOptions = {},
-  customData = defaultData,
+  customData = getDefaultData(),
 }) => {
-  // to handle with a custom hook
-  const chartRef = useRef<ChartJS<'doughnut'>>(null);
-  const [chartData, setChartData] = useState<ChartData<'doughnut'>>({
-    labels: [],
-    datasets: [],
-  });
-  const chartOptions = _.merge(options, customOptions);
+  const { data, chartRef, options, setData } = useChart(
+    'doughnut',
+    customOptions,
+    customData
+  );
 
-  useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) {
-      return;
-    }
-
-    chart.options = _.merge(options, customOptions);
-    setChartData(customData);
-  }, [customData, customOptions]);
+  const generateData = chartDataGenerator(1, 3, 'doughnut');
 
   return (
-    <div className={`chart__container chart__container--${size}`}>
-      <Doughnut options={chartOptions} data={chartData} ref={chartRef} />
-    </div>
+    <>
+      <div className={`chart__container chart__container--${size}`}>
+        <Doughnut options={options} data={data} ref={chartRef} />
+      </div>
+      <Button onClick={() => setData(generateData)}>New Data</Button>
+    </>
   );
 };
 

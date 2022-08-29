@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import './charts.style.scss';
 import { Doughnut } from 'react-chartjs-2';
 import {
@@ -13,14 +13,10 @@ import {
   Chart,
   ChartDataset,
 } from 'chart.js';
-import _ from 'lodash';
 import type { DoughnutChartProps, GaugePlugin } from '@typings/charts';
-import type { ChartData, ChartOptions } from 'chart.js';
-import {
-  getDefaultData,
-  getDefaultOptions,
-} from 'src/utils/configurations/chartsConfigurations';
-
+import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import useChart from 'src/hooks/use-chart.hook';
+import { Button } from '@components/Button';
 const gaugeNeedle = {
   id: 'gaugeNeedle',
 
@@ -50,17 +46,17 @@ const gaugeNeedle = {
     const cx = ctx.canvas.offsetWidth / 2;
     const cy = height;
 
-    //needle border
-    ctx.translate(cx, cy);
-    ctx.rotate(Math.PI + degrees);
-    ctx.beginPath();
-    ctx.moveTo(0, -7);
-    ctx.lineTo(height - ctx.canvas.offsetTop + 32, -7);
-    ctx.lineTo(height - ctx.canvas.offsetTop + 32, 7);
-    ctx.lineTo(0, 7);
-    ctx.fillStyle = '#FFF';
-    ctx.fill();
-    ctx.restore();
+    // //needle border
+    // ctx.translate(cx, cy);
+    // ctx.rotate(Math.PI + degrees);
+    // ctx.beginPath();
+    // ctx.moveTo(0, -7);
+    // ctx.lineTo(height - ctx.canvas.offsetTop + 32, -7);
+    // ctx.lineTo(height - ctx.canvas.offsetTop + 32, 7);
+    // ctx.lineTo(0, 7);
+    // ctx.fillStyle = '#FFF';
+    // ctx.fill();
+    // ctx.restore();
 
     //needle
     ctx.save();
@@ -93,44 +89,29 @@ ChartJS.register(
   Legend
 );
 
-const defaultData = getDefaultData() as ChartData<'doughnut'>;
-
-const options: ChartOptions = getDefaultOptions();
-
-const chartPlugins = [gaugeNeedle];
-
 const GaugeChart: FC<DoughnutChartProps> = ({
   size,
   customOptions = {},
-  customData = defaultData,
+  customData = getDefaultData(),
 }) => {
-  const chartRef = useRef<ChartJS<'doughnut'>>(null);
-  const [chartData, setChartData] = useState<ChartData<'doughnut'>>({
-    labels: [],
-    datasets: [],
-  });
-  const chartOptions = _.merge(options, customOptions);
-
-  useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) {
-      return;
-    }
-
-    chart.options = _.merge(options, customOptions);
-    setChartData(customData);
-    console.count('effect');
-  }, [customData, customOptions]);
+  const { data, chartRef, options, generateNewData } = useChart(
+    'gauge',
+    customOptions,
+    customData
+  );
 
   return (
-    <div className={`chart__container chart__container--${size}`}>
-      <Doughnut
-        plugins={chartPlugins}
-        options={chartOptions}
-        data={chartData}
-        ref={chartRef}
-      />
-    </div>
+    <>
+      <div className={`chart__container chart__container--${size}`}>
+        <Doughnut
+          plugins={[gaugeNeedle]}
+          options={options}
+          data={data}
+          ref={chartRef}
+        />
+      </div>
+      <Button onClick={() => generateNewData(1, 3, 'gauge')}>New Data</Button>
+    </>
   );
 };
 

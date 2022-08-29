@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { createRoot } from 'react-dom/client';
 import App from './App';
-// import registerServiceWorker from './serviceWorkerRegistration';
+import registerServiceWorker from './serviceWorkerRegistration';
 
 // set language from queryPram
 
@@ -15,6 +16,7 @@ if (urlSearchParams) {
 
 import './i18n';
 import './styles/main.scss';
+import { ThemeProvider } from './contexts/theme/theme.context';
 
 const container = document.getElementById('root');
 
@@ -23,8 +25,10 @@ const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );
 
-// registerServiceWorker();
+registerServiceWorker();

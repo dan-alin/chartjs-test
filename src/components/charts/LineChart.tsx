@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -9,20 +9,12 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartData,
-  ChartOptions,
   Filler,
-  ChartDataset,
-  ScatterDataPoint,
 } from 'chart.js';
 import { LineChartProps } from '@typings/charts.d';
 import './charts.style.scss';
-import _ from 'lodash';
-import {
-  getDefaultData,
-  getDefaultOptions,
-} from 'src/utils/configurations/chartsConfigurations';
-import { createGradient } from 'src/utils';
+import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import useChart from 'src/hooks/use-chart.hook';
 
 ChartJS.register(
   CategoryScale,
@@ -35,70 +27,22 @@ ChartJS.register(
   Filler
 );
 
-const options: ChartOptions = getDefaultOptions();
-
 const LineChart: FC<LineChartProps> = ({
   size,
   customOptions = {},
   customData = getDefaultData(),
   customFill,
 }) => {
-  const chartRef = useRef<ChartJS<'line'>>(null);
-  const [chartData, setChartData] = useState<ChartData<'line'>>({
-    labels: [],
-    datasets: [],
-  });
-
-  const chartOptions = _.merge(options, customOptions);
-
-  useEffect(() => {
-    const chart = chartRef.current;
-
-    if (!chart) {
-      return;
-    }
-
-    let chartData;
-
-    if (customFill) {
-      chartData = {
-        ...customData,
-        datasets: customData.datasets.map(
-          (
-            dataset: ChartDataset<'line', (number | ScatterDataPoint | null)[]>
-          ) => ({
-            ...dataset,
-            fill: {
-              target: customFill.target,
-              above: createGradient(
-                chart.ctx,
-                chart.chartArea,
-                ['#ffffff', dataset.borderColor as string],
-                [0.5, 0.1]
-              ),
-            },
-          })
-        ),
-      };
-    } else {
-      chartData = {
-        ...customData,
-        datasets: customData.datasets.map(
-          (
-            dataset: ChartDataset<'line', (number | ScatterDataPoint | null)[]>
-          ) => ({
-            ...dataset,
-            fill: dataset.fill,
-          })
-        ),
-      };
-    }
-    setChartData(chartData);
-  }, [customData, customFill]);
+  const { data, chartRef, options } = useChart(
+    'line',
+    customOptions,
+    customData,
+    customFill
+  );
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Line options={chartOptions} data={chartData} ref={chartRef} />
+      <Line options={options} data={data} ref={chartRef} />
     </div>
   );
 };

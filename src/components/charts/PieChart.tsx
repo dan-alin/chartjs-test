@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import { Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -9,18 +9,13 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-  ChartData,
-  ChartOptions,
 } from 'chart.js';
 
 import './charts.style.scss';
 
 import type { PieChartProps } from '@typings/charts';
-import _ from 'lodash';
-import {
-  getDefaultData,
-  getDefaultOptions,
-} from 'src/utils/configurations/chartsConfigurations';
+import { getDefaultData } from 'src/utils/configurations/chartsConfigurations';
+import useChart from 'src/hooks/use-chart.hook';
 
 ChartJS.register(
   CategoryScale,
@@ -32,35 +27,19 @@ ChartJS.register(
   Legend
 );
 
-const defaultData = getDefaultData() as ChartData<'pie'>;
-
-const options: ChartOptions = getDefaultOptions();
-
 const PieChart: FC<PieChartProps> = ({
   size,
   customOptions = {},
-  customData = defaultData,
+  customData = getDefaultData(),
 }) => {
-  const chartRef = useRef<ChartJS<'pie'>>(null);
-  const [chartData, setChartData] = useState<ChartData<'pie'>>({
-    labels: [],
-    datasets: [],
-  });
-  const chartOptions = _.merge(options, customOptions);
-
-  useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) {
-      return;
-    }
-
-    chart.options = _.merge(options, customOptions);
-    setChartData(customData);
-  }, [customData, customOptions]);
-
+  const { data, chartRef, options } = useChart(
+    'pie',
+    customOptions,
+    customData
+  );
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Pie options={chartOptions} data={chartData} ref={chartRef} />
+      <Pie options={options} data={data} ref={chartRef} />
     </div>
   );
 };
