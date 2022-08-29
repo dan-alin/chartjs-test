@@ -1,12 +1,15 @@
 .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   font-family: 'BentonSans', sans-serif;
   height: 32px;
-  min-width: 120px;
+  padding: 5px 5px;
   border-radius: 5px;
 }
 
 .primary {
-  background: rgb(17, 67, 131);
-  color: white;
+  background: var(--secondary);
+  color: var(--white);
 }

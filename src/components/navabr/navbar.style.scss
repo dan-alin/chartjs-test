@@ -1,0 +1,16 @@
+.navbar {
+  display: flex;
+  position: sticky;
+  height: 100px;
+  width: 100%;
+  background: var(--primary);
+  top: 0;
+  z-index: 10;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--text);
+
+  h2 {
+    font-size: 32px;
+  }
+}

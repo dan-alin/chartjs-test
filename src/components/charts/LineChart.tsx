@@ -27,8 +27,6 @@ ChartJS.register(
   Filler
 );
 
-// const options: ChartOptions = getDefaultOptions();
-
 const LineChart: FC<LineChartProps> = ({
   size,
   customOptions = {},
