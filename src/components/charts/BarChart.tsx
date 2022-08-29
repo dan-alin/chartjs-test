@@ -46,6 +46,7 @@ const BarChart: FC<BarChartProps> = ({
     if (!chart) {
       return;
     }
+    console.log('test');
 
     chart.options = _.merge(options, customOptions);
     setChartData(customData);
