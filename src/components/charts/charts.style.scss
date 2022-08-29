@@ -23,6 +23,8 @@ circle {
   transition: stroke 0.2s;
   &:hover {
     stroke: black;
+    cursor: grab;
+    opacity: 1 !important;
   }
 }
 text {
