@@ -42,6 +42,7 @@ export type CircularPackingProps = {
   width: number;
   height: number;
   data: CircularPackingMainData;
+  size?: 'xs' | 'md' | 'xl';
 };
 
 declare module 'chart.js' {
@@ -55,6 +56,7 @@ export type CircularPackingMainData = {
   value: number;
   name: string;
   groupsColors: { [key: string]: string };
+  groups: string[];
   id: string;
   children: CircularPackingElement[];
 };

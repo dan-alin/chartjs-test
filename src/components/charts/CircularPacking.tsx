@@ -1,19 +1,50 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import * as d3 from 'd3';
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import { CircularPackingData, CircularPackingProps } from '@typings/charts';
+import { Col, Container, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import {
+  CircularPackingData,
+  CircularPackingElement,
+  CircularPackingMainData,
+  CircularPackingProps,
+} from '@typings/charts';
 import { faker } from '@faker-js/faker';
 
-const CircularPacking: FC<CircularPackingProps> = ({ width, height, data }) => {
+const CircularPacking: FC<CircularPackingProps> = ({
+  width,
+  height,
+  data,
+  size = 'xl',
+}) => {
   const chartId = faker.random.alpha(10);
+  const [chartType, setChartType] = useState<string>('all');
+  const [chartData, setChartData] = useState<CircularPackingMainData>(data);
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    setChartData({
+      ...data,
+      children: data.children.filter((circle: CircularPackingElement) =>
+        chartType && chartType !== 'all' ? circle.type === chartType : true
+      ),
+    });
+  }, [chartType, data]);
 
   const hierarchy = useMemo(() => {
     return d3
-      .hierarchy(data)
+      .hierarchy(chartData)
       .sum((d) => d.value)
-      .sort((a, b) => b.value! - a.value!);
-  }, [data]);
+      .sort((a, b) => {
+        if (a?.value && b?.value) {
+          return b?.value - a?.value;
+        } else {
+          return 0;
+        }
+      });
+  }, [chartData]);
 
   const root = useMemo(() => {
     const packGenerator = d3
@@ -24,69 +55,142 @@ const CircularPacking: FC<CircularPackingProps> = ({ width, height, data }) => {
   }, [hierarchy, width, height]);
 
   useEffect(() => {
-    const previous = d3.select('#second');
+    const previous = d3.select('#' + chartId).selectChild('svg');
     if (previous) {
       previous.remove();
     }
-    const svg = d3.select('#' + chartId).append('svg');
-
-    svg
-      .attr('id', 'second')
+    const svg = d3.select('#' + chartId)
+      .append('svg')
+      .attr('id', 'circularPackingChart')
       .attr('width', width)
       .attr('height', height)
       .attr('display', 'inline-block');
 
-    const node = svg.selectAll('g').data(root.descendants().slice(1)).join('g');
-    //.attr('transform', d => `translate(${d.x},${d.y})`)
+    const nodeData: d3.HierarchyCircularNode<CircularPackingData>[] = root.descendants().slice(1);
 
-    node
+    const mainElement = svg.append("g").selectAll('circle')
+      .data(nodeData)
+      .enter();
+
+    const node = mainElement
       .append('circle')
       .attr('r', (node) => node.r)
       .attr('cx', (node) => node.x)
       .attr('cy', (node) => node.y)
       .attr('key', (node) => node.data.id)
-      .attr('stroke-width', (node) => 1 / (node.depth + 1))
+      .attr('stroke-width', 1)
       .attr('fill', (node) => data.groupsColors[node.data.type])
-      .attr('fillOpacity', 0.2);
+      .attr('fillOpacity', 0.2)
+      .on('click', (event, d) => {
+        setChartType(d.data.type);
+        //t.key = event.target.attributes.key.value)
+        // const currentCircle = event.target as SVGCircleElement;
+      });
 
-    node
+    // circle.transition()
+    //   .duration(faker.datatype.number({ min: 500, max: 3000 }))
+    //   .attr("r", (node) => node.r);
+
+    const text = mainElement
       .append('text')
-      .attr('className', (node) => (node.r < 20 ? 'd-none' : ''))
       .attr('key', (node) => node.data.id)
-      .attr('x', (node) => node.x - node.r)
+      .attr('x', (node) => node.x)
       .attr('y', (node) => node.y)
-      .attr('fontSize', 12)
-      .attr('fontWeight', 0.2)
-      .attr('textAnchor', 'start')
-      .attr('alignmentBaseline', 'central')
+      .attr('fontSize', 13)
+      .attr('fontWeight', 0.4)
+      .attr('textAnchor', 'middle')
+      .attr('alignmentBaseline', 'middle')
       .attr('lengthAdjust', 'spacingAndGlyphs')
+      .style('display', (node) => (node.r < 25 ? 'none' : 'block'))
       .attr('textLength', (node) => node.r * 2)
+
+    text
+      .append('tspan')
+      .style('display', (node) =>
+        node.data.name.length > 5 && node.r < 25 ? 'none' : 'block'
+      )
+      .attr('x', (node) => node.x)
+      .attr('dy', '0')
+      .text((node) => node.data.type);
+
+    text
+      .append('tspan')
+      .style('display', (node) =>
+        node.data.name.length > 5 && node.r < 25 ? 'none' : 'block'
+      )
+      .attr('x', (node) => node.x)
+      .attr('dy', '1em')
+      .attr('fontSize', 10)
+      .attr('fontWeight', 0.4)
       .text((node) => node.data.name);
 
-    // circle.on('click', (d: d3.HierarchyCircularNode<CircularPackingData>) => {
-    //     svg
-    //         .transition()
-    //         .duration(1000)
-    //         .attr('viewBox', [
-    //             d.x - d.r,
-    //             d.y - d.r,
-    //             d.r * 2 ,
-    //             d.r * 2
-    //         ]);
+
+
+    const simulation = d3.forceSimulation()
+      .force("center", d3.forceCenter().x(width * .5).y(height * .5)) // Attraction to the center of the svg area
+      .force("charge", d3.forceManyBody().strength(-15)) // Nodes are attracted one each other of value is > 0
+      .force("forceX", d3.forceX().strength(.1).x(width * .5))
+      .force("forceY", d3.forceY().strength(.1).y(height * .5))
+
+
+    // export interface simNode extends SimulationNodeDatum extends (d3.HierarchyCircularNode<CircularPackingData>);
+    // Apply these forces to the nodes and update their positions.
+    // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.s
+    simulation
+      .nodes(nodeData)
+      .force("collide", d3.forceCollide().strength(.5).radius((d) => ((d as d3.HierarchyCircularNode<CircularPackingData>).r + 1)).iterations(1)) // Force that avoids circle overlapping
+      .on("tick", () => {
+        node
+          .attr("cx", (d) => d.x)
+          .attr("cy", (d) => d.y)
+        // text
+        //   .attr("x", (d) => d.x)
+        //   .attr("y", (d) => d.y)
+      });
+
+    // circle.on('mouseover', (event) => {
+    //   console.log(event.target)
+    //   d3.select(event.target as SVGCircleElement)
+    //     .transition()
+    //     .duration(1000)
+    //     .attr('stroke-width', 3);
     // });
   }, [chartId, data, height, root, width]);
 
   // const checkTextellipsis = (text: string, threshold: number): string => {
-  //     //select(cont).node().getComputedTextLength()
-
   //     console.log(text, text.length, threshold)
   //     return text.length < threshold ? text : text.substr(0, threshold).concat('...');
   // }
 
   return (
-    <Container>
+    <Container className={`chart__container chart__container--${size}`}>
+      {chartData && (
+        <Row className='justify-content-center mb-4'>
+          <Col>
+            <ToggleButtonGroup value={chartType} defaultValue="all" name="types" type="radio" className="justify-content-center" onChange={(val) => {
+              return setChartType(val)
+            }
+            }>
+              {chartData?.groups.map((group) => {
+                const selected = chartType === group;
+                return (
+                  <ToggleButton style={{
+                    backgroundColor: selected ? chartData.groupsColors[group] : '#fff',
+                    color: selected ? '#fff' : chartData.groupsColors[group]
+                  }} name={group} value={group}
+                    checked={selected} key={group} id={group}>{group}</ToggleButton>)
+              }
+              )}
+              <ToggleButton value={'all'} name='all' id='all'
+                checked={chartType === 'all'} variant="secondary" key={'all'} onClick={() =>
+                  setChartType('all')
+                } disabled={'all' === chartType}>All groups</ToggleButton>
+            </ToggleButtonGroup >
+          </Col>
+        </Row>
+      )}
       <Row className='justify-content-center'>
-        <Col>
+        <Col xs={'auto'}>
           <div id={chartId}></div>
         </Col>
       </Row>

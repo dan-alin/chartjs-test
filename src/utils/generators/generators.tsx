@@ -150,6 +150,7 @@ export const d3ChartDataGenerator = (
     id: 'mainNode',
     value: 2300,
     groupsColors: {},
+    groups,
     children: [],
   };
 

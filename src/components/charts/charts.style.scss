@@ -23,12 +23,20 @@ circle {
   transition: stroke 0.2s;
   &:hover {
     stroke: black;
+    cursor: grab;
+    opacity: 1 !important;
   }
 }
 text {
   line-break: normal;
   word-break: break-all;
+  display: block;
+  &.d-none {
+    display: none !important;
+  }
 }
 tspan {
   display: block;
+  line-break: normal;
+  word-break: break-all;
 }
