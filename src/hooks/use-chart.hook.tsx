@@ -10,7 +10,7 @@ import {
   ScatterDataPoint,
 } from 'chart.js';
 import { getDefaultOptions } from 'src/utils/configurations/chartsConfigurations';
-import _ from 'lodash';
+import { merge } from 'lodash';
 import { createGradient } from 'src/utils';
 import chartDataGenerator from 'src/utils/generators/generators';
 import { chartJsCharts } from '@typings/charts';
@@ -29,14 +29,14 @@ const useChart = (
     datasets: [],
   });
   const defaultOptions: ChartOptions = getDefaultOptions(themeType);
-  const options = _.merge(defaultOptions, customOptions);
+  const options = merge(defaultOptions, customOptions);
 
   useEffect(() => {
     const chart = chartRef.current;
 
     if (!chart) return;
 
-    chart.options = _.merge(options, customOptions);
+    chart.options = merge(options, customOptions);
 
     if (type === 'line') {
       const chartData = customFill
@@ -75,7 +75,7 @@ const useChart = (
     } else {
       setData(customData);
     }
-  }, []);
+  }, [customFill]);
 
   const generateNewData = (
     datasets: number,
