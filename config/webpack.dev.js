@@ -7,6 +7,11 @@ const scssLoader = {
   use: ['style-loader', 'css-loader', 'sass-loader'],
 };
 
+const cssLoader = {
+  test: /\.css$/i,
+  use: ['style-loader', 'css-loader'],
+};
+
 const ASSET_PATH = '/';
 
 const publicPlugin = new webpack.DefinePlugin({
@@ -23,7 +28,7 @@ const config = merge(commonConfig, {
     publicPath: ASSET_PATH,
   },
   module: {
-    rules: [scssLoader],
+    rules: [scssLoader, cssLoader],
   },
   plugins: [publicPlugin],
 });

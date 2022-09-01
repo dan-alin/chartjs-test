@@ -29,6 +29,11 @@ const scssLoader = {
   use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
 };
 
+const cssLoader = {
+  test: /\.css$/i,
+  use: [MiniCssExtractPlugin.loader, 'css-loader'],
+};
+
 const ASSET_PATH = '/';
 
 const publicPlugin = new webpack.DefinePlugin({
@@ -39,7 +44,7 @@ const config = merge(commonConfig, {
   mode: 'production',
   plugins: [workboxGeneratePlugin, copyPlugin, publicPlugin, cssExtractPlugin],
   module: {
-    rules: [scssLoader],
+    rules: [scssLoader, cssLoader],
   },
   output: {
     publicPath: ASSET_PATH,
