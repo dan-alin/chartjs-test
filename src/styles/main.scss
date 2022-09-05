@@ -1,8 +1,6 @@
 @import 'reset';
 @import 'font';
 
-@import 'react-perfect-scrollbar/dist/css/styles.css';
-
 .lock-body {
   position: relative;
   overflow: hidden;
@@ -75,10 +73,4 @@
 
 .kvfysmfp {
   width: 100%;
-}
-
-.kvfysmfp,
-.zoom-container {
-  -webkit-transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
 }

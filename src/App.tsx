@@ -5,11 +5,13 @@ import Home from 'src/pages/home';
 import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
+import LibTest from '@views/libtest.page';
 
 const RoutesComponent: FC = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
+      <Route path='/libtest' element={<LibTest />} />
     </Routes>
   );
 };

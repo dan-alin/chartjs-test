@@ -190,7 +190,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
         };
       } else {
         customFill = undefined;
-        customLineData = chartDataGenerator(3, 4);
+        customLineData = chartDataGenerator(2, 50);
       }
       return (
         <LineChart
