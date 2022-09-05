@@ -83,4 +83,12 @@ Tooltip.positioners.myCustomPositioner = function (this) {
   };
 };
 
+export const colorsDefaults: string[] = [
+  '#0780eb',
+  '#ffa33f',
+  '#22dbbc',
+  '#ff4aad',
+  '#882dff',
+];
+
 export default chartConfigurations;

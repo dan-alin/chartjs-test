@@ -23,6 +23,7 @@ import chartDataGenerator, {
   d3ChartDataGenerator,
 } from 'src/utils/generators/generators';
 import { CardBox } from '@components/card-box';
+import { colorsDefaults } from 'src/utils/configurations/chart-config';
 
 const charts: ChartInfoProps[] = [
   {
@@ -74,6 +75,12 @@ const customLineOptions: ChartOptions<'line'> = {
   interaction: {
     intersect: false,
   },
+  elements: {
+    line: {
+      borderWidth: 1.5,
+      tension: 0.1,
+    },
+  },
 };
 
 const customDoughnutOptions: ChartOptions<'doughnut'> = {
@@ -118,10 +125,14 @@ const customScatterOptions: ChartOptions<'scatter'> = {
   scales: {
     x: {
       ticks: { stepSize: 1 },
+      max: 100,
+      min: -100,
     },
     y: {
       beginAtZero: true,
-      ticks: { stepSize: 10 },
+      ticks: { stepSize: 5 },
+      max: 100,
+      min: -100,
       //grid: { display: false }
     },
   },
@@ -168,9 +179,10 @@ let customBarData: ChartData;
 const customPieData = chartDataGenerator(1, 3, 'pie') as ChartData<'pie'>;
 
 const customScatterData = chartDataGenerator(
-  3,
-  9,
-  'scatter'
+  5,
+  1,
+  'scatter',
+  colorsDefaults
 ) as ChartData<'scatter'>;
 
 const circularPackingData = d3ChartDataGenerator('D3_circular');
@@ -182,7 +194,13 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'line':
     case 'linearea':
       if (chart.id === 'linearea') {
-        customLineData = chartDataGenerator(1, 12, chart.id);
+        customLineData = chartDataGenerator(
+          1,
+          50,
+          chart.id,
+          colorsDefaults,
+          100
+        );
         customFill = {
           target: 'origin',
           above: '',
@@ -194,7 +212,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
           5,
           50,
           chart.id,
-          ['#0780eb', '#ffa33f', '#22dbbc', '#ff4aad', '#882dff'],
+          colorsDefaults,
           100
         );
       }
@@ -227,10 +245,10 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'horizontalbar':
       if (chart.id === 'horizontalbar') {
         customBarOptions = { ...customBarOptions, indexAxis: 'y' as const };
-        customBarData = chartDataGenerator(2, 5);
+        customBarData = chartDataGenerator(5, 1, chart.id, colorsDefaults);
       } else {
         customBarOptions = { ...customBarOptions, indexAxis: 'x' as const };
-        customBarData = chartDataGenerator(3, 4);
+        customBarData = chartDataGenerator(5, 2, chart.id, colorsDefaults);
       }
       return (
         <BarChart

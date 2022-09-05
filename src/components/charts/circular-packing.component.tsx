@@ -271,7 +271,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
                   stroke={data.groupsColors[node.data.type]}
                   strokeWidth={2}
                   fill={data.groupsColors[node.data.type]}
-                  fillOpacity={0.2}
+                  fillOpacity={1}
                 />
               ))}
             {root
@@ -280,7 +280,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
               .map((node) => {
                 return (
                   <text
-                    className={node.r < 20 ? 'd-none' : ''}
+                    className={node.r < 30 ? 'd-none' : ''}
                     key={node.data.id}
                     x={node.x}
                     y={node.y}
@@ -290,6 +290,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
                     alignmentBaseline='middle'
                     lengthAdjust='spacingAndGlyphs'
                     textLength={node.r * 2}
+                    fill={'#ffffff'}
                   >
                     <tspan x={node.x} dy='0'>
                       {node.data.type}
