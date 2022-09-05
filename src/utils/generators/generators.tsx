@@ -48,25 +48,37 @@ export function transparentize(
 const chartDataGenerator = (
   datasetsRange = 3,
   labels = 6,
-  chartType?: chartJsCharts
+  chartType?: chartJsCharts,
+  colors?: string[],
+  maxRange?: number
 ): ChartData => {
   let data: ChartData = {
     labels: generateLabels(labels),
     datasets: [],
   };
 
-  for (let _i = 0; _i < datasetsRange; _i++) {
+  for (let _i = 1; _i < datasetsRange + 1; _i++) {
     let dataset: ChartDataset & GaugePlugin;
-    const datasetColor: string | number[] | Color | RGBA = faker.color.rgb();
+    const datasetColor: string | number[] | Color | RGBA =
+      !!colors && colors[_i - 1] ? colors[_i - 1] : faker.color.rgb();
     //defining custom data fopr gauge
-    const fakeData = range(labels).map(() => faker.datatype.number());
+    const fakeData = range(labels).map((index) =>
+      faker.datatype.number(
+        maxRange
+          ? {
+              max: (maxRange / labels) * (index + 1) * _i,
+              min: (maxRange / labels) * index - index,
+            }
+          : {}
+      )
+    );
     const gaugeNeedleRange = {
       max: fakeData.reduce((prev, curr) => prev + curr, 0),
     };
     switch (chartType) {
       case 'linearea':
         dataset = {
-          label: `Set ${_i + 1}`,
+          label: `Set ${_i}`,
           data: fakeData,
           borderColor: datasetColor,
           backgroundColor: transparentize(datasetColor, 0.7),
@@ -76,7 +88,7 @@ const chartDataGenerator = (
       case 'pie':
       case 'doughnut':
         dataset = {
-          label: `Set ${_i + 1}`,
+          label: `Set ${_i}`,
           data: fakeData,
           borderColor: 'rgb(255, 255, 255)',
           backgroundColor: range(labels).map(() => faker.color.rgb()),
@@ -85,7 +97,7 @@ const chartDataGenerator = (
         break;
       case 'gauge':
         dataset = {
-          label: `Set ${_i + 1}`,
+          label: `Set ${_i}`,
           data: fakeData,
           borderColor: 'rgb(255, 255, 255)',
           backgroundColor: range(labels).map(() => faker.color.rgb()),
@@ -96,7 +108,7 @@ const chartDataGenerator = (
         break;
       case 'scatter':
         dataset = {
-          label: `Set ${_i + 1}`,
+          label: `Set ${_i}`,
           data: range(labels).map(() => {
             const point: BubbleDataPoint = {
               x: faker.datatype.number({ min: -100, max: 100 }),
@@ -113,7 +125,7 @@ const chartDataGenerator = (
         break;
       default:
         dataset = {
-          label: `Set ${_i + 1}`,
+          label: `Set ${_i}`,
           data: fakeData,
           borderColor: datasetColor,
           backgroundColor: transparentize(datasetColor, 0.7),
