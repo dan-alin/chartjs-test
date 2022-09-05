@@ -36,7 +36,7 @@ const useChart = (
 
     if (!chart) return;
 
-    chart.options = merge(defaultOptions, customOptions);
+    chart.options = merge(options, customOptions);
 
     if (type === 'line') {
       const chartData = customFill
@@ -75,7 +75,7 @@ const useChart = (
     } else {
       setData(customData);
     }
-  }, [customFill, customOptions]);
+  }, [customFill, customOptions, customData]);
 
   const generateNewData = (
     datasets: number,
