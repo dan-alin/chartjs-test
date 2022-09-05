@@ -21,7 +21,7 @@ const FlourishChart: FC = () => {
   return (
     <div
       className='flourish-embed flourish-chart'
-      data-src='visualisation/11069148'
+      data-src='visualisation/11069148' // 11097038 bubble
     ></div>
   );
 };

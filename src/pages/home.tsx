@@ -190,7 +190,13 @@ const renderSwitch = (chart: ChartInfoProps) => {
         };
       } else {
         customFill = undefined;
-        customLineData = chartDataGenerator(2, 50);
+        customLineData = chartDataGenerator(
+          5,
+          50,
+          chart.id,
+          ['#0780eb', '#ffa33f', '#22dbbc', '#ff4aad', '#882dff'],
+          100
+        );
       }
       return (
         <LineChart
