@@ -76,7 +76,6 @@ const CircularPacking: FC<CircularPackingProps> = ({
     const nodeData: d3.HierarchyCircularNode<CircularPackingData>[] = root
       .descendants()
       .slice(1);
-
     const mainElement = svg
       .append('g')
       .selectAll('circle')
@@ -107,18 +106,20 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .attr('key', (node) => node.data.id)
       .attr('x', (node) => node.x)
       .attr('y', (node) => node.y)
-      .attr('fontSize', 13)
-      .attr('fontWeight', 0.4)
-      .attr('textAnchor', 'middle')
-      .attr('alignmentBaseline', 'middle')
+      .attr('font-size', 13)
+      .attr('font-weight', 0.4)
+      .attr('text-anchor', 'middle')
+      .attr('alignment-baseline', 'middle')
       .attr('lengthAdjust', 'spacingAndGlyphs')
-      .style('display', (node) => (node.r < 25 ? 'none' : 'block'))
+      .attr('fill', '#ffffff')
+      //.style('display', (node) => (node.r < 25 ? 'none' : 'block'))
       .attr('textLength', (node) => node.r * 2);
 
     text
       .append('tspan')
+      .attr('class', 'first')
       .style('display', (node) =>
-        node.data.name.length > 5 && node.r < 25 ? 'none' : 'block'
+        node.data.name.length > 5 && node.r < 30 ? 'none' : 'block'
       )
       .attr('x', (node) => node.x)
       .attr('dy', '0')
@@ -127,8 +128,9 @@ const CircularPacking: FC<CircularPackingProps> = ({
     text
       .append('tspan')
       .style('display', (node) =>
-        node.data.name.length > 5 && node.r < 25 ? 'none' : 'block'
+        node.data.name.length > 5 && node.r < 30 ? 'none' : 'block'
       )
+      .attr('class', 'second')
       .attr('x', (node) => node.x)
       .attr('dy', '1em')
       .attr('fontSize', 10)
@@ -136,15 +138,18 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .text((node) => node.data.name);
 
     const simulation = d3
-      .forceSimulation()
+      .forceSimulation(nodeData)
       .force(
-        'center',
+        'center', // Attraction to the center of the svg area
         d3
           .forceCenter()
           .x(width * 0.5)
           .y(height * 0.5)
-      ) // Attraction to the center of the svg area
-      .force('charge', d3.forceManyBody().strength(-15)) // Nodes are attracted one each other of value is > 0
+      )
+      .force(
+        'charge', // Nodes are attracted one each other of value is > 0
+        d3.forceManyBody().strength(-15)
+      )
       .force(
         'forceX',
         d3
@@ -162,11 +167,11 @@ const CircularPacking: FC<CircularPackingProps> = ({
 
     // export interface simNode extends SimulationNodeDatum extends (d3.HierarchyCircularNode<CircularPackingData>);
     // Apply these forces to the nodes and update their positions.
-    // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.s
+    // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop
     simulation
       .nodes(nodeData)
       .force(
-        'collide',
+        'collide', // Force that avoids circle overlapping
         d3
           .forceCollide()
           .strength(0.5)
@@ -174,21 +179,34 @@ const CircularPacking: FC<CircularPackingProps> = ({
             (d) => (d as d3.HierarchyCircularNode<CircularPackingData>).r + 1
           )
           .iterations(1)
-      ) // Force that avoids circle overlapping
+      )
       .on('tick', () => {
         node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
-        // text
-        //   .attr("x", (d) => d.x)
-        //   .attr("y", (d) => d.y)
+        text
+          .attr('x', (d) => d.x)
+          .attr('dy', () => '0')
+          .selectChildren('tspan')
+          .attr(
+            'x',
+            (d) => (d as d3.HierarchyCircularNode<CircularPackingData>).x
+          )
+          .attr(
+            'y',
+            (d) => (d as d3.HierarchyCircularNode<CircularPackingData>).y
+          )
+          .selectAll('.first')
+          .attr('dy', () => '0')
+          .selectAll('.second')
+          .attr('dy', () => '1em');
       });
 
-    // circle.on('mouseover', (event) => {
-    //   console.log(event.target)
-    //   d3.select(event.target as SVGCircleElement)
-    //     .transition()
-    //     .duration(1000)
-    //     .attr('stroke-width', 3);
-    // });
+    node.selectAll('circle').on('mouseover', (event) => {
+      console.log(event.target);
+      d3.select(event.target as SVGCircleElement)
+        .transition()
+        .duration(1000)
+        .attr('r', () => 10);
+    });
   }, [chartId, data, height, root, width]);
 
   // const checkTextellipsis = (text: string, threshold: number): string => {
@@ -252,7 +270,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
           <div id={chartId}></div>
         </Col>
       </Row>
-      <Row className='justify-content-center'>
+      <Row className='justify-content-center d-none'>
         <Col>
           <svg
             width={width}
@@ -271,7 +289,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
                   stroke={data.groupsColors[node.data.type]}
                   strokeWidth={2}
                   fill={data.groupsColors[node.data.type]}
-                  fillOpacity={0.2}
+                  fillOpacity={1}
                 />
               ))}
             {root
@@ -280,7 +298,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
               .map((node) => {
                 return (
                   <text
-                    className={node.r < 20 ? 'd-none' : ''}
+                    className={node.r < 30 ? 'd-none' : ''}
                     key={node.data.id}
                     x={node.x}
                     y={node.y}
@@ -290,6 +308,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
                     alignmentBaseline='middle'
                     lengthAdjust='spacingAndGlyphs'
                     textLength={node.r * 2}
+                    fill={'#ffffff'}
                   >
                     <tspan x={node.x} dy='0'>
                       {node.data.type}

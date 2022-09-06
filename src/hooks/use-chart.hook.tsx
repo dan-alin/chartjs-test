@@ -75,7 +75,7 @@ const useChart = (
     } else {
       setData(customData);
     }
-  }, [customFill]);
+  }, [customFill, customOptions, customData]);
 
   const generateNewData = (
     datasets: number,

@@ -1,6 +1,12 @@
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
+
+#root {
+  height: 100%;
+}
 
 main {
   background-color: var(--background);
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
+  overflow: auto;
 }

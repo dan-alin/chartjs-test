@@ -57,24 +57,29 @@ const chartDataGenerator = (
     datasets: [],
   };
 
-  for (let _i = 1; _i < datasetsRange + 1; _i++) {
+  for (let _i = 1; _i <= datasetsRange; _i++) {
     let dataset: ChartDataset & GaugePlugin;
     const datasetColor: string | number[] | Color | RGBA =
       !!colors && colors[_i - 1] ? colors[_i - 1] : faker.color.rgb();
     //defining custom data fopr gauge
-    const fakeData = range(labels).map((index) =>
-      faker.datatype.number(
-        maxRange
-          ? {
-              max: (maxRange / labels) * (index + 1) * _i,
-              min: (maxRange / labels) * index - index,
-            }
-          : {}
-      )
-    );
+    const fakeData = range(labels).map((index) => {
+      let options = {};
+      if (maxRange) {
+        const alpha = faker.datatype.number({ min: 1, max: 2 });
+        const max = (maxRange / labels) * (index + 1) * (1 / _i);
+        const min = (maxRange / labels) * index * (1 / _i) - index * alpha;
+        options = {
+          max: max <= maxRange ? max : maxRange,
+          min: min >= 0 ? min : 0,
+        };
+      }
+
+      return faker.datatype.number(options);
+    });
     const gaugeNeedleRange = {
       max: fakeData.reduce((prev, curr) => prev + curr, 0),
     };
+    const radius = faker.datatype.number({ min: 3, max: 20 });
     switch (chartType) {
       case 'linearea':
         dataset = {
@@ -111,16 +116,16 @@ const chartDataGenerator = (
           label: `Set ${_i}`,
           data: range(labels).map(() => {
             const point: BubbleDataPoint = {
-              x: faker.datatype.number({ min: -100, max: 100 }),
-              y: faker.datatype.number({ min: -100, max: 100 }),
-              r: 10,
+              x: faker.datatype.number({ min: -80, max: 80 }),
+              y: faker.datatype.number({ min: -80, max: 80 }),
+              r: radius,
             };
             return point;
           }),
           backgroundColor: transparentize(datasetColor, 0.3),
           borderColor: datasetColor,
           borderWidth: 2,
-          pointRadius: 7,
+          pointRadius: radius,
         };
         break;
       default:
@@ -156,7 +161,8 @@ export const d3ChartDataGenerator = (
     'Gold',
     'Silver',
     'Platinum',
-  ]
+  ],
+  colors = ['#5856d6', '#39b2e9', '#e35183']
 ): CircularPackingMainData => {
   let chartData: CircularPackingMainData = {
     type: 'node',
@@ -168,8 +174,9 @@ export const d3ChartDataGenerator = (
     children: [],
   };
 
-  groups.forEach((group) => {
-    chartData.groupsColors[group] = faker.color.rgb();
+  groups.forEach((group, index) => {
+    chartData.groupsColors[group] =
+      colors && colors[index] ? colors[index] : faker.color.rgb();
   });
 
   switch (chartType) {
