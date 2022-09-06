@@ -68,6 +68,14 @@ const customLineOptions: ChartOptions<'line'> = {
       usePointStyle: true,
       position: 'myCustomPositioner',
     },
+    zoom: {
+      zoom: {
+        wheel: {
+          enabled: true,
+        },
+        mode: 'x',
+      },
+    },
   },
   scales: {
     y: yAxeRight,
