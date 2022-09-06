@@ -267,7 +267,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
       );
     case 'D3_circular':
       return (
-        <CircularPacking data={circularPackingData} width={600} height={600} />
+        <CircularPacking data={circularPackingData} width={500} height={600} />
       );
     case 'gauge':
       return (
