@@ -5,7 +5,7 @@ import Home from 'src/pages/home';
 import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
-import LibTest from '@views/libtest.page';
+import LibTest from '@pages/libtest.page';
 
 const RoutesComponent: FC = () => {
   return (

@@ -84,10 +84,13 @@ const customLineOptions: ChartOptions<'line'> = {
 };
 
 const customDoughnutOptions: ChartOptions<'doughnut'> = {
-  cutout: '85%',
+  cutout: '75%',
 
   plugins: {
     title,
+    legend: {
+      position: 'left' as const,
+    },
   },
 };
 
@@ -150,7 +153,7 @@ const customGaugeOptions: ChartOptions<'doughnut'> = {
   //remove animation to avoid chart flickering and rotation
   animation: false,
 
-  cutout: '95%',
+  cutout: '90%',
   rotation: 270,
   circumference: 180,
   plugins: {
@@ -161,17 +164,16 @@ const customGaugeOptions: ChartOptions<'doughnut'> = {
   },
 };
 
-const customDoughnutData = chartDataGenerator(
-  1,
-  3,
-  'doughnut'
-) as ChartData<'doughnut'>;
+const customDoughnutData = chartDataGenerator(1, 4, 'doughnut', [
+  '#0780eb',
+  '#ffa33f',
+  '#22dbbc',
+  '#ff4aad',
+]) as ChartData<'doughnut'>;
 
-const customGaugeData = chartDataGenerator(
-  1,
-  3,
-  'gauge'
-) as ChartData<'doughnut'>;
+const customGaugeData = chartDataGenerator(1, 1, 'gauge', [
+  '#0780eb',
+]) as ChartData<'doughnut'>;
 
 let customLineData: ChartData;
 let customBarData: ChartData;

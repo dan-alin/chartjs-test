@@ -96,7 +96,7 @@ const chartDataGenerator = (
           label: `Set ${_i}`,
           data: fakeData,
           borderColor: 'rgb(255, 255, 255)',
-          backgroundColor: range(labels).map(() => faker.color.rgb()),
+          backgroundColor: colors,
           hoverOffset: 4,
         };
         break;
@@ -105,7 +105,7 @@ const chartDataGenerator = (
           label: `Set ${_i}`,
           data: fakeData,
           borderColor: 'rgb(255, 255, 255)',
-          backgroundColor: range(labels).map(() => faker.color.rgb()),
+          backgroundColor: colors,
           hoverOffset: 4,
           needleValue: faker.datatype.number(gaugeNeedleRange),
         };
@@ -133,8 +133,10 @@ const chartDataGenerator = (
           label: `Set ${_i}`,
           data: fakeData,
           borderColor: datasetColor,
+          borderWidth: 1,
           backgroundColor: transparentize(datasetColor, 0.7),
           fill: false,
+          tension: 0.1,
         };
     }
 

@@ -64,8 +64,8 @@ const gaugeNeedle = {
     ctx.rotate(Math.PI + degrees);
     ctx.beginPath();
     ctx.moveTo(0, -3);
-    ctx.lineTo(height - ctx.canvas.offsetTop + 30, -3);
-    ctx.lineTo(height - ctx.canvas.offsetTop + 30, 3);
+    ctx.lineTo(height - ctx.canvas.offsetTop + 100, -3);
+    ctx.lineTo(height - ctx.canvas.offsetTop + 100, 3);
     ctx.lineTo(0, 3);
     ctx.fillStyle = '#444';
     ctx.fill();

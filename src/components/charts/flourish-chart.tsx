@@ -1,9 +1,5 @@
 import React, { FC, useEffect } from 'react';
 
-{
-  /* <script src="https://public.flourish.studio/resources/embed.js"></script> */
-}
-
 const FlourishChart: FC = () => {
   useEffect(() => {
     const script = document.createElement('script');
