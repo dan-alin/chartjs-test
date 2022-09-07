@@ -30,7 +30,7 @@ ChartJS.register(
 );
 
 const LineChart: FC<LineChartProps> = ({
-  size,
+  size = 'responsive',
   customOptions = {},
   customData = getDefaultData(),
   customFill,

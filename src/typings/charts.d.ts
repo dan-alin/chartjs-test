@@ -42,9 +42,8 @@ export type CircularPackingProps = {
   width: number;
   height: number;
   data: CircularPackingMainData;
-  size?: 'xs' | 'md' | 'xl';
+  size?: 'xs' | 'md' | 'xl' | 'responsive';
 };
-
 declare module 'chart.js' {
   interface TooltipPositionerMap {
     myCustomPositioner: TooltipPositionerFunction<ChartType>;

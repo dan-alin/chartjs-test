@@ -18,7 +18,7 @@ import { useTheme } from 'src/contexts/theme/theme.context';
 
 const useChart = (
   type: string,
-  customOptions: unknown,
+  customOptions: ChartOptions,
   customData: ChartData,
   customFill?: ComplexFillTarget
 ) => {
@@ -29,7 +29,7 @@ const useChart = (
     datasets: [],
   });
   const defaultOptions: ChartOptions = getDefaultOptions(themeType);
-  const options = merge(defaultOptions, customOptions);
+  const options: ChartOptions = merge(defaultOptions, customOptions);
 
   useEffect(() => {
     const chart = chartRef.current;
