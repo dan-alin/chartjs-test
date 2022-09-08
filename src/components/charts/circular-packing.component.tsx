@@ -20,7 +20,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
   width,
   height,
   data,
-  size = 'xl',
+  size = 'responsive',
 }) => {
   const chartId = faker.random.alpha(10);
   const [chartType, setChartType] = useState<string>('all');
@@ -69,9 +69,15 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .select('#' + chartId)
       .append('svg')
       .attr('id', 'circularPackingChart')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('display', 'inline-block');
+      .attr('viewBox', `0 0 700 600`)
+      .attr('display', 'inline-block')
+      .attr('vertical-align', 'top');
+
+    if (size === 'responsive') {
+      svg.attr('preserveAspectRatio', 'xMinYMin meet');
+    } else {
+      svg.attr('width', width).attr('height', height);
+    }
 
     const nodeData: d3.HierarchyCircularNode<CircularPackingData>[] = root
       .descendants()
@@ -81,6 +87,33 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .selectAll('circle')
       .data(nodeData)
       .enter();
+
+    const circleEvent = (
+      event: MouseEvent,
+      d: d3.HierarchyCircularNode<CircularPackingData>
+    ) => {
+      if (chartType === 'all') {
+        const target = event.target as SVGCircleElement;
+        const text = d3.selectAll('text').filter((t) => {
+          const selected = t as d3.HierarchyCircularNode<CircularPackingData>;
+          return selected && selected.data?.id === d.data.id;
+        });
+        target.parentNode?.appendChild(target);
+        if (text && text.nodes()) {
+          target.parentNode?.appendChild(text.nodes()[0] as SVGTextElement);
+        }
+
+        d3.select(target)
+          .transition()
+          .duration(300)
+          .attr(
+            'r',
+            (node) =>
+              (node as d3.HierarchyCircularNode<CircularPackingData>).r *
+              (event.type === 'mouseenter' ? 1.5 : 1)
+          );
+      }
+    };
 
     const node = mainElement
       .append('circle')
@@ -95,7 +128,9 @@ const CircularPacking: FC<CircularPackingProps> = ({
         setChartType(d.data.type);
         //t.key = event.target.attributes.key.value)
         // const currentCircle = event.target as SVGCircleElement;
-      });
+      })
+      .on('mouseenter', circleEvent)
+      .on('mouseleave', circleEvent);
 
     // circle.transition()
     //   .duration(faker.datatype.number({ min: 500, max: 3000 }))
@@ -113,7 +148,9 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .attr('lengthAdjust', 'spacingAndGlyphs')
       .attr('fill', '#ffffff')
       //.style('display', (node) => (node.r < 25 ? 'none' : 'block'))
-      .attr('textLength', (node) => node.r * 2);
+      .attr('textLength', (node) => node.r * 2)
+      .on('mouseenter', circleEvent)
+      .on('mouseleave', circleEvent);
 
     text
       .append('tspan')
@@ -137,6 +174,13 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .attr('fontWeight', 0.4)
       .text((node) => node.data.name);
 
+    node.select('circle').on('click', (event) => {
+      console.log(event.target);
+      d3.select(event.target as SVGCircleElement)
+        .transition()
+        .duration(1000)
+        .attr('r', () => 10);
+    });
     const simulation = d3
       .forceSimulation(nodeData)
       .force(
@@ -148,22 +192,22 @@ const CircularPacking: FC<CircularPackingProps> = ({
       )
       .force(
         'charge', // Nodes are attracted one each other of value is > 0
-        d3.forceManyBody().strength(-15)
-      )
-      .force(
-        'forceX',
-        d3
-          .forceX()
-          .strength(0.1)
-          .x(width * 0.5)
-      )
-      .force(
-        'forceY',
-        d3
-          .forceY()
-          .strength(0.1)
-          .y(height * 0.5)
+        d3.forceManyBody().strength(10)
       );
+    // .force(
+    //   'forceX',
+    //   d3
+    //     .forceX()
+    //     .strength(0.2)
+    //     .x(width * 0.5)
+    // )
+    // .force(
+    //   'forceY',
+    //   d3
+    //     .forceY()
+    //     .strength(0.2)
+    //     .y(height * 0.5)
+    // );
 
     // export interface simNode extends SimulationNodeDatum extends (d3.HierarchyCircularNode<CircularPackingData>);
     // Apply these forces to the nodes and update their positions.
@@ -174,7 +218,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
         'collide', // Force that avoids circle overlapping
         d3
           .forceCollide()
-          .strength(0.5)
+          .strength(0.1)
           .radius(
             (d) => (d as d3.HierarchyCircularNode<CircularPackingData>).r + 1
           )
@@ -199,14 +243,6 @@ const CircularPacking: FC<CircularPackingProps> = ({
           .selectAll('.second')
           .attr('dy', () => '1em');
       });
-
-    node.selectAll('circle').on('mouseover', (event) => {
-      console.log(event.target);
-      d3.select(event.target as SVGCircleElement)
-        .transition()
-        .duration(1000)
-        .attr('r', () => 10);
-    });
   }, [chartId, data, height, root, width]);
 
   // const checkTextellipsis = (text: string, threshold: number): string => {
@@ -217,59 +253,63 @@ const CircularPacking: FC<CircularPackingProps> = ({
   return (
     <Container className={`chart__container chart__container--${size}`}>
       {chartData && (
-        <Row className='justify-content-center mb-4'>
-          <Col>
-            <ToggleButtonGroup
-              value={chartType}
-              defaultValue='all'
-              name='types'
-              type='radio'
-              className='justify-content-center'
-              onChange={(val) => {
-                return setChartType(val);
-              }}
-            >
-              {chartData?.groups.map((group) => {
-                const selected = chartType === group;
-                return (
-                  <ToggleButton
-                    style={{
-                      backgroundColor: selected
-                        ? chartData.groupsColors[group]
-                        : '#fff',
-                      color: selected ? '#fff' : chartData.groupsColors[group],
-                    }}
-                    name={group}
-                    value={group}
-                    checked={selected}
-                    key={group}
-                    id={group}
-                  >
-                    {group}
-                  </ToggleButton>
-                );
-              })}
-              <ToggleButton
-                value={'all'}
-                name='all'
-                id='all'
-                checked={chartType === 'all'}
-                variant='secondary'
-                key={'all'}
-                onClick={() => setChartType('all')}
-                disabled={'all' === chartType}
+        <>
+          <Row className='justify-content-center mb-4 align-items-center'>
+            <Col xs={8}>
+              <div id={chartId} className={chartType}></div>
+            </Col>
+            <Col xs={2}>
+              <ToggleButtonGroup
+                value={chartType}
+                defaultValue='all'
+                name='types'
+                type='radio'
+                vertical={true}
+                className='justify-content-center'
+                onChange={(val) => {
+                  return setChartType(val);
+                }}
               >
-                All groups
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Col>
-        </Row>
+                {chartData?.groups.map((group) => {
+                  const selected = chartType === group;
+                  return (
+                    <ToggleButton
+                      style={{
+                        backgroundColor: selected
+                          ? chartData.groupsColors[group]
+                          : '#fff',
+                        color: selected
+                          ? '#fff'
+                          : chartData.groupsColors[group],
+                      }}
+                      name={group}
+                      value={group}
+                      checked={selected}
+                      key={group}
+                      id={group}
+                    >
+                      {group}
+                    </ToggleButton>
+                  );
+                })}
+                <ToggleButton
+                  value={'all'}
+                  name='all'
+                  id='all'
+                  checked={chartType === 'all'}
+                  variant='secondary'
+                  key={'all'}
+                  onClick={() => setChartType('all')}
+                  disabled={'all' === chartType}
+                >
+                  All groups
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Col>
+          </Row>
+        </>
       )}
-      <Row className='justify-content-center'>
-        <Col xs={'auto'}>
-          <div id={chartId}></div>
-        </Col>
-      </Row>
+
       <Row className='justify-content-center d-none'>
         <Col>
           <svg

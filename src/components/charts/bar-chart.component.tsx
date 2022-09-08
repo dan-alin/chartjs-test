@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   BarElement,
+  ChartOptions,
 } from 'chart.js';
 import { BarChartProps } from '@typings/charts.d';
 import { getDefaultData } from 'src/utils/configurations/chart-config';
@@ -40,7 +41,7 @@ const BarChart: FC<BarChartProps> = ({
         <Bar
           key={Math.random()}
           redraw
-          options={options}
+          options={options as ChartOptions}
           data={data}
           ref={chartRef}
         />

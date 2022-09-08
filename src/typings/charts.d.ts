@@ -9,7 +9,7 @@ export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
 export type Charts = chartJsCharts | d3Charts;
 
 export type ChartProps = {
-  size?: 'xs' | 'md' | 'xl';
+  size?: ChartSize;
   customData?;
 };
 
@@ -38,13 +38,14 @@ export type ScatterChartProps = ChartProps & {
   customOptions?: ChartOptions<'scatter'>;
 };
 
+export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
+
 export type CircularPackingProps = {
   width: number;
   height: number;
   data: CircularPackingMainData;
-  size?: 'xs' | 'md' | 'xl';
+  size?: ChartSize;
 };
-
 declare module 'chart.js' {
   interface TooltipPositionerMap {
     myCustomPositioner: TooltipPositionerFunction<ChartType>;

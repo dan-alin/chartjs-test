@@ -1,6 +1,5 @@
 .chart__container {
-  margin: auto;
-
+  margin: 30px auto;
   &--xs {
     width: 500px;
   }
@@ -12,6 +11,11 @@
   &--xl {
     width: 1000px;
   }
+
+  &--responsive {
+    width: 100%;
+    max-width: 100% !important;
+  }
 }
 
 svg {
@@ -21,10 +25,15 @@ svg {
 circle {
   stroke: transparent;
   transition: stroke 0.2s;
-  &:hover {
-    stroke: black;
-    cursor: grab;
-    opacity: 1 !important;
+}
+.all {
+  circle {
+    &:hover {
+      cursor: zoom-in;
+      stroke: #ffffff;
+      stroke-width: 3;
+      opacity: 1 !important;
+    }
   }
 }
 text {
