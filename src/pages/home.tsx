@@ -29,9 +29,9 @@ const charts: ChartInfoProps[] = [
   {
     id: 'line',
   },
-  {
-    id: 'pie',
-  },
+  // {
+  //   id: 'pie',
+  // },
   {
     id: 'doughnut',
   },

@@ -65,20 +65,24 @@ const LineChart: FC<LineChartProps> = ({
   customOptions = {},
   customData = getDefaultData(),
   customFill,
-  showAlwaysTooltip,
+  // showAlwaysTooltip,
 }) => {
-  const { data, chartRef, options, pluginList } = useChart(
+  const { data, chartRef, options } = useChart(
     'line',
     customOptions,
     customData,
-    customFill,
-    showAlwaysTooltip ? [alwaysShowTooltip] : []
+    customFill
+    // showAlwaysTooltip ? [alwaysShowTooltip] : []
   );
-  console.log('pluginList', pluginList);
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <Line plugins={pluginList} options={options} data={data} ref={chartRef} />
+      <Line
+        plugins={[alwaysShowTooltip]}
+        options={options}
+        data={data}
+        ref={chartRef}
+      />
     </div>
   );
 };
