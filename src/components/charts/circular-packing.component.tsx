@@ -69,7 +69,7 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .select('#' + chartId)
       .append('svg')
       .attr('id', 'circularPackingChart')
-      .attr('viewBox', `0 0 500 600`)
+      .attr('viewBox', `0 0 700 600`)
       .attr('display', 'inline-block')
       .attr('vertical-align', 'top');
 
@@ -254,18 +254,17 @@ const CircularPacking: FC<CircularPackingProps> = ({
     <Container className={`chart__container chart__container--${size}`}>
       {chartData && (
         <>
-          <Row className='justify-content-center'>
+          <Row className='justify-content-center mb-4 align-items-center'>
             <Col xs={8}>
               <div id={chartId} className={chartType}></div>
             </Col>
-          </Row>
-          <Row className='justify-content-center mb-4'>
-            <Col>
+            <Col xs={2}>
               <ToggleButtonGroup
                 value={chartType}
                 defaultValue='all'
                 name='types'
                 type='radio'
+                vertical={true}
                 className='justify-content-center'
                 onChange={(val) => {
                   return setChartType(val);
