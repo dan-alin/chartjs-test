@@ -16,7 +16,6 @@ import {
 import type { DoughnutChartProps, GaugePlugin } from '@typings/charts';
 import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
-import { Button } from '@components/button';
 const gaugeNeedle = {
   id: 'gaugeNeedle',
 
@@ -94,7 +93,7 @@ const GaugeChart: FC<DoughnutChartProps> = ({
   customOptions = {},
   customData = getDefaultData(),
 }) => {
-  const { data, chartRef, options, generateNewData } = useChart(
+  const { data, chartRef, options } = useChart(
     'gauge',
     customOptions,
     customData
@@ -110,7 +109,6 @@ const GaugeChart: FC<DoughnutChartProps> = ({
           ref={chartRef}
         />
       </div>
-      <Button onClick={() => generateNewData(1, 3, 'gauge')}>New Data</Button>
     </>
   );
 };

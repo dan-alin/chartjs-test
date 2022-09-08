@@ -78,7 +78,7 @@ Tooltip.positioners.myCustomPositioner = function (this) {
 
   return {
     x: this.getActiveElements()[0]?.element?.x,
-    y: 100,
+    y: this.getActiveElements()[0]?.element?.y,
     // You may also include xAlign and yAlign to override those tooltip options.
   };
 };
