@@ -216,33 +216,31 @@ export const AMChartDataGenerator = (
     'Platinum',
   ]
 ): AMChartsData => {
-  let chartData: AMChartsData = [];
+  let chartData: AMChartsData = {};
 
   switch (chartType) {
     case 'force_directed':
-      chartData = [
-        {
-          name: 'Root',
-          value: 0,
-          children: groups.map((group) => {
-            return {
-              name: group,
-              value: 0,
-              children: range(
-                faker.datatype.number({ min: 10, max: dataRange })
-              ).map(() => {
-                const circleData: CircularPackingElement = {
-                  type: group,
-                  name: `${faker.helpers.arrayElement(names)}`,
-                  value: faker.datatype.number({ min: 10, max: 100 }),
-                  id: faker.random.alphaNumeric(7),
-                };
-                return circleData;
-              }),
-            };
-          }),
-        },
-      ];
+      chartData = {
+        name: 'Root',
+        value: 0,
+        children: groups.map((group) => {
+          return {
+            name: group,
+            value: 0,
+            children: range(
+              faker.datatype.number({ min: 10, max: dataRange })
+            ).map(() => {
+              const circleData: CircularPackingElement = {
+                type: group,
+                name: `${faker.helpers.arrayElement(names)}`,
+                value: faker.datatype.number({ min: 10, max: 100 }),
+                id: faker.random.alphaNumeric(7),
+              };
+              return circleData;
+            }),
+          };
+        }),
+      };
       break;
   }
 
