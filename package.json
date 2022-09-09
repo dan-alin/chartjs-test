@@ -14,6 +14,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@amcharts/amcharts5": "^5.2.21",
     "@haty-2ndb/untitled": "https://api.observablehq.com/@haty-2ndb/untitled.tgz?v=3",
     "@kurkle/color": "^0.2.1",
     "@observablehq/runtime": "^4.23.0",
@@ -22,6 +23,7 @@
     "chartjs-plugin-zoom": "^1.2.1",
     "clsx": "^1.2.1",
     "d3": "^7.6.1",
+    "faker": "^5.5.3",
     "gsap": "^3.10.4",
     "i18next": "^21.8.4",
     "i18next-http-backend": "^1.4.0",

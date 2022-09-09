@@ -91,4 +91,19 @@ export const colorsDefaults: string[] = [
   '#882dff',
 ];
 
+export const GroupsColors = [
+  {
+    group: 'CLASSIC',
+    color: '#5856d6',
+  },
+  {
+    group: 'X-TEAM',
+    color: '#39b2e9',
+  },
+  {
+    group: 'TREND',
+    color: '#e35183',
+  },
+];
+
 export default chartConfigurations;
