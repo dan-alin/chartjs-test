@@ -29,9 +29,9 @@ const charts: ChartInfoProps[] = [
   {
     id: 'line',
   },
-  {
-    id: 'pie',
-  },
+  // {
+  //   id: 'pie',
+  // },
   {
     id: 'doughnut',
   },
@@ -64,9 +64,11 @@ const customLineOptions: ChartOptions<'line'> = {
   plugins: {
     title,
     tooltip: {
+      enabled: true,
       yAlign: 'bottom',
       usePointStyle: true,
-      position: 'myCustomPositioner',
+      position: 'nearest',
+      xAlign: 'right',
     },
     zoom: {
       zoom: {
@@ -111,7 +113,6 @@ const customPieOptions: ChartOptions<'pie'> = {
       boxWidth: 20,
       bodyColor: '#333',
       bodyFont: { weight: 'bold' },
-
       borderColor: '#f4f4f4',
     },
   },
@@ -200,6 +201,7 @@ const circularPackingData = d3ChartDataGenerator('D3_circular');
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
   // const description = i18n.t(`charts.${chart.id}.description`);
+
   switch (chart.id) {
     case 'line':
     case 'linearea':
@@ -232,6 +234,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
           customOptions={customLineOptions}
           customData={customLineData as ChartData<'line'>}
           customFill={customFill}
+          showAlwaysTooltip={chart.id === 'line'}
         />
       );
     case 'pie':

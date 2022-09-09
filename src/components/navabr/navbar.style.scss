@@ -3,14 +3,16 @@
   position: sticky;
   height: 100px;
   width: 100%;
-  background: var(--primary);
+  background: var(--white);
   top: 0;
   z-index: 10;
   align-items: center;
   justify-content: space-around;
   color: var(--text);
+  box-shadow: 0 2px 2px -2px gray;
 
   h2 {
     font-size: 32px;
+    color: var(--primary);
   }
 }

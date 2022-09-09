@@ -21,6 +21,7 @@ const useChart = (
   customOptions: ChartOptions,
   customData: ChartData,
   customFill?: ComplexFillTarget
+  // plugins?: any
 ) => {
   const chartRef = useRef<ChartJS<any>>(null);
   const { themeType } = useTheme();
@@ -28,6 +29,7 @@ const useChart = (
     labels: [],
     datasets: [],
   });
+  // const [pluginList, setPluginList] = useState([]);
   const defaultOptions: ChartOptions = getDefaultOptions(themeType);
   const options: ChartOptions = merge(defaultOptions, customOptions);
 
@@ -39,6 +41,8 @@ const useChart = (
     chart.options = merge(options, customOptions);
 
     if (type === 'line') {
+      // setPluginList(plugins);
+
       const chartData = customFill
         ? {
             ...customData,
