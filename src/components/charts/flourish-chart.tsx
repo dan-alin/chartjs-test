@@ -1,6 +1,10 @@
 import React, { FC, useEffect } from 'react';
 
-const FlourishChart: FC = () => {
+interface FlourishChartProps {
+  dataSrc: string;
+}
+
+const FlourishChart: FC<FlourishChartProps> = (props) => {
   useEffect(() => {
     const script = document.createElement('script');
 
@@ -12,13 +16,19 @@ const FlourishChart: FC = () => {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [props]);
 
   return (
-    <div
-      className='flourish-embed flourish-chart'
-      data-src='visualisation/11069148' // 11097038 bubble
-    ></div>
+    <div>
+      <iframe
+        src={`https://flo.uri.sh/visualisation/${props.dataSrc}/embed`}
+        title='Interactive or visual content'
+        className='flourish-embed-iframe'
+        scrolling='no'
+        style={{ width: '90%', height: '450px' }}
+        sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'
+      ></iframe>
+    </div>
   );
 };
 

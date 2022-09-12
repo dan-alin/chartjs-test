@@ -36,6 +36,10 @@
     "gauge": {
       "label": "Gauge Chart",
       "description": "A gauge chart is a type of data visualization often used to display a single data value with a quantitative context. "
+    },
+    "bubble": {
+      "label": "Bubble Chart",
+      "description": "A circular packing chart displays a hierarchical dataset as a set of nested circles. Nodes are displayed as circles. Size is usually proportional to a numeric variable."
     }
   }
 }
