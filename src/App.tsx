@@ -6,12 +6,15 @@ import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
 import LibTest from '@pages/libtest.page';
+import AmCharts from '@pages/amcharts.page';
+import routes from './routes';
 
 const RoutesComponent: FC = () => {
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/libtest' element={<LibTest />} />
+      <Route path={routes.home} element={<Home />} />
+      <Route path={routes.flourish} element={<LibTest />} />
+      <Route path={routes.amcharts} element={<AmCharts />} />
     </Routes>
   );
 };
