@@ -14,6 +14,9 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@amcharts/amcharts5": "^5.2.21",
+    "@amcharts/amcharts5-fonts": "^5.0.1",
+    "@amcharts/amcharts5-geodata": "^5.0.3",
     "@haty-2ndb/untitled": "https://api.observablehq.com/@haty-2ndb/untitled.tgz?v=3",
     "@kurkle/color": "^0.2.1",
     "@observablehq/runtime": "^4.23.0",
