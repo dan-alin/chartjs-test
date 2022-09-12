@@ -40,6 +40,10 @@
     "bubble": {
       "label": "Bubble Chart",
       "description": "A circular packing chart displays a hierarchical dataset as a set of nested circles. Nodes are displayed as circles. Size is usually proportional to a numeric variable."
+    },
+    "force_directed": {
+      "label": "Force Directed Chart",
+      "description": "A circular packing chart displays a hierarchical dataset as a set of nested circles. Nodes are displayed as circles. Size is usually proportional to a numeric variable."
     }
   }
 }

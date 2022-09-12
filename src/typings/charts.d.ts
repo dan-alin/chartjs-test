@@ -5,8 +5,9 @@ import {
   TooltipPositionerFunction,
 } from 'chart.js';
 export type d3Charts = 'D3_circular';
+export type AMCharts = 'force_directed';
 export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
-export type Charts = chartJsCharts | d3Charts;
+export type Charts = chartJsCharts | d3Charts | AMCharts;
 
 export type ChartProps = {
   size?: ChartSize;
@@ -37,6 +38,12 @@ export type PieChartProps = ChartProps & {
 };
 export type ScatterChartProps = ChartProps & {
   customOptions?: ChartOptions<'scatter'>;
+};
+
+export type ForceDirectedProps = {
+  size?: ChartSize;
+  customData: ForceDirected;
+  customOptions?;
 };
 
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
@@ -73,3 +80,18 @@ export type CircularPackingElement = {
 export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
+
+export type AMChartsData = ForceDirected | any;
+
+export type ForceDirected = {
+  name: string;
+  value?: number;
+  children?: ForceDirectedData[];
+};
+
+export type ForceDirectedData = {
+  name: string;
+  id: string;
+  value?: number;
+  type?: string;
+};
