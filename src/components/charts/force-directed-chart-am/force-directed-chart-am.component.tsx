@@ -1,15 +1,26 @@
-import { ForceDirected, ForceDirectedProps } from '@typings/charts';
-import React, { FC, useEffect, useId, useLayoutEffect, useState } from 'react';
+import {
+  ForceDirected,
+  ForceDirectedData,
+  ForceDirectedProps,
+} from '@typings/charts';
+import React, {
+  FC,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5hierarchy from '@amcharts/amcharts5/hierarchy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { Color } from '@amcharts/amcharts5';
+import { GroupsColors } from 'src/utils/configurations/chart-config';
 // import { faker } from "@faker-js/faker";
 
 const ForceDirectedchart: FC<ForceDirectedProps> = ({
   size = 'responsive',
-  // customOptions = {},
   customData,
 }) => {
   const chartId = useId();
@@ -34,6 +45,8 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
       ...settings,
     };
   };
+
+  const groupFilter = useRef('all');
 
   useEffect(() => {
     if (customData) {
@@ -76,24 +89,24 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
         valueField: 'value',
         categoryField: 'name',
         childDataField: 'children',
-        initialFrames: 500,
-        showOnFrame: 5,
-        velocityDecay: 0.6,
-        singleBranchOnly: false,
-        initialDepth: 1,
+        initialFrames: 200,
+        showOnFrame: 3,
+        velocityDecay: 0.4,
+        initialDepth: 3,
         downDepth: 10,
-        topDepth: 3,
+        topDepth: 2,
         manyBodyStrength: -1,
         //centerStrength: 0.7,
         nodePadding: 0,
         minRadius: 5,
-        //maxRadius: am5.percent(12)
+        maxRadius: am5.percent(5),
+        //linkWithField: "type"
       })
     );
     const labeSettings: Partial<am5.ILabelSettings> = generateLabel({
       text: '[bold]{type}[/]\n{category}\n{sum}%',
       oversizedBehavior: 'fit',
-      minScale: 10,
+      minScale: 5,
       layer: 100000,
     });
     series.labels.template.setAll(labeSettings);
@@ -112,12 +125,27 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
 
     circles.setAll(circleSetting);
 
+    circles.adapters.add('fill', (fill, target: am5.Circle) => {
+      if (target && target.dataItem?.dataContext) {
+        const item = target.dataItem?.dataContext as ForceDirectedData;
+        const groupColor = GroupsColors.find(
+          (colorgroup) => colorgroup.group === item['type']
+        );
+        if (groupColor) {
+          return am5.color(groupColor.color);
+        } else {
+          return fill;
+        }
+      }
+    });
+
     circles.states.create('hover', {
       fillOpacity: 1,
       strokeWidth: 1.5,
       strokeOpacity: 1,
       scale: 1.3,
       layer: 10000,
+      stateAnimationDuration: 300,
     });
 
     circles.events.on(
@@ -128,8 +156,6 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
           target: am5.Circle;
         }
       ) => {
-        console.log('hover', event.target);
-
         event.target.toFront();
       }
     );
@@ -143,8 +169,27 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
         }
       ) => {
         console.log(ev.target);
+        const currentCircle = ev.target.dataItem
+          ?.dataContext as ForceDirectedData;
+        if (currentCircle?.type && customData?.children) {
+          groupFilter.current =
+            groupFilter.current === 'all' ? currentCircle?.type : 'all';
+          setChartData({
+            ...chartData,
+            children: customData.children.filter((circle) =>
+              groupFilter.current === 'all'
+                ? true
+                : circle.type === groupFilter.current
+            ),
+          });
+        }
       }
     );
+
+    series.outerCircles.template.setAll({
+      strokeWidth: 2,
+      stroke: am5.color('#ffff00'),
+    });
     // -----
 
     // NODES

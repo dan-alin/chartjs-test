@@ -203,7 +203,7 @@ export const d3ChartDataGenerator = (
 
 export const AMChartDataGenerator = (
   chartType: AMCharts,
-  dataRange = 20,
+  dataRange = 15,
   groups = ['CLASSIC', 'X-TEAM', 'TREND'],
   names = [
     'Global allocation',
@@ -226,14 +226,16 @@ export const AMChartDataGenerator = (
         children: groups.map((group) => {
           return {
             name: group,
+            type: group,
             value: 0,
             children: range(
-              faker.datatype.number({ min: 10, max: dataRange })
+              faker.datatype.number({ min: 5, max: dataRange })
             ).map(() => {
+              const circleValue = faker.datatype.number({ min: 10, max: 100 });
               const circleData: CircularPackingElement = {
                 type: group,
                 name: `${faker.helpers.arrayElement(names)}`,
-                value: faker.datatype.number({ min: 10, max: 100 }),
+                value: circleValue,
                 id: faker.random.alphaNumeric(7),
               };
               return circleData;

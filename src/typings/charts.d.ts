@@ -40,7 +40,9 @@ export type ScatterChartProps = ChartProps & {
   customOptions?: ChartOptions<'scatter'>;
 };
 
-export type ForceDirectedProps = ChartProps & {
+export type ForceDirectedProps = {
+  size?: ChartSize;
+  customData: ForceDirected;
   customOptions?;
 };
 
