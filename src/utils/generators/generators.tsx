@@ -4,6 +4,8 @@ import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
 import colorLib, { Color, RGBA } from '@kurkle/color';
 import {
+  AMCharts,
+  AMChartsData,
   chartJsCharts,
   CircularPackingElement,
   CircularPackingMainData,
@@ -191,6 +193,52 @@ export const d3ChartDataGenerator = (
             id: faker.random.alphaNumeric(7),
           };
           return circleData;
+        }),
+      };
+      break;
+  }
+
+  return chartData;
+};
+
+export const AMChartDataGenerator = (
+  chartType: AMCharts,
+  dataRange = 20,
+  groups = ['CLASSIC', 'X-TEAM', 'TREND'],
+  names = [
+    'Global allocation',
+    'BlackRock',
+    'RedRock',
+    'Income Strategy',
+    'Tecnology',
+    'Gold',
+    'Silver',
+    'Platinum',
+  ]
+): AMChartsData => {
+  let chartData: AMChartsData = {};
+
+  switch (chartType) {
+    case 'force_directed':
+      chartData = {
+        name: 'Root',
+        value: 0,
+        children: groups.map((group) => {
+          return {
+            name: group,
+            value: 0,
+            children: range(
+              faker.datatype.number({ min: 10, max: dataRange })
+            ).map(() => {
+              const circleData: CircularPackingElement = {
+                type: group,
+                name: `${faker.helpers.arrayElement(names)}`,
+                value: faker.datatype.number({ min: 10, max: 100 }),
+                id: faker.random.alphaNumeric(7),
+              };
+              return circleData;
+            }),
+          };
         }),
       };
       break;

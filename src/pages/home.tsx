@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { chartConfigurations, yAxeRight } from '../utils';
-import { ChartInfoProps } from '@typings/charts.d';
+import { ChartInfoProps, Charts } from '@typings/charts.d';
 import {
   ChartData,
   ChartOptions,
@@ -18,20 +18,24 @@ import {
   ScatterChart,
   CircularPacking,
   GaugeChart,
+  ForceDirectedchart,
 } from '@components/charts';
 import chartDataGenerator, {
   d3ChartDataGenerator,
+  AMChartDataGenerator,
 } from 'src/utils/generators/generators';
 import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
+
+const hideCharts: Charts[] = ['pie'];
 
 const charts: ChartInfoProps[] = [
   {
     id: 'line',
   },
-  // {
-  //   id: 'pie',
-  // },
+  {
+    id: 'pie',
+  },
   {
     id: 'doughnut',
   },
@@ -52,6 +56,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'gauge',
+  },
+  {
+    id: 'force_directed',
   },
 ];
 
@@ -198,6 +205,8 @@ const customScatterData = chartDataGenerator(
 
 const circularPackingData = d3ChartDataGenerator('D3_circular');
 
+const customForceDirectedData = AMChartDataGenerator('force_directed', 40);
+
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
   // const description = i18n.t(`charts.${chart.id}.description`);
@@ -290,13 +299,15 @@ const renderSwitch = (chart: ChartInfoProps) => {
           customData={customGaugeData}
         />
       );
+    case 'force_directed':
+      return <ForceDirectedchart customData={customForceDirectedData} />;
     default:
       return <div>No chart</div>;
   }
 };
 
 const Home: FC = () => {
-  const [chartType, setChartType] = useState<ChartInfoProps>(charts[0]);
+  const [chartType, setChartType] = useState<ChartInfoProps>(charts[9]);
 
   const { t } = useTranslation();
 
@@ -320,13 +331,15 @@ const Home: FC = () => {
             value={chartType.id}
             onChange={(event) => changeChart(event.target)}
           >
-            {charts.map((chart) => {
-              return (
-                <option value={chart.id} key={chart.id}>
-                  {t(`charts.${chart.id}.label`)}
-                </option>
-              );
-            })}
+            {charts
+              .filter((chart) => hideCharts.indexOf(chart.id) < 0)
+              .map((chart) => {
+                return (
+                  <option value={chart.id} key={chart.id}>
+                    {t(`charts.${chart.id}.label`)}
+                  </option>
+                );
+              })}
           </Form.Select>
         </Col>
       </Row>

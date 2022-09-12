@@ -41,7 +41,7 @@ const BarChart: FC<BarChartProps> = ({
         <Bar
           key={Math.random()}
           redraw
-          options={options as ChartOptions}
+          options={options as ChartOptions<'bar'>}
           data={data}
           ref={chartRef}
         />
