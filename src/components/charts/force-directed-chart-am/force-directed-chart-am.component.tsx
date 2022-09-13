@@ -3,14 +3,7 @@ import {
   ForceDirectedData,
   ForceDirectedProps,
 } from '@typings/charts';
-import React, {
-  FC,
-  useEffect,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, useEffect, useId, useRef, useState } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5hierarchy from '@amcharts/amcharts5/hierarchy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
@@ -24,9 +17,9 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
   customData,
 }) => {
   const chartId = useId();
+
   const [chartData, setChartData] = useState<ForceDirected>({
     value: 0,
-    name: 'Root',
     children: [],
   });
   //const chartRef = useRef(null);
@@ -35,8 +28,7 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
     settings: am5.ILabelSettings
   ): Partial<am5.ILabelSettings> => {
     return {
-      fontSize: 12,
-      //fill: am5.color(0x550000),
+      fontSize: 11,
       oversizedBehavior: 'truncate',
       breakWords: true,
       textAlign: 'center',
@@ -54,7 +46,7 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
     }
   }, [customData]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
 
     // THEME CHART
@@ -92,25 +84,38 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
         initialFrames: 200,
         showOnFrame: 3,
         velocityDecay: 0.4,
-        initialDepth: 3,
-        downDepth: 10,
-        topDepth: 2,
-        manyBodyStrength: -1,
-        //centerStrength: 0.7,
+        initialDepth: 1,
+        downDepth: 3,
+        topDepth: 1,
+        manyBodyStrength: 0.1,
+        centerStrength: 0.1,
         nodePadding: 0,
         minRadius: 5,
         maxRadius: am5.percent(5),
-        //linkWithField: "type"
       })
     );
     const labeSettings: Partial<am5.ILabelSettings> = generateLabel({
-      text: '[bold]{type}[/]\n{category}\n{sum}%',
+      text: '[fontSize: 14px]+{sum}%[/]\n[bold]{type}[/]\n{category}',
       oversizedBehavior: 'fit',
       minScale: 5,
+      lineHeight: 1.2,
       layer: 100000,
     });
+
+    series.events.on(
+      'pointerover',
+      (
+        event: am5.ISpritePointerEvent & {
+          type: 'pointerover';
+          target: am5hierarchy.ForceDirected;
+        }
+      ) => {
+        console.log(event.target.labels.template);
+        event.target.toFront();
+      }
+    );
+
     series.labels.template.setAll(labeSettings);
-    series.hideTooltip();
 
     // CIRCLES
     const circles = series.circles.template;
@@ -125,19 +130,27 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
 
     circles.setAll(circleSetting);
 
-    circles.adapters.add('fill', (fill, target: am5.Circle) => {
-      if (target && target.dataItem?.dataContext) {
-        const item = target.dataItem?.dataContext as ForceDirectedData;
-        const groupColor = GroupsColors.find(
-          (colorgroup) => colorgroup.group === item['type']
-        );
-        if (groupColor) {
-          return am5.color(groupColor.color);
-        } else {
-          return fill;
+    circles.adapters.add(
+      'fill',
+      (
+        fill: am5.Color | undefined,
+        target: am5.Circle
+      ): am5.Color | undefined => {
+        if (target && target.dataItem?.dataContext) {
+          const item = target.dataItem?.dataContext as ForceDirectedData;
+          const groupColor = GroupsColors.find(
+            (colorgroup) => colorgroup.group === item['type']
+          );
+          let color: am5.Color | undefined;
+          if (groupColor) {
+            color = am5.color(groupColor.color);
+          } else if (fill) {
+            color = fill;
+          }
+          return color;
         }
       }
-    });
+    );
 
     circles.states.create('hover', {
       fillOpacity: 1,
@@ -148,17 +161,17 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
       stateAnimationDuration: 300,
     });
 
-    circles.events.on(
-      'pointerover',
-      (
-        event: am5.ISpritePointerEvent & {
-          type: 'pointerover';
-          target: am5.Circle;
-        }
-      ) => {
-        event.target.toFront();
-      }
-    );
+    // circles.events.on(
+    //   'pointerover',
+    //   (
+    //     event: am5.ISpritePointerEvent & {
+    //       type: 'pointerover';
+    //       target: am5.Circle;
+    //     }
+    //   ) => {
+    //     event.target.toFront();
+    //   }
+    // );
 
     circles.events.on(
       'click',
@@ -199,6 +212,7 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
       draggable: false,
       toggleKey: 'none',
       tooltipText: '',
+      cursorOverStyle: 'zoom-in',
     });
 
     series.data.setAll([chartData]);
@@ -208,12 +222,12 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
     return () => {
       root.dispose();
     };
-  }, [chartId, chartData]);
+  }, [chartId, chartData, customData.children]);
 
   return (
     <>
       <div className={`chart__container chart__container--${size}`}>
-        <div id={chartId} style={{ width: '100%', height: '1000px' }}></div>
+        <div id={chartId} className={'force_chart'}></div>
       </div>
     </>
   );

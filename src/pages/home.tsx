@@ -27,7 +27,7 @@ import chartDataGenerator, {
 import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
 
-const hideCharts: Charts[] = ['pie'];
+const hideCharts: Charts[] = ['pie', 'D3_circular'];
 
 const charts: ChartInfoProps[] = [
   {
@@ -84,6 +84,9 @@ const customLineOptions: ChartOptions<'line'> = {
         },
         mode: 'x',
       },
+    },
+    legend: {
+      position: 'left' as const,
     },
   },
   scales: {
@@ -153,6 +156,12 @@ const customScatterOptions: ChartOptions<'scatter'> = {
       max: 100,
       min: -100,
       //grid: { display: false }
+    },
+  },
+  plugins: {
+    title,
+    legend: {
+      position: 'right' as const,
     },
   },
 };
@@ -239,7 +248,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
       }
       return (
         <LineChart
-          size='xl'
+          size='responsive'
           customOptions={customLineOptions}
           customData={customLineData as ChartData<'line'>}
           customFill={customFill}
@@ -249,7 +258,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'pie':
       return (
         <PieChart
-          size='xs'
+          size='responsive'
           customOptions={customPieOptions}
           customData={customPieData}
         />
@@ -258,7 +267,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'doughnut':
       return (
         <DoughnutChart
-          size='xs'
+          size='responsive'
           customOptions={customDoughnutOptions}
           customData={customDoughnutData}
         />
@@ -274,7 +283,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
       }
       return (
         <BarChart
-          size='xl'
+          size='responsive'
           customOptions={customBarOptions}
           customData={customBarData as ChartData<'bar'>}
         />
@@ -282,7 +291,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'scatter':
       return (
         <ScatterChart
-          size='md'
+          size='responsive'
           customOptions={customScatterOptions}
           customData={customScatterData}
         />
@@ -294,7 +303,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'gauge':
       return (
         <GaugeChart
-          size='xs'
+          size='responsive'
           customOptions={customGaugeOptions}
           customData={customGaugeData}
         />
@@ -307,7 +316,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
 };
 
 const Home: FC = () => {
-  const [chartType, setChartType] = useState<ChartInfoProps>(charts[9]);
+  const [chartType, setChartType] = useState<ChartInfoProps>(charts[0]);
 
   const { t } = useTranslation();
 
