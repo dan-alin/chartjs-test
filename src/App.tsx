@@ -23,7 +23,6 @@ const RoutesComponent: FC = () => {
         path={routes.flourishchart}
         element={<FlourishChart dataId='11160304' />}
       />
-      <Route path='/libtest' element={<LibTest />} />
       <Route path={routes.flourish} element={<LibTest />} />
       <Route path={routes.amcharts} element={<AmCharts />} />
     </Routes>
