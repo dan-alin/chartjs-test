@@ -6,11 +6,18 @@ import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
 import LibTest from '@pages/libtest.page';
+import ForceDirectedChart from '@pages/forceDirected.page';
+import FlourishChart from '@components/charts/flourish-chart';
 
 const RoutesComponent: FC = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
+      <Route path='/forcedirectedchart' element={<ForceDirectedChart />} />
+      <Route
+        path='/flourishchart'
+        element={<FlourishChart dataId='11160304' />}
+      />
       <Route path='/libtest' element={<LibTest />} />
     </Routes>
   );
