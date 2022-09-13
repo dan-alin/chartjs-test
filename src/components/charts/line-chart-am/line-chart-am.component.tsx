@@ -163,9 +163,9 @@ const LineChartAm: FC<LineChartAmProps> = ({
       return 0;
     });
 
-    axisFill.events.on('dragstop', function () {
+    axisFill?.events.on('dragstop', function () {
       const dx = axisFill?.x();
-      const x = resizeButton1.x() + dx!;
+      const x = resizeButton1.x() + dx;
       const position = xAxis.toAxisPosition(x / chart.plotContainer.width());
       const endPosition = xAxis.toAxisPosition(
         (x + axisFill.width()) / chart.plotContainer.width()
