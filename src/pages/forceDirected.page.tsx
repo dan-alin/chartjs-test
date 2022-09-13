@@ -1,11 +1,15 @@
-import { ForceDirectedchart } from '@components/charts';
+import { ForceDirectedChart } from '@components/charts';
+import { ForceDirected } from '@typings/charts';
 import React, { FC } from 'react';
 import { AMChartDataGenerator } from 'src/utils/generators/generators';
 
-const ForceDirectedChart: FC = () => {
-  const customForceDirectedData = AMChartDataGenerator('force_directed', 40);
+const ForceDirectedPage: FC = () => {
+  const customForceDirectedData = AMChartDataGenerator(
+    'force_directed',
+    40
+  ) as ForceDirected;
 
-  return <ForceDirectedchart customData={customForceDirectedData} />;
+  return <ForceDirectedChart customData={customForceDirectedData} />;
 };
 
-export default ForceDirectedChart;
+export default ForceDirectedPage;

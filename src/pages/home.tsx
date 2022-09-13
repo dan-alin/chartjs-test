@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { chartConfigurations, yAxeRight } from '../utils';
-import { ChartInfoProps, Charts } from '@typings/charts.d';
+import {
+  ChartInfoProps,
+  Charts,
+  DoughnutData,
+  ForceDirected,
+} from '@typings/charts.d';
 import {
   ChartData,
   ChartOptions,
@@ -18,7 +23,7 @@ import {
   ScatterChart,
   CircularPacking,
   GaugeChart,
-  ForceDirectedchart,
+  ForceDirectedChart,
 } from '@components/charts';
 import chartDataGenerator, {
   d3ChartDataGenerator,
@@ -26,8 +31,9 @@ import chartDataGenerator, {
 } from 'src/utils/generators/generators';
 import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
+import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
 
-const hideCharts: Charts[] = ['pie', 'D3_circular'];
+const hideCharts: Charts[] = ['pie', 'doughnut', 'D3_circular'];
 
 const charts: ChartInfoProps[] = [
   {
@@ -38,6 +44,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'doughnut',
+  },
+  {
+    id: 'am_doughnut',
   },
   {
     id: 'bar',
@@ -214,7 +223,16 @@ const customScatterData = chartDataGenerator(
 
 const circularPackingData = d3ChartDataGenerator('D3_circular');
 
-const customForceDirectedData = AMChartDataGenerator('force_directed', 40);
+const customForceDirectedData = AMChartDataGenerator(
+  'force_directed',
+  40
+) as ForceDirected;
+const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
+  'Cash',
+  'Equity',
+  'Bond',
+  'Altro',
+]) as DoughnutData[];
 
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
@@ -309,7 +327,9 @@ const renderSwitch = (chart: ChartInfoProps) => {
         />
       );
     case 'force_directed':
-      return <ForceDirectedchart customData={customForceDirectedData} />;
+      return <ForceDirectedChart customData={customForceDirectedData} />;
+    case 'am_doughnut':
+      return <DoughnutChartAM customData={customAmdoughnutData} />;
     default:
       return <div>No chart</div>;
   }

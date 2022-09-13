@@ -4,14 +4,19 @@ import {
   ComplexFillTarget,
   TooltipPositionerFunction,
 } from 'chart.js';
+import * as am5 from '@amcharts/amcharts5';
 export type d3Charts = 'D3_circular';
-export type AMCharts = 'force_directed';
+export type AMCharts = 'force_directed' | 'am_doughnut';
 export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
 export type Charts = chartJsCharts | d3Charts | AMCharts;
 
 export type ChartProps = {
   size?: ChartSize;
   customData?;
+};
+
+export type AmChartProps = {
+  size?: ChartSize;
 };
 
 export type GaugePlugin = {
@@ -40,10 +45,12 @@ export type ScatterChartProps = ChartProps & {
   customOptions?: ChartOptions<'scatter'>;
 };
 
-export type ForceDirectedProps = {
-  size?: ChartSize;
+export type ForceDirectedProps = AmChartProps & {
   customData: ForceDirected;
-  customOptions?;
+};
+
+export type AmDoughnutProps = AmChartProps & {
+  customData: DoughnutData[];
 };
 
 export type LineChartAmProps = ChartProps & {
@@ -84,12 +91,12 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData = ForceDirected | any;
+export type AMChartsData = ForceDirected | DoughnutData[];
 
 export type ForceDirected = {
   name?: string;
   value?: number;
-  children?: ForceDirectedData[];
+  children: ForceDirectedData[];
 };
 
 export type ForceDirectedData = {
@@ -97,4 +104,10 @@ export type ForceDirectedData = {
   id: string;
   value?: number;
   type?: string;
+};
+
+export type DoughnutData = {
+  name: string;
+  value: number;
+  color: am5.Color;
 };

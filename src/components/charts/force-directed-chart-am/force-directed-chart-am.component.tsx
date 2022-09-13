@@ -12,7 +12,7 @@ import { Color } from '@amcharts/amcharts5';
 import { GroupsColors } from 'src/utils/configurations/chart-config';
 // import { faker } from "@faker-js/faker";
 
-const ForceDirectedchart: FC<ForceDirectedProps> = ({
+const ForceDirectedChart: FC<ForceDirectedProps> = ({
   size = 'responsive',
   customData,
 }) => {
@@ -227,9 +227,9 @@ const ForceDirectedchart: FC<ForceDirectedProps> = ({
   return (
     <>
       <div className={`chart__container chart__container--${size}`}>
-        <div id={chartId} className={'force_chart'}></div>
+        <div id={chartId} className={'am_chart force_chart'}></div>
       </div>
     </>
   );
 };
-export default ForceDirectedchart;
+export default ForceDirectedChart;

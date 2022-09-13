@@ -1,4 +1,5 @@
 import { BubbleDataPoint, ChartArea, ChartData, ChartDataset } from 'chart.js';
+import * as am5 from '@amcharts/amcharts5';
 import { range } from 'lodash';
 import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
@@ -10,8 +11,10 @@ import {
   CircularPackingElement,
   CircularPackingMainData,
   d3Charts,
+  ForceDirected,
   GaugePlugin,
 } from '@typings/charts';
+import { AssetColors } from '../configurations/chart-config';
 
 export const generateLabels = (arrayRange = 3, label = 'label'): string[] => {
   return range(arrayRange).map((index) => `${label} ${index + 1}`);
@@ -216,7 +219,7 @@ export const AMChartDataGenerator = (
     'Platinum',
   ]
 ): AMChartsData => {
-  let chartData: AMChartsData = {};
+  let chartData: AMChartsData;
 
   switch (chartType) {
     case 'force_directed':
@@ -224,9 +227,10 @@ export const AMChartDataGenerator = (
         value: 0,
         children: [],
       };
+
       groups.forEach((group) => {
-        chartData.children = [
-          ...chartData.children,
+        (chartData as ForceDirected).children = [
+          ...(chartData as ForceDirected).children,
           ...range(faker.datatype.number({ min: 5, max: dataRange })).map(
             () => {
               const circleData: CircularPackingElement = {
@@ -239,6 +243,17 @@ export const AMChartDataGenerator = (
             }
           ),
         ];
+      });
+      break;
+    case 'am_doughnut':
+      chartData = groups.map((group) => {
+        const colorGroup = AssetColors.find((asset) => asset.group === group);
+
+        return {
+          name: group,
+          color: am5.color(colorGroup ? colorGroup.color : faker.color.rgb()),
+          value: faker.datatype.number({ min: 10, max: dataRange }),
+        };
       });
       break;
   }
