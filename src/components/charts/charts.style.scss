@@ -50,13 +50,19 @@ tspan {
   word-break: break-all;
 }
 
-.force_chart {
+.am_chart {
   width: 100%;
   height: 600px;
+  &.doughnut_chart {
+    height: 700px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-  .force_chart {
+  .am_chart {
     height: 400px;
+    &.doughnut_chart {
+      height: 450px;
+    }
   }
 }

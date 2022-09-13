@@ -106,4 +106,23 @@ export const GroupsColors = [
   },
 ];
 
+export const AssetColors = [
+  {
+    group: 'Cash',
+    color: '#0e9eff',
+  },
+  {
+    group: 'Equity',
+    color: '#ff9959',
+  },
+  {
+    group: 'Bond',
+    color: '#61d7a6',
+  },
+  {
+    group: 'Altro',
+    color: '#837d87',
+  },
+];
+
 export default chartConfigurations;
