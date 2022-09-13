@@ -84,7 +84,7 @@ export type CircularPackingData =
 export type AMChartsData = ForceDirected | any;
 
 export type ForceDirected = {
-  name: string;
+  name?: string;
   value?: number;
   children?: ForceDirectedData[];
 };

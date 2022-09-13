@@ -221,30 +221,28 @@ export const AMChartDataGenerator = (
   switch (chartType) {
     case 'force_directed':
       chartData = {
-        name: 'Root',
         value: 0,
-        children: groups.map((group) => {
-          return {
-            name: group,
-            type: group,
-            value: 0,
-            children: range(
-              faker.datatype.number({ min: 5, max: dataRange })
-            ).map(() => {
-              const circleValue = faker.datatype.number({ min: 10, max: 100 });
+        children: [],
+      };
+      groups.forEach((group) => {
+        chartData.children = [
+          ...chartData.children,
+          ...range(faker.datatype.number({ min: 5, max: dataRange })).map(
+            () => {
               const circleData: CircularPackingElement = {
                 type: group,
                 name: `${faker.helpers.arrayElement(names)}`,
-                value: circleValue,
+                value: faker.datatype.number({ min: 10, max: 100 }),
                 id: faker.random.alphaNumeric(7),
               };
               return circleData;
-            }),
-          };
-        }),
-      };
+            }
+          ),
+        ];
+      });
       break;
   }
+  console.log('data', chartData);
 
   return chartData;
 };
