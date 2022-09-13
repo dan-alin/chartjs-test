@@ -1,7 +1,10 @@
-import React, { FC, useId, useLayoutEffect, useState } from 'react';
+import React, { FC, useEffect, useId, useLayoutEffect, useState } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import { IXYChartSettings } from '@amcharts/amcharts5/xy';
+import { LineChartAmProps } from '@typings/charts';
+import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+// import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 
 export enum ChartCategories {
   xy = 'xy',
@@ -34,16 +37,27 @@ const initChart = (
   return root?.container?.children.push(chartInit);
 };
 
-const LineChartAm: FC = () => {
+const LineChartAm: FC<LineChartAmProps> = ({
+  size = 'responsive',
+  // customOptions = {},
+  customData,
+}) => {
   const chartId = useId();
-  const [amRoot, setAmRoot] = useState<am5.Root>();
-  const [chartState, setChartState] = useState<number>(0);
+  const [chartData, setChartData] = useState<any>(null);
+
+  useEffect(() => {
+    if (customData) {
+      console.log(chartData);
+
+      setChartData(customData);
+    }
+  }, [customData]);
 
   useLayoutEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
 
-    setAmRoot(root);
-    // let chart = root.container.children.push(am5xy.XYChart.new(root, {}))
+    root.setThemes([am5themes_Animated.new(root)]);
+
     const chart = initChart(root, ChartCategories.xy);
 
     //cursor
@@ -253,10 +267,14 @@ const LineChartAm: FC = () => {
 
     return () => {
       root.dispose();
-      setChartState(1);
+      // setChartState(1);
     };
   }, []);
 
-  return <div id={chartId} style={{ width: '100%', height: '500px' }}></div>;
+  return (
+    <div className={`chart__container chart__container--${size}`}>
+      <div id={chartId} style={{ width: '100%', height: '500px' }}></div>
+    </div>
+  );
 };
 export default LineChartAm;
