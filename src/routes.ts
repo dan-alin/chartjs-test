@@ -1,6 +1,10 @@
 const routes = {
   home: '/',
-  d3: '/libtest',
+  flourish: '/flourish',
+  amcharts: '/amcharts',
+  forcedirectedchart: '/forcedirectedchart',
+  flourishchart: '/flourishchart',
+  linechart: '/linechart',
 };
 
 export default routes;

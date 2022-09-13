@@ -53,6 +53,9 @@ export type AmDoughnutProps = AmChartProps & {
   customData: DoughnutData[];
 };
 
+export type LineChartAmProps = ChartProps & {
+  customOptions?;
+};
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 
 export type CircularPackingProps = {

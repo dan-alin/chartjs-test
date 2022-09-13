@@ -5,4 +5,6 @@ export { default as PieChart } from './pie-chart.component';
 export { default as ScatterChart } from './scatter-chart.component';
 export { default as CircularPacking } from './circular-packing.component';
 export { default as GaugeChart } from './gauge-chart.component';
+export { default as LineChartAm } from './line-chart-am/line-chart-am.component';
+export { default as DoughnutChartAM } from './doughnut-chart-am/doughnut-chart-am.component';
 export { default as ForceDirectedChart } from './force-directed-chart-am/force-directed-chart-am.component';

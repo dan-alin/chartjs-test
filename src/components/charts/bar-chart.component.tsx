@@ -13,7 +13,6 @@ import {
 import { BarChartProps } from '@typings/charts.d';
 import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
-import { Button } from '@components/button';
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +28,7 @@ const BarChart: FC<BarChartProps> = ({
   customOptions = {},
   customData = getDefaultData(),
 }) => {
-  const { data, chartRef, options, generateNewData } = useChart(
+  const { data, chartRef, options } = useChart(
     'bar',
     customOptions,
     customData
@@ -46,7 +45,6 @@ const BarChart: FC<BarChartProps> = ({
           ref={chartRef}
         />
       </div>
-      <Button onClick={() => generateNewData(3, 3, 'bar')}>New Data</Button>
     </>
   );
 };
