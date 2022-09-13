@@ -87,7 +87,7 @@ const LibTest: FC = () => {
         return <div>No charts</div>;
     }
 
-    return <FlourishChart dataSrc={dataSrc} />;
+    return <FlourishChart dataId={dataSrc} />;
   };
 
   return (

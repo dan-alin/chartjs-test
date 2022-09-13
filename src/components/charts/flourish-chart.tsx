@@ -1,10 +1,10 @@
 import React, { FC, useEffect } from 'react';
 
 interface FlourishChartProps {
-  dataSrc: string;
+  dataId: string;
 }
 
-const FlourishChart: FC<FlourishChartProps> = (props) => {
+const FlourishChart: FC<FlourishChartProps> = ({ dataId }) => {
   useEffect(() => {
     const script = document.createElement('script');
 
@@ -16,12 +16,12 @@ const FlourishChart: FC<FlourishChartProps> = (props) => {
     return () => {
       document.body.removeChild(script);
     };
-  }, [props]);
+  }, [dataId]);
 
   return (
     <div>
       <iframe
-        src={`https://flo.uri.sh/visualisation/${props.dataSrc}/embed`}
+        src={`https://flo.uri.sh/visualisation/${dataId}/embed`}
         title='Interactive or visual content'
         className='flourish-embed-iframe'
         scrolling='no'
