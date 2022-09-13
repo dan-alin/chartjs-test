@@ -43,6 +43,8 @@ const RoutesComponent: FC = () => {
 const App: FC = () => {
   const { theme } = useTheme();
   const pathname = window.location.pathname;
+  console.log(pathname);
+
   const showNavbar = !hideNavbar.includes(pathname);
   return (
     <BrowserRouter>
