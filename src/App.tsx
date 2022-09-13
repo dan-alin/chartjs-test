@@ -11,8 +11,14 @@ import FlourishChart from '@components/charts/flourish-chart';
 import AmCharts from '@pages/amcharts.page';
 import routes from './routes';
 import LineChartAm from '@components/charts/line-chart-am/line-chart-am.component';
+import DoughnutAm from '@pages/doughhnutam.page';
 
-const hideNavbar = ['/linechart', '/forcedirectedchart', '/flourishchart'];
+const hideNavbar = [
+  '/linechart',
+  '/forcedirectedchart',
+  '/flourishchart',
+  '/doughnut',
+];
 
 const RoutesComponent: FC = () => {
   return (
@@ -29,6 +35,7 @@ const RoutesComponent: FC = () => {
       <Route path={routes.linechart} element={<LineChartAm />} />
       <Route path={routes.flourish} element={<LibTest />} />
       <Route path={routes.amcharts} element={<AmCharts />} />
+      <Route path={routes.doughnutam} element={<DoughnutAm />} />
     </Routes>
   );
 };

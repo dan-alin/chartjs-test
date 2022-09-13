@@ -5,6 +5,7 @@ const routes = {
   forcedirectedchart: '/forcedirectedchart',
   flourishchart: '/flourishchart',
   linechart: '/linechart',
+  doughnutam: '/doughnut',
 };
 
 export default routes;
