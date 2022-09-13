@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 // import { Button } from '@components';
 // import { useTheme } from 'src/contexts/theme/theme.context';
 import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 
 import './navbar.style.scss';
 
@@ -14,7 +15,12 @@ const Navbar: FC = () => {
 
   return (
     <div className='navbar'>
-      <h2>{t('title')}</h2>
+      <NavLink to={'/'}>
+        <h2>{t('title')}</h2>
+      </NavLink>
+
+      <NavLink to={'/amcharts'}>AMCharts</NavLink>
+      <NavLink to={'/flourish'}>Flourish</NavLink>
 
       {/* <Button onClick={toggleTheme}> {themeType}</Button> */}
     </div>

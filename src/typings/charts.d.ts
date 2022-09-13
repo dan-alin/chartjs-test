@@ -46,6 +46,9 @@ export type ForceDirectedProps = {
   customOptions?;
 };
 
+export type LineChartAmProps = ChartProps & {
+  customOptions?;
+};
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 
 export type CircularPackingProps = {
