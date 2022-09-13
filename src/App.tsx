@@ -6,11 +6,13 @@ import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
 import LibTest from '@pages/libtest.page';
-import ForceDirectedChart from '@pages/forceDirected.page';
+import ForceDirectedChart from '@pages/force-directed.page';
 import FlourishChart from '@components/charts/flourish-chart';
 import AmCharts from '@pages/amcharts.page';
 import routes from './routes';
 import LineChartAm from '@components/charts/line-chart-am/line-chart-am.component';
+
+const hideNavbar = ['/linechart', '/forcedirectedchart', '/flourishchart'];
 
 const RoutesComponent: FC = () => {
   return (
@@ -33,11 +35,13 @@ const RoutesComponent: FC = () => {
 
 const App: FC = () => {
   const { theme } = useTheme();
+  const pathname = window.location.pathname;
+  const showNavbar = !hideNavbar.includes(pathname);
   return (
     <BrowserRouter>
       <main style={{ ...(theme as React.CSSProperties) }}>
         {' '}
-        <Navbar />
+        {showNavbar && <Navbar />}
         <RoutesComponent />
       </main>
     </BrowserRouter>

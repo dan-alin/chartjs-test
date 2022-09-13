@@ -5,7 +5,7 @@ import { IXYChartSettings } from '@amcharts/amcharts5/xy';
 import { LineChartAmProps } from '@typings/charts';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-
+import '../charts.style.scss';
 export enum ChartCategories {
   xy = 'xy',
   hierarchy = 'hierarchy',
@@ -44,11 +44,9 @@ const LineChartAm: FC<LineChartAmProps> = ({
 }) => {
   const chartId = useId();
   const [chartData, setChartData] = useState<any>(null);
-
+  console.log(chartData);
   useEffect(() => {
     if (customData) {
-      console.log(chartData);
-
       setChartData(customData);
     }
   }, [customData]);
@@ -248,8 +246,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
       range2.set('value', value);
 
       range1.set('endValue', value);
-
-      console.log('selected to', new Date(value));
     });
 
     // set bullet for the range
