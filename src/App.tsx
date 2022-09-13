@@ -10,6 +10,7 @@ import ForceDirectedChart from '@pages/forceDirected.page';
 import FlourishChart from '@components/charts/flourish-chart';
 import AmCharts from '@pages/amcharts.page';
 import routes from './routes';
+import LineChartAm from '@components/charts/line-chart-am/line-chart-am.component';
 
 const RoutesComponent: FC = () => {
   return (
@@ -23,6 +24,7 @@ const RoutesComponent: FC = () => {
         path={routes.flourishchart}
         element={<FlourishChart dataId='11160304' />}
       />
+      <Route path={routes.linechart} element={<LineChartAm />} />
       <Route path={routes.flourish} element={<LibTest />} />
       <Route path={routes.amcharts} element={<AmCharts />} />
     </Routes>
