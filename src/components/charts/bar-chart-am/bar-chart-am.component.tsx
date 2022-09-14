@@ -31,8 +31,9 @@ const BarChartAm: FC<BarChartProps> = ({ size = 'responsive', customData }) => {
       })
     );
 
-    // const cursor = chart.set('cursor', am5xy.XYCursor.new(root, {}));
-    // cursor.lineY.set("visible", false);
+    const cursor = chart.set('cursor', am5xy.XYCursor.new(root, {}));
+    cursor.lineY.set('visible', false);
+    cursor.lineX.set('visible', false);
 
     const data = [
       {
@@ -117,6 +118,9 @@ const BarChartAm: FC<BarChartProps> = ({ size = 'responsive', customData }) => {
         valueYField: 'value',
         sequencedInterpolation: true,
         categoryXField: 'country',
+        tooltip: am5.Tooltip.new(root, {
+          labelText: '{valueY}',
+        }),
       })
     );
 
