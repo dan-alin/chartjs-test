@@ -44,7 +44,8 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
         valueField: 'value',
         alignLabels: false,
         legendLabelText: '{category}',
-        legendValueText: '[{color}][fontSize: 18px]{value}%[/][/]',
+        legendValueText:
+          "[{color}][fontSize: 18px]{valuePercentTotal.formatNumber('#.00')}%[/][/]",
       })
     );
 
