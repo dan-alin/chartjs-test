@@ -44,7 +44,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
 }) => {
   const chartId = useId();
   const [chartData, setChartData] = useState<any>(null);
-  console.log(chartData);
   useEffect(() => {
     if (customData) {
       setChartData(customData);
@@ -123,14 +122,19 @@ const LineChartAm: FC<LineChartAmProps> = ({
       visible: true,
     });
 
-    // chart.set("scrollbarX", am5.Scrollbar.new(root, {
-    //   orientation: "horizontal"
-    // }));
+    chart.set(
+      'scrollbarX',
+      am5.Scrollbar.new(root, {
+        orientation: 'horizontal',
+      })
+    );
 
     // Set data
     const data = generateDatas(1200);
-    series.data.setAll(data);
 
+    series.data.setAll(customData);
+    console.log('data', data);
+    console.log('customData', customData);
     const rangeDate = new Date();
     am5.time.add(rangeDate, 'day', Math.round(series.dataItems.length / 2));
     const rangeTime1 = rangeDate.getTime() - am5.time.getDuration('day') * 20;
@@ -265,11 +269,11 @@ const LineChartAm: FC<LineChartAmProps> = ({
       root.dispose();
       // setChartState(1);
     };
-  }, []);
+  }, [chartId, chartData, customData]);
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <div id={chartId} className={'am_chart force_chart'}></div>
+      <div id={chartId} className={'am_chart linearea_chart'}></div>
     </div>
   );
 };

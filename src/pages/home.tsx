@@ -24,6 +24,7 @@ import {
   CircularPacking,
   GaugeChart,
   ForceDirectedChart,
+  LineChartAm,
 } from '@components/charts';
 import chartDataGenerator, {
   d3ChartDataGenerator,
@@ -68,6 +69,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'force_directed',
+  },
+  {
+    id: 'am_linearea',
   },
 ];
 
@@ -227,6 +231,9 @@ const customForceDirectedData = AMChartDataGenerator(
   'force_directed',
   40
 ) as ForceDirected;
+
+const customAmLinechartData = AMChartDataGenerator('am_linearea');
+
 const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
   'Cash',
   'Equity',
@@ -330,6 +337,9 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
       return <DoughnutChartAM customData={customAmdoughnutData} />;
+    case 'am_linearea':
+      return <LineChartAm customData={customAmLinechartData} />;
+
     default:
       return <div>No chart</div>;
   }
