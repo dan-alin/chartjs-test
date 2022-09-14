@@ -5,13 +5,14 @@ import Home from 'src/pages/home';
 import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
-import LibTest from '@pages/libtest.page';
+import Flourish from '@pages/flurish.page';
 import ForceDirectedChart from '@pages/force-directed.page';
 import FlourishChart from '@components/charts/flourish-chart';
-import AmCharts from '@pages/amcharts.page';
 import routes from './routes';
-import LineChartAm from '@components/charts/line-chart-am/line-chart-am.component';
+// import LineChartAm from '@components/charts/line-chart-am/line-chart-am.component';
 import DoughnutAm from '@pages/doughhnutam.page';
+// import { AMChartDataGenerator } from './utils';
+import LineChartAmPage from '@pages/line-chart-am.page';
 
 const hideNavbar = [
   '/linechart',
@@ -19,6 +20,7 @@ const hideNavbar = [
   '/flourishchart',
   '/doughnut',
 ];
+// const customData = AMChartDataGenerator('am_linearea')
 
 const RoutesComponent: FC = () => {
   return (
@@ -32,9 +34,8 @@ const RoutesComponent: FC = () => {
         path={routes.flourishchart}
         element={<FlourishChart dataId='11160304' />}
       />
-      <Route path={routes.linechart} element={<LineChartAm />} />
-      <Route path={routes.flourish} element={<LibTest />} />
-      <Route path={routes.amcharts} element={<AmCharts />} />
+      <Route path={routes.linechart} element={<LineChartAmPage />} />
+      <Route path={routes.flourish} element={<Flourish />} />
       <Route path={routes.doughnutam} element={<DoughnutAm />} />
     </Routes>
   );
