@@ -95,7 +95,11 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData = ForceDirected | DoughnutData[] | LineAreaData[];
+export type AMChartsData =
+  | ForceDirected
+  | DoughnutData[]
+  | LineAreaData[]
+  | LineAreaData[];
 
 export type ForceDirected = {
   name?: string;
