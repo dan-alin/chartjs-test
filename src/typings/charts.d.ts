@@ -6,7 +6,7 @@ import {
 } from 'chart.js';
 import * as am5 from '@amcharts/amcharts5';
 export type d3Charts = 'D3_circular';
-export type AMCharts = 'force_directed' | 'am_doughnut';
+export type AMCharts = 'force_directed' | 'am_doughnut' | 'am_bar';
 export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
 export type Charts = chartJsCharts | d3Charts | AMCharts;
 
