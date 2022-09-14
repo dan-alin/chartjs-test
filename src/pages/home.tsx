@@ -32,6 +32,7 @@ import chartDataGenerator, {
 import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
 import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
+import BarChartAm from '@components/charts/bar-chart-am/bar-chart-am.component';
 
 const hideCharts: Charts[] = ['pie', 'doughnut', 'D3_circular'];
 
@@ -68,6 +69,9 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'force_directed',
+  },
+  {
+    id: 'am_bar',
   },
 ];
 
@@ -330,6 +334,8 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
       return <DoughnutChartAM customData={customAmdoughnutData} />;
+    case 'am_bar':
+      return <BarChartAm />;
     default:
       return <div>No chart</div>;
   }
