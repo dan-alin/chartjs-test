@@ -59,23 +59,34 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       tooltipText: '',
     });
     series.slices.template.set('strokeOpacity', 0);
-    series.slices.template.set(
-      'fillGradient',
-      am5.LinearGradient.new(root, {
-        stops: [
-          {
-            brighten: 0,
-          },
-          {
-            brighten: 0.8,
-          },
-        ],
-      })
-    );
 
     // Disabling labels and ticks
     //series.labels.template.set("visible", false);
     series.ticks.template.set('visible', false);
+
+    series.slices.template.adapters.add(
+      'fillGradient',
+      (value: am5.Gradient | undefined, target: am5.Slice) => {
+        if (target && target.dataItem?.dataContext) {
+          const item = target.dataItem?.dataContext as DoughnutData;
+          let gradient = value;
+          if (item.value > 20) {
+            gradient = am5.LinearGradient.new(root, {
+              stops: [
+                {
+                  brighten: 0,
+                },
+                {
+                  brighten: 0.4,
+                },
+              ],
+              rotation: 0,
+            });
+          }
+          return gradient;
+        }
+      }
+    );
 
     // series.slices.template.adapters.add("fill",
     //     (fill: am5.Color | undefined, target: am5.Slice) => {

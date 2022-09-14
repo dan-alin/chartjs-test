@@ -248,16 +248,21 @@ export const AMChartDataGenerator = (
     case 'am_doughnut':
       chartData = groups.map((group) => {
         const colorGroup = AssetColors.find((asset) => asset.group === group);
+        const c: am5.Color = am5.color(
+          colorGroup ? colorGroup.color : faker.color.rgb()
+        );
 
         return {
           name: group,
-          color: am5.color(colorGroup ? colorGroup.color : faker.color.rgb()),
-          value: faker.datatype.number({ min: 10, max: dataRange }),
+          color: c,
+          value:
+            group === 'Altro'
+              ? 10
+              : faker.datatype.number({ min: 10, max: dataRange }),
         };
       });
       break;
   }
-  console.log('data', chartData);
 
   return chartData;
 };
