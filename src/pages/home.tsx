@@ -14,7 +14,7 @@ import {
   ComplexFillTarget,
   TitleOptions,
 } from 'chart.js';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   LineChart,
   PieChart,
@@ -30,7 +30,6 @@ import chartDataGenerator, {
   d3ChartDataGenerator,
   AMChartDataGenerator,
 } from 'src/utils/generators/generators';
-import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
 import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
 import BarChartAm from '@components/charts/bar-chart-am/bar-chart-am.component';
@@ -379,6 +378,7 @@ const Home: FC = () => {
             {charts
               .filter((chart) => hideCharts.indexOf(chart.id) < 0)
               .map((chart) => {
+                console.log(chart.id);
                 return (
                   <option value={chart.id} key={chart.id}>
                     {t(`charts.${chart.id}.label`)}
@@ -389,12 +389,12 @@ const Home: FC = () => {
         </Col>
       </Row>
       <Row className='justify-content-center'>
-        <Col xs={12} lg={10}>
+        {/* <Col xs={12} lg={10}>
           <CardBox bg={'secondary'} text={'white'}>
             {' '}
             <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
           </CardBox>
-        </Col>
+        </Col> */}
       </Row>
       <Row className='justify-content-center'>
         <Col xs={12} lg={10}>
