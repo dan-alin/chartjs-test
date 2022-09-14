@@ -2,7 +2,7 @@ import React, { FC, useEffect, useId, useLayoutEffect, useState } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import { IXYChartSettings } from '@amcharts/amcharts5/xy';
-import { LineChartAmProps } from '@typings/charts';
+import { LineAreaData, LineChartAmProps } from '@typings/charts';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import '../charts.style.scss';
@@ -43,7 +43,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
   customData,
 }) => {
   const chartId = useId();
-  const [chartData, setChartData] = useState<any>(null);
+  const [chartData, setChartData] = useState<LineAreaData[]>([]);
   useEffect(() => {
     if (customData) {
       setChartData(customData);
@@ -122,19 +122,18 @@ const LineChartAm: FC<LineChartAmProps> = ({
       visible: true,
     });
 
-    chart.set(
-      'scrollbarX',
-      am5.Scrollbar.new(root, {
-        orientation: 'horizontal',
-      })
-    );
+    // chart.set(
+    //   'scrollbarX',
+    //   am5.Scrollbar.new(root, {
+    //     orientation: 'horizontal',
+    //   })
+    // );
 
     // Set data
     const data = generateDatas(1200);
 
-    series.data.setAll(customData);
-    console.log('data', data);
-    console.log('customData', customData);
+    series.data.setAll(data);
+
     const rangeDate = new Date();
     am5.time.add(rangeDate, 'day', Math.round(series.dataItems.length / 2));
     const rangeTime1 = rangeDate.getTime() - am5.time.getDuration('day') * 20;
