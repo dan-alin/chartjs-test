@@ -38,7 +38,7 @@ const charts: FlourishChartTypes[] = [
   },
 ];
 
-const LibTest: FC = () => {
+const Flourish: FC = () => {
   const [chartType, setChartType] = useState<FlourishChartTypes>(charts[0]);
 
   const { t } = useTranslation();
@@ -126,4 +126,4 @@ const LibTest: FC = () => {
   );
 };
 
-export default LibTest;
+export default Flourish;

@@ -19,7 +19,7 @@ const Navbar: FC = () => {
         <h2>{t('title')}</h2>
       </NavLink>
 
-      <NavLink to={'/amcharts'}>AMCharts</NavLink>
+      {/* <NavLink to={'/amcharts'}>AMCharts</NavLink> */}
       <NavLink to={'/flourish'}>Flourish</NavLink>
 
       {/* <Button onClick={toggleTheme}> {themeType}</Button> */}
