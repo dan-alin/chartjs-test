@@ -10,6 +10,8 @@ const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
 ]) as DoughnutData[];
 
 const DoughnutAm: FC = () => {
+  console.log('test');
+
   return <DoughnutChartAM customData={customAmdoughnutData}></DoughnutChartAM>;
 };
 
