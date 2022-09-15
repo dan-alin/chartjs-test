@@ -73,7 +73,7 @@ const Flourish: FC = () => {
         dataSrc = '11157049';
         break;
       case 'bubble':
-        dataSrc = '11160788';
+        dataSrc = '11191376';
         break;
       case 'doughnut':
         dataSrc = '11159750';
