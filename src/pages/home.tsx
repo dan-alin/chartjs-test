@@ -36,12 +36,24 @@ import { Logo } from '@components/logo';
 import BarChartAm from '@components/charts/bar-chart-am/bar-chart-am.component';
 import { CardBox } from '@components/card-box';
 
-const hideCharts: Charts[] = ['pie', 'doughnut', 'D3_circular'];
+const hideCharts: Charts[] = [
+  'pie',
+  'doughnut',
+  'D3_circular',
+  'gauge',
+  'horizontalbar',
+  'linearea',
+  'am_bar',
+];
 
 const charts: ChartInfoProps[] = [
   {
     id: 'line',
     lib: 'chart_js',
+  },
+  {
+    id: 'am_linearea',
+    lib: 'am_charts',
   },
   {
     id: 'pie',
@@ -60,6 +72,10 @@ const charts: ChartInfoProps[] = [
     lib: 'chart_js',
   },
   {
+    id: 'am_bar',
+    lib: 'am_charts',
+  },
+  {
     id: 'linearea',
     lib: 'chart_js',
   },
@@ -69,7 +85,7 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'horizontalbar',
-    lib: 'flourish',
+    lib: 'chart_js',
   },
   {
     id: 'D3_circular',
@@ -82,12 +98,6 @@ const charts: ChartInfoProps[] = [
   {
     id: 'force_directed',
     lib: 'am_charts',
-  },
-  {
-    id: 'am_bar',
-  },
-  {
-    id: 'am_linearea',
   },
 ];
 

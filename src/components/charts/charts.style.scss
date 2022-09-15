@@ -52,18 +52,18 @@ tspan {
 
 .am_chart {
   width: 100%;
-  min-height: 700px;
+  height: 700px;
   &.doughnut_chart {
     height: 700px;
   }
   &.linearea_chart {
-    height: 700px;
+    height: 500px;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .am_chart {
-    min-height: 400px;
+    height: 400px;
     &.doughnut_chart {
       height: 450px;
     }

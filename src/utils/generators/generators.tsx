@@ -262,6 +262,11 @@ export const AMChartDataGenerator = (
         };
       });
       break;
+    default:
+      chartData = {
+        value: 0,
+        children: [],
+      };
   }
 
   return chartData;

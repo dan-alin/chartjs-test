@@ -50,11 +50,11 @@
       "description": "A Force Directed chart displays a hierarchical dataset as a set of nested circles. Nodes are displayed as circles. Size is usually proportional to a numeric variable."
     },
     "am_linearea": {
-      "label": "AM-Line Area Chart",
+      "label": "Line Area Chart",
       "description": "Both line and radar charts support a fill option on the dataset object which can be used to create space between two datasets or a dataset and a boundary, i.e. the scale origin, start, or end (see filling modes)."
     },
     "am_bar": {
-      "label": "AM-Bar Chart",
+      "label": "Bar Chart",
       "description": "A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side."
     }
   }

@@ -12,7 +12,17 @@ export type AMCharts =
   | 'am_bar'
   | 'am_linearea';
 export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
-export type Charts = chartJsCharts | d3Charts | AMCharts;
+export type flourishCharts =
+  | 'line'
+  | 'bubble'
+  | 'doughnut'
+  | 'bar'
+  | 'linearea'
+  | 'scatter'
+  | 'horizontalbar'
+  | 'map'
+  | 'line-race';
+export type Charts = chartJsCharts | d3Charts | AMCharts | flourishCharts;
 
 export type ChartProps = {
   size?: ChartSize;

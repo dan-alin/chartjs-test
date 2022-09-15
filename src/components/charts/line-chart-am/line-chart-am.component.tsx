@@ -272,7 +272,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <div id={chartId} className={'am_chart linearea_chart'}></div>
+      <div id={chartId} className={'am_chart linearea_chart '}></div>
     </div>
   );
 };
