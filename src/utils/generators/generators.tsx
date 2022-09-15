@@ -266,5 +266,24 @@ export const AMChartDataGenerator = (
 
   return chartData;
 };
+// let value = 100;
+// const date = new Date();
+// function generateData() {
+//   date.setHours(0, 0, 0, 0);
+//   value = Math.round(Math.random() * 10 - 5 + value);
+//   am5.time.add(date, 'day', 1);
+//   return {
+//     date: date.getTime(),
+//     value: value,
+//   };
+// }
+
+// function generateDatas(count: number) {
+//   const data = [];
+//   for (let i = 0; i < count; ++i) {
+//     data.push(generateData());
+//   }
+//   return data;
+// }
 
 export default chartDataGenerator;

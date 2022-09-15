@@ -24,15 +24,17 @@ import {
   CircularPacking,
   GaugeChart,
   ForceDirectedChart,
+  LineChartAm,
 } from '@components/charts';
 import chartDataGenerator, {
   d3ChartDataGenerator,
   AMChartDataGenerator,
 } from 'src/utils/generators/generators';
-import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
 import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
 import { Logo } from '@components/logo';
+import BarChartAm from '@components/charts/bar-chart-am/bar-chart-am.component';
+import { CardBox } from '@components/card-box';
 
 const hideCharts: Charts[] = ['pie', 'doughnut', 'D3_circular'];
 
@@ -80,6 +82,12 @@ const charts: ChartInfoProps[] = [
   {
     id: 'force_directed',
     lib: 'am_charts',
+  },
+  {
+    id: 'am_bar',
+  },
+  {
+    id: 'am_linearea',
   },
 ];
 
@@ -239,6 +247,9 @@ const customForceDirectedData = AMChartDataGenerator(
   'force_directed',
   40
 ) as ForceDirected;
+
+const customAmLinechartData = AMChartDataGenerator('am_linearea');
+
 const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
   'Cash',
   'Equity',
@@ -342,6 +353,11 @@ const renderSwitch = (chart: ChartInfoProps) => {
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
       return <DoughnutChartAM customData={customAmdoughnutData} />;
+    case 'am_bar':
+      return <BarChartAm />;
+    case 'am_linearea':
+      return <LineChartAm customData={customAmLinechartData} />;
+
     default:
       return <div>No chart</div>;
   }
@@ -375,6 +391,7 @@ const Home: FC = () => {
             {charts
               .filter((chart) => hideCharts.indexOf(chart.id) < 0)
               .map((chart) => {
+                console.log(chart.id);
                 return (
                   <option value={chart.id} key={chart.id}>
                     {t(`charts.${chart.id}.label`)}
