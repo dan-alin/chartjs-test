@@ -23,8 +23,11 @@ export type GaugePlugin = {
   needleValue?: number;
 };
 
+export type Libs = 'am_charts' | 'chart_js' | 'd3' | 'flourish';
+
 export type ChartInfoProps = {
   id: Charts;
+  lib: Libs;
 };
 
 export type LineChartProps = ChartProps & {

@@ -88,25 +88,6 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       }
     );
 
-    // series.slices.template.adapters.add("fill",
-    //     (fill: am5.Color | undefined, target: am5.Slice) => {
-    //         console.log(target);
-    //         if (target && target.dataItem?.dataContext) {
-    //             const item = target.dataItem?.dataContext as DoughnutData;
-    //             const groupColor = AssetColors.find(
-    //                 (colorgroup) => colorgroup.group === item['name']
-    //             );
-
-    //             let color: am5.Color | undefined;
-    //             if (groupColor) {
-    //                 color = am5.color(groupColor.color);
-    //             } else if (fill) {
-    //                 color = fill;
-    //             }
-    //             return color;
-    //         }
-    //     });
-
     series.data.setAll(customData);
 
     // Add legend
@@ -116,6 +97,7 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
         centerX: am5.percent(50),
         x: am5.percent(50),
         layout: root.verticalLayout,
+        marginTop: 30,
       })
     );
 

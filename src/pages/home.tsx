@@ -32,42 +32,54 @@ import chartDataGenerator, {
 import { CardBox } from '@components/card-box';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
 import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
+import { Logo } from '@components/logo';
 
 const hideCharts: Charts[] = ['pie', 'doughnut', 'D3_circular'];
 
 const charts: ChartInfoProps[] = [
   {
     id: 'line',
+    lib: 'chart_js',
   },
   {
     id: 'pie',
+    lib: 'chart_js',
   },
   {
     id: 'doughnut',
+    lib: 'chart_js',
   },
   {
     id: 'am_doughnut',
+    lib: 'am_charts',
   },
   {
     id: 'bar',
+    lib: 'chart_js',
   },
   {
     id: 'linearea',
+    lib: 'chart_js',
   },
   {
     id: 'scatter',
+    lib: 'chart_js',
   },
   {
     id: 'horizontalbar',
+    lib: 'flourish',
   },
   {
     id: 'D3_circular',
+    lib: 'd3',
   },
   {
     id: 'gauge',
+    lib: 'chart_js',
   },
   {
     id: 'force_directed',
+    lib: 'am_charts',
   },
 ];
 
@@ -353,8 +365,8 @@ const Home: FC = () => {
 
   return (
     <Container>
-      <Row className='justify-content-center mb-4 mt-4'>
-        <Col>
+      <Row className='justify-content-center mb-4 mt-4 align-items-center'>
+        <Col xs={8}>
           <Form.Select
             aria-label='Chart selection'
             value={chartType.id}
@@ -371,18 +383,21 @@ const Home: FC = () => {
               })}
           </Form.Select>
         </Col>
-      </Row>
-      <Row className='justify-content-center'>
-        <Col xs={12} lg={10}>
-          <CardBox bg={'secondary'} text={'white'}>
-            {' '}
-            <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
-          </CardBox>
+        <Col xs='auto'>
+          <Logo libType={chartType.lib}></Logo>
         </Col>
       </Row>
       <Row className='justify-content-center'>
         <Col xs={12} lg={10}>
           {renderSwitch(chartType)}
+        </Col>
+      </Row>
+      <Row className='justify-content-center mt-5'>
+        <Col xs={12} lg={10}>
+          <CardBox bg={'light'} text={'secondary'}>
+            {' '}
+            <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
+          </CardBox>
         </Col>
       </Row>
     </Container>
