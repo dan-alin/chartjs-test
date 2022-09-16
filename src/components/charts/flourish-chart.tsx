@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 
 interface FlourishChartProps {
-  dataId: string;
+  dataId: string | undefined;
 }
 
 const FlourishChart: FC<FlourishChartProps> = ({ dataId }) => {

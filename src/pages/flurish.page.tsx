@@ -16,22 +16,27 @@ const charts: ChartInfoProps[] = [
   {
     id: 'line',
     lib: 'flourish',
+    dataSrc: '11157049',
   },
   {
     id: 'bubble',
     lib: 'flourish',
+    dataSrc: '11191376',
   },
   {
     id: 'doughnut',
     lib: 'flourish',
+    dataSrc: '11159750',
   },
   {
     id: 'bar',
     lib: 'flourish',
+    dataSrc: '11159892',
   },
   {
     id: 'linearea',
     lib: 'flourish',
+    dataSrc: '11160102',
   },
   // {
   //   id: 'scatter',
@@ -59,44 +64,6 @@ const Flourish: FC = () => {
     }
   };
 
-  const renderSwitch = (chart: ChartInfoProps) => {
-    let dataSrc = '';
-
-    switch (chart.id) {
-      case 'map':
-        dataSrc = '11137799';
-        break;
-      case 'line-race':
-        dataSrc = '11069148';
-        break;
-      case 'line':
-        dataSrc = '11157049';
-        break;
-      case 'bubble':
-        dataSrc = '11191376';
-        break;
-      case 'doughnut':
-        dataSrc = '11159750';
-        break;
-      case 'bar':
-        dataSrc = '11159892';
-        break;
-      case 'linearea':
-        dataSrc = '11160102';
-        break;
-      case 'scatter':
-        dataSrc = '11160679';
-        break;
-      case 'horizontalbar':
-        dataSrc = '11160304';
-        break;
-      default:
-        return <div>No charts</div>;
-    }
-
-    return <FlourishChart dataId={dataSrc} />;
-  };
-
   return (
     <Container>
       <Row className='justify-content-center mb-4 mt-4'>
@@ -121,7 +88,7 @@ const Flourish: FC = () => {
       </Row>
       <Row className='justify-content-center'>
         <Col xs={12} lg={10}>
-          {renderSwitch(chartType)}
+          <FlourishChart dataId={chartType.dataSrc} />
         </Col>
       </Row>
       <Row className='justify-content-center mt-5'>
