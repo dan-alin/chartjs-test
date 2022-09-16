@@ -32,7 +32,12 @@ const RoutesComponent: FC = () => {
       />
       <Route
         path={routes.flourishchart}
-        element={<FlourishChart dataId='11160304' />}
+        element={
+          <FlourishChart
+            dataId='11160304'
+            customOptions={{ windowHeight: true }}
+          />
+        }
       />
       <Route path={routes.linechart} element={<LineChartAmPage />} />
       <Route path={routes.flourish} element={<Flourish />} />

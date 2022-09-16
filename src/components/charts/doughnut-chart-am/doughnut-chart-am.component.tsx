@@ -1,26 +1,40 @@
-import React, { FC, useEffect, useId, useState } from 'react';
+import React, { FC, useEffect, useId, useLayoutEffect, useState } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-import { AmDoughnutProps, DoughnutData } from '@typings/charts';
+import {
+  AmCustomOptions,
+  AmDoughnutProps,
+  DoughnutData,
+} from '@typings/charts';
+import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 
 const DoughnutChartAM: FC<AmDoughnutProps> = ({
   size = 'responsive',
   customData,
+  customOptions = {},
 }) => {
   const chartId = useId();
+  const windowSize: WindowSize = useWindowSize(true, 100, 60);
 
   const [chartData, setChartData] = useState<DoughnutData[]>([]);
+  const [chartOptions, setChartOptions] = useState<AmCustomOptions>({
+    hideLegend: true,
+  });
   //const chartRef = useRef(null);
-
   useEffect(() => {
-    if (customData) {
-      setChartData(customData);
+    if (customOptions) {
+      if (customData) {
+        setChartData(customData);
+      }
+      console.log('options', customOptions);
+      setChartOptions(customOptions);
     }
-  }, [customData]);
+  }, [customOptions, customData]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
+    console.log('*** window size ***', windowSize);
 
     // THEME CHART
     const actualThemes: am5.Theme[] = [am5themes_Animated.new(root)];
@@ -34,6 +48,7 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       })
     );
     // -----
+    console.log(root.container.children);
 
     // SERIES
     const series = container.series.push(
@@ -90,27 +105,29 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
 
     series.data.setAll(customData);
 
-    // Add legend
-    // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-    const legend = container.children.push(
-      am5.Legend.new(root, {
-        centerX: am5.percent(50),
-        x: am5.percent(50),
-        layout: root.verticalLayout,
-        marginTop: 30,
-      })
-    );
+    if (chartOptions && !chartOptions.hideLegend) {
+      // Add legend
+      // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+      const legend = container.children.push(
+        am5.Legend.new(root, {
+          centerX: am5.percent(50),
+          x: am5.percent(50),
+          layout: root.verticalLayout,
+          marginTop: 30,
+        })
+      );
 
-    // set value labels align to right
-    legend.valueLabels.template.setAll({ textAlign: 'right' });
-    // set width and max width of labels
-    legend.labels.template.setAll({
-      maxWidth: 140,
-      width: 140,
-      oversizedBehavior: 'wrap',
-    });
+      // set value labels align to right
+      legend.valueLabels.template.setAll({ textAlign: 'right' });
+      // set width and max width of labels
+      legend.labels.template.setAll({
+        maxWidth: 140,
+        width: 140,
+        oversizedBehavior: 'wrap',
+      });
 
-    legend.data.setAll(series.dataItems);
+      legend.data.setAll(series.dataItems);
+    }
 
     // Play initial series animation
     // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
@@ -119,12 +136,20 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
     return () => {
       root.dispose();
     };
-  }, [chartId, chartData]);
+  }, [chartId, chartData, chartOptions, windowSize]);
 
   return (
     <>
       <div className={`chart__container chart__container--${size}`}>
-        <div id={chartId} className={'am_chart doughnut_chart'}></div>
+        <div
+          id={chartId}
+          className={'am_chart doughnut_chart'}
+          style={
+            chartOptions.windowHeight
+              ? { height: windowSize.height }
+              : undefined
+          }
+        ></div>
       </div>
     </>
   );

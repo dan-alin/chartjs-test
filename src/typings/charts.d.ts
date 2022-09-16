@@ -31,6 +31,12 @@ export type ChartProps = {
 
 export type AmChartProps = {
   size?: ChartSize;
+  customOptions?: AmCustomOptions;
+};
+
+export type AmCustomOptions = {
+  hideLegend?: boolean;
+  windowHeight?: boolean;
 };
 
 export type GaugePlugin = {
@@ -72,7 +78,7 @@ export type AmDoughnutProps = AmChartProps & {
 };
 
 export type LineChartAmProps = ChartProps & {
-  customOptions?;
+  customOptions?: AmCustomOptions;
 };
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 

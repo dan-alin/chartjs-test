@@ -9,7 +9,12 @@ const ForceDirectedPage: FC = () => {
     40
   ) as ForceDirected;
 
-  return <ForceDirectedChart customData={customForceDirectedData} />;
+  return (
+    <ForceDirectedChart
+      customData={customForceDirectedData}
+      customOptions={{ windowHeight: true }}
+    />
+  );
 };
 
 export default ForceDirectedPage;
