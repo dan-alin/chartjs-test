@@ -14,7 +14,7 @@ import {
   ComplexFillTarget,
   TitleOptions,
 } from 'chart.js';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   LineChart,
   PieChart,
@@ -32,49 +32,72 @@ import chartDataGenerator, {
 } from 'src/utils/generators/generators';
 import { colorsDefaults } from 'src/utils/configurations/chart-config';
 import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
+import { Logo } from '@components/logo';
 import BarChartAm from '@components/charts/bar-chart-am/bar-chart-am.component';
+import { CardBox } from '@components/card-box';
 
-const hideCharts: Charts[] = ['pie', 'doughnut', 'D3_circular'];
+const hideCharts: Charts[] = [
+  'pie',
+  'doughnut',
+  'D3_circular',
+  'gauge',
+  'horizontalbar',
+  'linearea',
+  'am_bar',
+];
 
 const charts: ChartInfoProps[] = [
   {
     id: 'line',
-  },
-  {
-    id: 'pie',
-  },
-  {
-    id: 'doughnut',
-  },
-  {
-    id: 'am_doughnut',
-  },
-  {
-    id: 'bar',
-  },
-  {
-    id: 'linearea',
-  },
-  {
-    id: 'scatter',
-  },
-  {
-    id: 'horizontalbar',
-  },
-  {
-    id: 'D3_circular',
-  },
-  {
-    id: 'gauge',
-  },
-  {
-    id: 'force_directed',
-  },
-  {
-    id: 'am_bar',
+    lib: 'chart_js',
   },
   {
     id: 'am_linearea',
+    lib: 'am_charts',
+  },
+  {
+    id: 'pie',
+    lib: 'chart_js',
+  },
+  {
+    id: 'doughnut',
+    lib: 'chart_js',
+  },
+  {
+    id: 'am_doughnut',
+    lib: 'am_charts',
+  },
+  {
+    id: 'bar',
+    lib: 'chart_js',
+  },
+  {
+    id: 'am_bar',
+    lib: 'am_charts',
+  },
+  {
+    id: 'linearea',
+    lib: 'chart_js',
+  },
+  {
+    id: 'scatter',
+    lib: 'chart_js',
+  },
+  {
+    id: 'horizontalbar',
+    lib: 'chart_js',
+  },
+  {
+    id: 'D3_circular',
+    lib: 'd3',
+  },
+  {
+    id: 'gauge',
+    lib: 'chart_js',
+  },
+  {
+    id: 'force_directed',
+    lib: 'am_charts',
   },
 ];
 
@@ -339,7 +362,9 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'force_directed':
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
-      return <DoughnutChartAM customData={customAmdoughnutData} />;
+      return (
+        <DoughnutChartAM customData={customAmdoughnutData} customOptions={{}} />
+      );
     case 'am_bar':
       return <BarChartAm />;
     case 'am_linearea':
@@ -368,8 +393,8 @@ const Home: FC = () => {
 
   return (
     <Container>
-      <Row className='justify-content-center mb-4 mt-4'>
-        <Col>
+      <Row className='justify-content-center mb-4 mt-4 align-items-center'>
+        <Col xs={8}>
           <Form.Select
             aria-label='Chart selection'
             value={chartType.id}
@@ -378,7 +403,6 @@ const Home: FC = () => {
             {charts
               .filter((chart) => hideCharts.indexOf(chart.id) < 0)
               .map((chart) => {
-                console.log(chart.id);
                 return (
                   <option value={chart.id} key={chart.id}>
                     {t(`charts.${chart.id}.label`)}
@@ -387,18 +411,21 @@ const Home: FC = () => {
               })}
           </Form.Select>
         </Col>
-      </Row>
-      <Row className='justify-content-center'>
-        {/* <Col xs={12} lg={10}>
-          <CardBox bg={'secondary'} text={'white'}>
-            {' '}
-            <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
-          </CardBox>
-        </Col> */}
+        <Col xs='auto'>
+          <Logo libType={chartType.lib}></Logo>
+        </Col>
       </Row>
       <Row className='justify-content-center'>
         <Col xs={12} lg={10}>
           {renderSwitch(chartType)}
+        </Col>
+      </Row>
+      <Row className='justify-content-center mt-5'>
+        <Col xs={12} lg={10}>
+          <CardBox bg={'light'} text={'secondary'}>
+            {' '}
+            <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
+          </CardBox>
         </Col>
       </Row>
     </Container>

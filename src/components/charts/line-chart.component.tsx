@@ -43,7 +43,7 @@ const alwaysShowTooltip = {
 
       ctx.font = '12px Arial';
       ctx.fillStyle = 'white';
-      ctx.fillText(text, x + 10, y);
+      ctx.fillText(text, x + 10, y + 4);
     });
   },
 };

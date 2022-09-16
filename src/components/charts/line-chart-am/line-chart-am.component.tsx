@@ -2,10 +2,17 @@ import React, { FC, useEffect, useId, useLayoutEffect, useState } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import { IXYChartSettings } from '@amcharts/amcharts5/xy';
-import { LineAreaData, LineChartAmProps } from '@typings/charts';
+import {
+  AmCustomOptions,
+  LineAreaData,
+  LineChartAmProps,
+} from '@typings/charts';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import '../charts.style.scss';
+import { emitCustomEvent, useCustomEventListener } from 'react-custom-events';
+import { chartEvents } from 'src/models/events.model';
+import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 export enum ChartCategories {
   xy = 'xy',
   hierarchy = 'hierarchy',
@@ -39,16 +46,32 @@ const initChart = (
 
 const LineChartAm: FC<LineChartAmProps> = ({
   size = 'responsive',
-  // customOptions = {},
+  customOptions = {},
   customData,
 }) => {
   const chartId = useId();
   const [chartData, setChartData] = useState<LineAreaData[]>([]);
+  const windowSize: WindowSize = useWindowSize(true, 100, 60);
+  const [chartOptions, setChartOptions] = useState<AmCustomOptions>({
+    windowHeight: false,
+  });
+
   useEffect(() => {
     if (customData) {
       setChartData(customData);
+      console.log('options', customOptions);
+      setChartOptions(customOptions);
+
+      emitCustomEvent(chartEvents.LINEAREA_DATA, {
+        action: 'linearea data change',
+        customData,
+      });
     }
-  }, [customData]);
+  }, [customOptions, customData]);
+
+  useCustomEventListener(chartEvents.FILTER, (data) => {
+    console.log('linearea filters', data);
+  });
 
   useLayoutEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
@@ -56,6 +79,8 @@ const LineChartAm: FC<LineChartAmProps> = ({
     root.setThemes([am5themes_Animated.new(root)]);
 
     const chart = initChart(root, ChartCategories.xy);
+
+    console.log('*** window size ***', windowSize);
 
     //cursor
     const cursor = chart.set('cursor', am5xy.XYCursor.new(root, {}));
@@ -180,6 +205,12 @@ const LineChartAm: FC<LineChartAmProps> = ({
       range2.set('value', endValue);
 
       axisFill?.set('x', 0);
+
+      emitCustomEvent(chartEvents.LINEAREA_DRAGSTOP, {
+        action: 'linearea drag stop on range',
+        startValue: value,
+        endValue,
+      });
     });
 
     const resizeButton1 = am5.Button.new(root, {
@@ -272,7 +303,13 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
   return (
     <div className={`chart__container chart__container--${size}`}>
-      <div id={chartId} className={'am_chart linearea_chart'}></div>
+      <div
+        id={chartId}
+        className={'am_chart linearea_chart '}
+        style={
+          chartOptions.windowHeight ? { height: windowSize.height } : undefined
+        }
+      ></div>
     </div>
   );
 };

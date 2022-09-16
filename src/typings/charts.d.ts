@@ -12,7 +12,17 @@ export type AMCharts =
   | 'am_bar'
   | 'am_linearea';
 export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
-export type Charts = chartJsCharts | d3Charts | AMCharts;
+export type flourishCharts =
+  | 'line'
+  | 'bubble'
+  | 'doughnut'
+  | 'bar'
+  | 'linearea'
+  | 'scatter'
+  | 'horizontalbar'
+  | 'map'
+  | 'line-race';
+export type Charts = chartJsCharts | d3Charts | AMCharts | flourishCharts;
 
 export type ChartProps = {
   size?: ChartSize;
@@ -21,14 +31,24 @@ export type ChartProps = {
 
 export type AmChartProps = {
   size?: ChartSize;
+  customOptions?: AmCustomOptions;
+};
+
+export type AmCustomOptions = {
+  hideLegend?: boolean;
+  windowHeight?: boolean;
 };
 
 export type GaugePlugin = {
   needleValue?: number;
 };
 
+export type Libs = 'am_charts' | 'chart_js' | 'd3' | 'flourish';
+
 export type ChartInfoProps = {
   id: Charts;
+  lib: Libs;
+  dataSrc?: string;
 };
 
 export type LineChartProps = ChartProps & {
@@ -58,7 +78,7 @@ export type AmDoughnutProps = AmChartProps & {
 };
 
 export type LineChartAmProps = ChartProps & {
-  customOptions?;
+  customOptions?: AmCustomOptions;
 };
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 

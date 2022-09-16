@@ -1,4 +1,5 @@
 import {
+  AmCustomOptions,
   ForceDirected,
   ForceDirectedData,
   ForceDirectedProps,
@@ -10,18 +11,21 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { Color } from '@amcharts/amcharts5';
 import { GroupsColors } from 'src/utils/configurations/chart-config';
+import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 // import { faker } from "@faker-js/faker";
 
 const ForceDirectedChart: FC<ForceDirectedProps> = ({
   size = 'responsive',
   customData,
+  customOptions,
 }) => {
   const chartId = useId();
-
   const [chartData, setChartData] = useState<ForceDirected>({
     value: 0,
     children: [],
   });
+  const windowSize: WindowSize = useWindowSize(true, 100, 60);
+  const [chartOptions, setChartOptions] = useState<AmCustomOptions>({});
   //const chartRef = useRef(null);
 
   const generateLabel = (
@@ -44,7 +48,10 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     if (customData) {
       setChartData(customData);
     }
-  }, [customData]);
+    if (customOptions) {
+      setChartOptions(customOptions);
+    }
+  }, [customData, customOptions]);
 
   useEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
@@ -227,7 +234,15 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
   return (
     <>
       <div className={`chart__container chart__container--${size}`}>
-        <div id={chartId} className={'am_chart force_chart'}></div>
+        <div
+          id={chartId}
+          className={'am_chart force_chart'}
+          style={
+            chartOptions.windowHeight
+              ? { height: windowSize.height }
+              : undefined
+          }
+        ></div>
       </div>
     </>
   );

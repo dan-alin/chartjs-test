@@ -14,8 +14,6 @@ import {
 import type { DoughnutChartProps } from '@typings/charts';
 import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
-// import chartDataGenerator from 'src/utils/generators/generators';
-// import { Button } from '@components/button';
 
 ChartJS.register(
   CategoryScale,
@@ -45,7 +43,6 @@ const DoughnutChart: FC<DoughnutChartProps> = ({
       <div className={`chart__container chart__container--${size}`}>
         <Doughnut options={options} data={data} ref={chartRef} />
       </div>
-      {/* <Button onClick={() => setData(generateData)}>New Data</Button> */}
     </>
   );
 };
