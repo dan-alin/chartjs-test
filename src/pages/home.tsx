@@ -362,7 +362,9 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'force_directed':
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
-      return <DoughnutChartAM customData={customAmdoughnutData} />;
+      return (
+        <DoughnutChartAM customData={customAmdoughnutData} customOptions={{}} />
+      );
     case 'am_bar':
       return <BarChartAm />;
     case 'am_linearea':
@@ -401,7 +403,6 @@ const Home: FC = () => {
             {charts
               .filter((chart) => hideCharts.indexOf(chart.id) < 0)
               .map((chart) => {
-                console.log(chart.id);
                 return (
                   <option value={chart.id} key={chart.id}>
                     {t(`charts.${chart.id}.label`)}
