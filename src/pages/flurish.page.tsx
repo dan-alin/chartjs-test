@@ -88,7 +88,7 @@ const Flourish: FC = () => {
       </Row>
       <Row className='justify-content-center'>
         <Col xs={12} lg={10}>
-          <FlourishChart dataId={chartType.dataSrc} />
+          <FlourishChart dataId={chartType.dataSrc} customOptions={{}} />
         </Col>
       </Row>
       <Row className='justify-content-center mt-5'>
