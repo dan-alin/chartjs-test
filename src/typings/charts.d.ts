@@ -48,6 +48,7 @@ export type Libs = 'am_charts' | 'chart_js' | 'd3' | 'flourish';
 export type ChartInfoProps = {
   id: Charts;
   lib: Libs;
+  dataSrc?: string;
 };
 
 export type LineChartProps = ChartProps & {
