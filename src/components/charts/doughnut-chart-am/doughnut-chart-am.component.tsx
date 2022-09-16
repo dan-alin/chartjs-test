@@ -140,13 +140,16 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
 
   return (
     <>
-      <div
-        className={`chart__container chart__container--${size}`}
-        style={
-          chartOptions.windowHeight ? { height: windowSize.height } : undefined
-        }
-      >
-        <div id={chartId} className={'am_chart doughnut_chart'}></div>
+      <div className={`chart__container chart__container--${size}`}>
+        <div
+          id={chartId}
+          className={'am_chart doughnut_chart'}
+          style={
+            chartOptions.windowHeight
+              ? { height: windowSize.height }
+              : undefined
+          }
+        ></div>
       </div>
     </>
   );
