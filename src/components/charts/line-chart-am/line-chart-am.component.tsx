@@ -10,7 +10,7 @@ import {
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import '../charts.style.scss';
-import { emitCustomEvent, useCustomEventListener } from 'react-custom-events';
+import { emitCustomEvent } from 'react-custom-events';
 import { chartEvents } from 'src/models/events.model';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 export enum ChartCategories {
@@ -44,9 +44,33 @@ const initChart = (
   return root?.container?.children.push(chartInit);
 };
 
+interface RangeEvent {
+  first?: number;
+  second?: number;
+  label?: string;
+}
+
+const rangeEvent = ({ first, second, label }: RangeEvent) => {
+  const eventNode = document.getElementById('chartEvents');
+
+  const eventLabel = label ? label : chartEvents.LINEAREA_DRAGSTOP;
+
+  const customEvent = new CustomEvent(eventLabel, {
+    bubbles: true,
+    detail: {
+      action: 'linearea drag stop on range',
+      firstValue: first,
+      secondValue: second,
+    },
+  });
+
+  eventNode?.dispatchEvent(customEvent);
+  console.log(eventLabel, customEvent);
+};
+
 const LineChartAm: FC<LineChartAmProps> = ({
   size = 'responsive',
-  customOptions = {},
+  customOptions,
   customData,
 }) => {
   const chartId = useId();
@@ -59,19 +83,16 @@ const LineChartAm: FC<LineChartAmProps> = ({
   useEffect(() => {
     if (customData) {
       setChartData(customData);
-      console.log('options', customOptions);
-      setChartOptions(customOptions);
 
       emitCustomEvent(chartEvents.LINEAREA_DATA, {
         action: 'linearea data change',
         customData,
       });
     }
+    if (customOptions) {
+      setChartOptions(customOptions);
+    }
   }, [customOptions, customData]);
-
-  useCustomEventListener(chartEvents.FILTER, (data) => {
-    console.log('linearea filters', data);
-  });
 
   useLayoutEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
@@ -79,8 +100,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
     root.setThemes([am5themes_Animated.new(root)]);
 
     const chart = initChart(root, ChartCategories.xy);
-
-    console.log('*** window size ***', windowSize);
 
     //cursor
     const cursor = chart.set('cursor', am5xy.XYCursor.new(root, {}));
@@ -164,6 +183,12 @@ const LineChartAm: FC<LineChartAmProps> = ({
     const rangeTime1 = rangeDate.getTime() - am5.time.getDuration('day') * 20;
     const rangeTime2 = rangeDate.getTime() + am5.time.getDuration('day') * 20;
 
+    rangeEvent({
+      first: rangeTime1,
+      second: rangeTime2,
+      label: chartEvents.LINEAREA,
+    });
+
     const color = root.interfaceColors.get('primaryButton');
 
     // add axis range 1
@@ -203,14 +228,9 @@ const LineChartAm: FC<LineChartAmProps> = ({
       range1.set('value', value);
       range1.set('endValue', endValue);
       range2.set('value', endValue);
+      rangeEvent({ first: value, second: endValue });
 
       axisFill?.set('x', 0);
-
-      emitCustomEvent(chartEvents.LINEAREA_DRAGSTOP, {
-        action: 'linearea drag stop on range',
-        startValue: value,
-        endValue,
-      });
     });
 
     const resizeButton1 = am5.Button.new(root, {
@@ -235,6 +255,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       const value = xAxis.positionToValue(position);
 
       range1.set('value', value);
+      rangeEvent({ first: value });
     });
 
     range1.set(
@@ -280,6 +301,8 @@ const LineChartAm: FC<LineChartAmProps> = ({
       range2.set('value', value);
 
       range1.set('endValue', value);
+
+      rangeEvent({ second: value });
     });
 
     // set bullet for the range
