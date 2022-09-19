@@ -175,7 +175,6 @@ const CircularPacking: FC<CircularPackingProps> = ({
       .text((node) => node.data.name);
 
     node.select('circle').on('click', (event) => {
-      console.log(event.target);
       d3.select(event.target as SVGCircleElement)
         .transition()
         .duration(1000)
