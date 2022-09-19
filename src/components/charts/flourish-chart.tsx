@@ -1,15 +1,17 @@
-import { AmCustomOptions } from '@typings/charts';
+import { AmCustomOptions, ChartSize } from '@typings/charts';
 import React, { FC, useEffect, useState } from 'react';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 
 interface FlourishChartProps {
   dataId: string | undefined;
   customOptions: AmCustomOptions;
+  size?: ChartSize;
 }
 
 const FlourishChart: FC<FlourishChartProps> = ({
   dataId,
   customOptions = {},
+  size,
 }) => {
   const windowSize: WindowSize = useWindowSize(true, 100, 60);
   const [chartOptions, setChartOptions] = useState<AmCustomOptions>({});
@@ -31,7 +33,7 @@ const FlourishChart: FC<FlourishChartProps> = ({
   }, [dataId, customOptions]);
 
   return (
-    <div>
+    <div className={`chart__container chart__container--${size}`}>
       <iframe
         src={`https://flo.uri.sh/visualisation/${dataId}/embed`}
         title='Interactive or visual content'

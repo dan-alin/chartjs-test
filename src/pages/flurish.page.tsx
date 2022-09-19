@@ -4,15 +4,11 @@ import { Trans, useTranslation } from 'react-i18next';
 import FlourishChart from '@components/charts/flourish-chart';
 import { CardBox } from '@components/card-box';
 import { Logo } from '@components/index';
-import { ChartInfoProps } from '@typings/charts';
+import { ChartInfoProps, Charts } from '@typings/charts';
+
+const hideCharts: Charts[] = [];
 
 const charts: ChartInfoProps[] = [
-  // {
-  //   id: 'map',
-  // },
-  // {
-  //   id: 'line-race',
-  // },
   {
     id: 'line',
     lib: 'flourish',
@@ -22,6 +18,7 @@ const charts: ChartInfoProps[] = [
     id: 'bubble',
     lib: 'flourish',
     dataSrc: '11191376',
+    size: 'xs',
   },
   {
     id: 'doughnut',
@@ -38,16 +35,6 @@ const charts: ChartInfoProps[] = [
     lib: 'flourish',
     dataSrc: '11160102',
   },
-  // {
-  //   id: 'scatter',
-  //   lib: 'flourish'
-
-  // },
-  // {
-  //   id: 'horizontalbar',
-  //   lib: 'flourish'
-
-  // }
 ];
 
 const Flourish: FC = () => {
@@ -73,13 +60,15 @@ const Flourish: FC = () => {
             value={chartType.id}
             onChange={(event) => changeChart(event.target)}
           >
-            {charts.map((chart) => {
-              return (
-                <option value={chart.id} key={chart.id}>
-                  {t(`charts.${chart.id}.label`)}
-                </option>
-              );
-            })}
+            {charts
+              .filter((chart) => hideCharts.indexOf(chart.id) < 0)
+              .map((chart) => {
+                return (
+                  <option value={chart.id} key={chart.id}>
+                    {t(`charts.${chart.id}.label`)}
+                  </option>
+                );
+              })}
           </Form.Select>
         </Col>
         <Col xs='auto'>
@@ -88,7 +77,11 @@ const Flourish: FC = () => {
       </Row>
       <Row className='justify-content-center'>
         <Col xs={12} lg={10}>
-          <FlourishChart dataId={chartType.dataSrc} customOptions={{}} />
+          <FlourishChart
+            dataId={chartType.dataSrc}
+            customOptions={{}}
+            size={chartType.size}
+          />
         </Col>
       </Row>
       <Row className='justify-content-center mt-5'>

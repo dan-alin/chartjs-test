@@ -6,7 +6,7 @@ import { AMChartDataGenerator } from 'src/utils/generators/generators';
 const ForceDirectedPage: FC = () => {
   const customForceDirectedData = AMChartDataGenerator(
     'force_directed',
-    40
+    20
   ) as ForceDirected;
 
   return (

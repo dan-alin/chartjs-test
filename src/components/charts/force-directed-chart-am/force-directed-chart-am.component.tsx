@@ -26,6 +26,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
   });
   const windowSize: WindowSize = useWindowSize(true, 100, 60);
   const [chartOptions, setChartOptions] = useState<AmCustomOptions>({});
+
   //const chartRef = useRef(null);
 
   const generateLabel = (
@@ -61,10 +62,15 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     responsive.addRule({
       name: 'AxisRendererY',
       relevant: (width) => {
+        console.log(width, am5themes_Responsive.XL);
         return width < am5themes_Responsive.XL;
       },
-      settings: {
-        inside: true,
+      applying: function () {
+        console.log('resize');
+        series.labels.template.setAll({
+          fontSize: 8,
+          text: '[fontSize: 10px]+{sum}%[/]\n[bold]{type}[/]',
+        });
       },
     });
     const actualThemes: am5.Theme[] = [
