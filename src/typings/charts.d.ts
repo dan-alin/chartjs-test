@@ -49,6 +49,7 @@ export type ChartInfoProps = {
   id: Charts;
   lib: Libs;
   dataSrc?: string;
+  size?: ChartSize;
 };
 
 export type LineChartProps = ChartProps & {
