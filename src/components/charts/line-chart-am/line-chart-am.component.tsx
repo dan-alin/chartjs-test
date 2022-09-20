@@ -10,7 +10,6 @@ import {
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import '../charts.style.scss';
-import { emitCustomEvent } from 'react-custom-events';
 import { chartEvents } from 'src/models/events.model';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 export enum ChartCategories {
@@ -83,11 +82,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
   useEffect(() => {
     if (customData) {
       setChartData(customData);
-
-      emitCustomEvent(chartEvents.LINEAREA_DATA, {
-        action: 'linearea data change',
-        customData,
-      });
     }
     if (customOptions) {
       setChartOptions(customOptions);
