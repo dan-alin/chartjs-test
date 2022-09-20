@@ -12,6 +12,9 @@ import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { Color } from '@amcharts/amcharts5';
 import { GroupsColors } from 'src/utils/configurations/chart-config';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
+import customChartEvent from 'src/utils/webview/custom-events';
+import { chartEvents } from 'src/models/events.model';
+import { ChartEventData } from '@typings/chartEvents';
 // import { faker } from "@faker-js/faker";
 
 const ForceDirectedChart: FC<ForceDirectedProps> = ({
@@ -45,6 +48,32 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
 
   const groupFilter = useRef('all');
 
+  const changeGroupFilter = (group: string, dispatch = false) => {
+    groupFilter.current = group;
+    setChartData({
+      ...chartData,
+      children: customData.children.filter((circle) =>
+        groupFilter.current === 'all'
+          ? true
+          : circle.type === groupFilter.current
+      ),
+    });
+
+    if (dispatch) {
+      customChartEvent.dispatch(chartEvents.FILTER, {
+        action: 'Force directed group filter',
+        group: groupFilter.current,
+      });
+    }
+  };
+
+  customChartEvent.listen(chartEvents.FILTER, (data: ChartEventData) => {
+    if (data) {
+      console.log('filter group', data);
+      changeGroupFilter(data.group);
+    }
+  });
+
   useEffect(() => {
     if (customData) {
       setChartData(customData);
@@ -62,11 +91,9 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     responsive.addRule({
       name: 'AxisRendererY',
       relevant: (width) => {
-        console.log(width, am5themes_Responsive.XL);
         return width < am5themes_Responsive.XL;
       },
       applying: function () {
-        console.log('resize');
         series.labels.template.setAll({
           fontSize: 8,
           text: '[fontSize: 10px]+{sum}%[/]\n[bold]{type}[/]',
@@ -123,7 +150,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
           target: am5hierarchy.ForceDirected;
         }
       ) => {
-        console.log(event.target.labels.template);
+        //console.log(event.target.labels.template);
         event.target.toFront();
       }
     );
@@ -198,16 +225,10 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
         const currentCircle = ev.target.dataItem
           ?.dataContext as ForceDirectedData;
         if (currentCircle?.type && customData?.children) {
-          groupFilter.current =
-            groupFilter.current === 'all' ? currentCircle?.type : 'all';
-          setChartData({
-            ...chartData,
-            children: customData.children.filter((circle) =>
-              groupFilter.current === 'all'
-                ? true
-                : circle.type === groupFilter.current
-            ),
-          });
+          changeGroupFilter(
+            groupFilter.current === 'all' ? currentCircle?.type : 'all',
+            true
+          );
         }
       }
     );

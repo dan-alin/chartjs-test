@@ -58,6 +58,7 @@ const App: FC = () => {
         {showNavbar && <Navbar />}
         <RoutesComponent />
         <div id={'chartEvents'}></div>
+        <div id={'chartEventsListen'}></div>
       </main>
     </BrowserRouter>
   );
