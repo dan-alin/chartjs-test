@@ -87,7 +87,6 @@ const Flourish: FC = () => {
       <Row className='justify-content-center mt-5'>
         <Col xs={12} lg={10}>
           <CardBox bg={'light'} text={'secondary'}>
-            {' '}
             <Trans i18nKey={`charts.${chartType.id}.description`}></Trans>
           </CardBox>
         </Col>

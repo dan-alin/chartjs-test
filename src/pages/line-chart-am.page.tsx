@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
-import { LineChartAm } from '@components/charts';
-import { AMChartDataGenerator } from 'src/utils';
-const customLineAm = AMChartDataGenerator('am_linearea');
+// import { LineChartAm } from '@components/charts';
+// import { AMChartDataGenerator } from 'src/utils';
+// const customLineAm = AMChartDataGenerator('am_linearea');
 import { chartEvents } from 'src/models/events.model';
+import DoubleChartAm from '@components/charts/double-chart-am/double-chart-am.component';
 
 const LineChartAmPage: FC = () => {
   document
@@ -12,10 +13,11 @@ const LineChartAmPage: FC = () => {
     );
 
   return (
-    <LineChartAm
-      customData={customLineAm}
-      customOptions={{ windowHeight: true }}
-    ></LineChartAm>
+    // <LineChartAm
+    //   customData={customLineAm}
+    //   customOptions={{ windowHeight: true }}
+    // ></LineChartAm>
+    <DoubleChartAm></DoubleChartAm>
   );
 };
 
