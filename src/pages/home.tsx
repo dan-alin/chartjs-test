@@ -34,6 +34,7 @@ import { colorsDefaults } from 'src/utils/configurations/chart-config';
 import DoughnutChartAM from '@components/charts/doughnut-chart-am/doughnut-chart-am.component';
 import { Logo } from '@components/logo';
 import BarChartAm from '@components/charts/bar-chart-am/bar-chart-am.component';
+import TestChart from '@components/charts/test-chart/test-chart-am.component';
 import { CardBox } from '@components/card-box';
 
 const hideCharts: Charts[] = [
@@ -73,6 +74,10 @@ const charts: ChartInfoProps[] = [
   },
   {
     id: 'am_bar',
+    lib: 'am_charts',
+  },
+  {
+    id: 'test_am',
     lib: 'am_charts',
   },
   {
@@ -333,11 +338,13 @@ const renderSwitch = (chart: ChartInfoProps) => {
         customBarData = chartDataGenerator(5, 2, chart.id, colorsDefaults);
       }
       return (
-        <BarChart
-          size='responsive'
-          customOptions={customBarOptions}
-          customData={customBarData as ChartData<'bar'>}
-        />
+        <>
+          <BarChart
+            size='responsive'
+            customOptions={customBarOptions}
+            customData={customBarData as ChartData<'bar'>}
+          />
+        </>
       );
     case 'scatter':
       return (
@@ -367,6 +374,8 @@ const renderSwitch = (chart: ChartInfoProps) => {
       );
     case 'am_bar':
       return <BarChartAm />;
+    case 'test_am':
+      return <TestChart />;
     case 'am_linearea':
       return <LineChartAm customData={customAmLinechartData} />;
 

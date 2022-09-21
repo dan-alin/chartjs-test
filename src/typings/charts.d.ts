@@ -10,7 +10,8 @@ export type AMCharts =
   | 'force_directed'
   | 'am_doughnut'
   | 'am_bar'
-  | 'am_linearea';
+  | 'am_linearea'
+  | 'test_am';
 export type chartJsCharts = ChartType | 'linearea' | 'horizontalbar' | 'gauge';
 export type flourishCharts =
   | 'line'
@@ -58,6 +59,9 @@ export type LineChartProps = ChartProps & {
   showAlwaysTooltip?: boolean;
 };
 export type BarChartProps = ChartProps & {
+  customOptions?: ChartOptions<'bar'>;
+};
+export type TestChartProps = ChartProps & {
   customOptions?: ChartOptions<'bar'>;
 };
 export type DoughnutChartProps = ChartProps & {
