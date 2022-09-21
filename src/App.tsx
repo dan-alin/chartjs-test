@@ -5,7 +5,7 @@ import Home from 'src/pages/home';
 import './App.scss';
 import { useTheme } from './contexts/theme/theme.context';
 import { Navbar } from '@components/navabr';
-import Flourish from '@pages/flurish.page';
+import Flourish from '@pages/flourish.page';
 import ForceDirectedChart from '@pages/force-directed.page';
 import FlourishChart from '@components/charts/flourish-chart';
 import routes from './routes';
