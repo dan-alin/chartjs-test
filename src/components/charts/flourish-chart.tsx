@@ -5,7 +5,7 @@ import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 interface FlourishChartProps {
   dataId: string | undefined;
   customOptions: AmCustomOptions;
-  size: ChartSize | undefined;
+  size?: ChartSize | undefined;
 }
 
 const FlourishChart: FC<FlourishChartProps> = ({
