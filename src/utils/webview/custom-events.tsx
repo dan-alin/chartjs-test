@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { ChartEventData } from '@typings/chartEvents';
 import { chartEvents } from 'src/models/events.model';
 
@@ -19,15 +20,22 @@ const customChartEvent = {
   },
   listen: (
     label: chartEvents = chartEvents.CHART,
-    callback?: (data?: ChartEventData) => void,
+    callback: EventListenerOrEventListenerObject,
     eventNode = document.getElementById('chartEventsListen')
   ) => {
     if (eventNode) {
-      eventNode.addEventListener(label, (data: any) => {
-        console.log(`--- evento ricevuto ${label} ---`, data.detail);
-        if (callback) {
-          callback(data?.detail as ChartEventData);
-        }
+      eventNode.addEventListener(label, callback);
+    }
+  },
+  remove: (
+    labels: string[],
+    callbacks: EventListenerOrEventListenerObject[],
+    eventNode = document.getElementById('chartEventsListen')
+  ) => {
+    if (eventNode && labels) {
+      labels.forEach((label, i) => {
+        eventNode.removeEventListener(label, callbacks[i]);
+        console.log(`--- removed ${label} ---`);
       });
     }
   },

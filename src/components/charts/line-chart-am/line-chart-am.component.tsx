@@ -193,8 +193,8 @@ const LineChartAm: FC<LineChartAmProps> = ({
     rangeEvent({
       firstValue: rangeTime1,
       secondValue: rangeTime2,
-      label: chartEvents.LINEAREA,
-      action: 'Initial range',
+      label: chartEvents.LINEAREA_DRAGSTOP,
+      action: 'Initial range draggable area',
     });
 
     range1?.get('grid')?.setAll({
@@ -242,7 +242,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       rangeEvent({
         firstValue: range1.get('value') as number,
         label: chartEvents.LINEAREA_DRAGSTOP,
-        action: 'range button 1 dragstop',
+        action: 'Range button 1 dragstop',
       });
     });
 
@@ -276,7 +276,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       rangeEvent({
         secondValue: range2.get('value') as number,
         label: chartEvents.LINEAREA_DRAGSTOP,
-        action: 'range button 2 dragstop',
+        action: 'Range button 2 dragstop',
       });
     });
 

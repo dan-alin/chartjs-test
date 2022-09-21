@@ -13,6 +13,7 @@ import routes from './routes';
 import DoughnutAm from '@pages/doughhnutam.page';
 // import { AMChartDataGenerator } from './utils';
 import LineChartAmPage from '@pages/line-chart-am.page';
+import { WebviewEvents } from './components';
 
 const hideNavbar = [
   '/linechart',
@@ -57,8 +58,7 @@ const App: FC = () => {
         {' '}
         {showNavbar && <Navbar />}
         <RoutesComponent />
-        <div id={'chartEvents'}></div>
-        <div id={'chartEventsListen'}></div>
+        <WebviewEvents />
       </main>
     </BrowserRouter>
   );

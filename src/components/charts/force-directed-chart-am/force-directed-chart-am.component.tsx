@@ -67,12 +67,14 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     }
   };
 
-  customChartEvent.listen(chartEvents.FILTER, (data: ChartEventData) => {
+  const changeGroupListener = (data: ChartEventData) => {
     if (data) {
       console.log('filter group', data);
-      changeGroupFilter(data.group);
+      changeGroupFilter(data.detail.group);
     }
-  });
+  };
+
+  customChartEvent.listen(chartEvents.FILTER, changeGroupListener);
 
   useEffect(() => {
     if (customData) {
@@ -257,6 +259,12 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
       root.dispose();
     };
   }, [chartId, chartData, customData.children]);
+
+  useEffect(
+    () => () =>
+      customChartEvent.remove([chartEvents.FILTER], [changeGroupListener]),
+    []
+  );
 
   return (
     <>
