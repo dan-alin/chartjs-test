@@ -12,7 +12,7 @@ import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 const DoughnutChartAM: FC<AmDoughnutProps> = ({
   size = 'responsive',
   customData,
-  customOptions = {},
+  customOptions,
 }) => {
   const chartId = useId();
   const windowSize: WindowSize = useWindowSize(true, 100, 60);
@@ -23,18 +23,17 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
   });
   //const chartRef = useRef(null);
   useEffect(() => {
+    if (customData) {
+      setChartData(customData);
+    }
     if (customOptions) {
-      if (customData) {
-        setChartData(customData);
-      }
-      console.log('options', customOptions);
       setChartOptions(customOptions);
+      console.log('options', customOptions);
     }
   }, [customOptions, customData]);
 
   useLayoutEffect(() => {
     const root: am5.Root = am5.Root.new(chartId);
-    console.log('*** window size ***', windowSize);
 
     // THEME CHART
     const actualThemes: am5.Theme[] = [am5themes_Animated.new(root)];
@@ -48,7 +47,6 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       })
     );
     // -----
-    console.log(root.container.children);
 
     // SERIES
     const series = container.series.push(
@@ -103,7 +101,7 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       }
     );
 
-    series.data.setAll(customData);
+    series.data.setAll(chartData);
 
     if (chartOptions && !chartOptions.hideLegend) {
       // Add legend
