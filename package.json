@@ -81,5 +81,8 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix",
     "*.{ts,tsx,json}": "prettier --write"
+  },
+  "volta": {
+    "node": "16.17.0"
   }
 }
