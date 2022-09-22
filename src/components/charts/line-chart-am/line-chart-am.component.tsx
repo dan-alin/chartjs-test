@@ -10,9 +10,10 @@ import {
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import '../charts.style.scss';
-import { emitCustomEvent } from 'react-custom-events';
 import { chartEvents } from 'src/models/events.model';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
+import customChartEvent from 'src/utils/webview/custom-events';
+import { DRangeEvent } from '@typings/chartEvents';
 export enum ChartCategories {
   xy = 'xy',
   hierarchy = 'hierarchy',
@@ -44,28 +45,32 @@ const initChart = (
   return root?.container?.children.push(chartInit);
 };
 
-interface RangeEvent {
-  first?: number;
-  second?: number;
-  label?: string;
-}
-
-const rangeEvent = ({ first, second, label }: RangeEvent) => {
-  const eventNode = document.getElementById('chartEvents');
-
-  const eventLabel = label ? label : chartEvents.LINEAREA_DRAGSTOP;
-
-  const customEvent = new CustomEvent(eventLabel, {
-    bubbles: true,
-    detail: {
-      action: 'linearea drag stop on range',
-      firstValue: first,
-      secondValue: second,
-    },
+const initButton = (root: am5.Root, width: number): am5.Button => {
+  const resizeButton = am5.Button.new(root, {
+    themeTags: ['resize', 'horizontal'],
+    icon: am5.Graphics.new(root, {
+      themeTags: ['icon'],
+    }),
   });
+  resizeButton.adapters.add('y', function () {
+    return 0;
+  });
+  resizeButton.adapters.add('x', function (x) {
+    return Math.max(0, Math.min(width, x as number));
+  });
+  return resizeButton;
+};
 
-  eventNode?.dispatchEvent(customEvent);
-  console.log(eventLabel, customEvent);
+const rangeEvent = (rangeEvent: DRangeEvent) => {
+  const detail = {
+    action: rangeEvent.action,
+    firstValue: rangeEvent.firstValue,
+    secondValue: rangeEvent.secondValue,
+  };
+  customChartEvent.dispatch(
+    rangeEvent.label ? rangeEvent.label : chartEvents.LINEAREA_DRAGSTOP,
+    detail
+  );
 };
 
 const LineChartAm: FC<LineChartAmProps> = ({
@@ -83,11 +88,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
   useEffect(() => {
     if (customData) {
       setChartData(customData);
-
-      emitCustomEvent(chartEvents.LINEAREA_DATA, {
-        action: 'linearea data change',
-        customData,
-      });
     }
     if (customOptions) {
       setChartOptions(customOptions);
@@ -183,19 +183,19 @@ const LineChartAm: FC<LineChartAmProps> = ({
     const rangeTime1 = rangeDate.getTime() - am5.time.getDuration('day') * 20;
     const rangeTime2 = rangeDate.getTime() + am5.time.getDuration('day') * 20;
 
-    rangeEvent({
-      first: rangeTime1,
-      second: rangeTime2,
-      label: chartEvents.LINEAREA,
-    });
-
     const color = root.interfaceColors.get('primaryButton');
 
     // add axis range 1
     const range1 = xAxis.createAxisRange(xAxis.makeDataItem({}));
 
-    range1.set('value', rangeTime1);
-    range1.set('endValue', rangeTime2);
+    range1.setAll({ value: rangeTime1, endValue: rangeTime2 });
+
+    rangeEvent({
+      firstValue: rangeTime1,
+      secondValue: rangeTime2,
+      label: chartEvents.LINEAREA_DRAGSTOP,
+      action: 'Initial range draggable area',
+    });
 
     range1?.get('grid')?.setAll({
       strokeOpacity: 1,
@@ -216,46 +216,34 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
     axisFill?.events.on('dragstop', function () {
       const dx = axisFill?.x();
-      const x = resizeButton1.x() + dx;
-      const position = xAxis.toAxisPosition(x / chart.plotContainer.width());
-      const endPosition = xAxis.toAxisPosition(
-        (x + axisFill.width()) / chart.plotContainer.width()
-      );
-
-      const value = xAxis.positionToValue(position);
-      const endValue = xAxis.positionToValue(endPosition);
-
-      range1.set('value', value);
-      range1.set('endValue', endValue);
+      const value = axisRangeDrag(resizeButton1, dx);
+      const endValue = axisRangeDrag(resizeButton1, dx, axisFill.width());
+      range1.setAll({ value, endValue });
       range2.set('value', endValue);
-      rangeEvent({ first: value, second: endValue });
 
+      rangeEvent({
+        firstValue: value,
+        secondValue: endValue,
+        label: chartEvents.LINEAREA_DRAGSTOP,
+        action: 'Drag both axis',
+      });
       axisFill?.set('x', 0);
     });
 
-    const resizeButton1 = am5.Button.new(root, {
-      themeTags: ['resize', 'horizontal'],
-      icon: am5.Graphics.new(root, {
-        themeTags: ['icon'],
-      }),
-    });
-
-    resizeButton1.adapters.add('y', function () {
-      return 0;
-    });
-
-    resizeButton1.adapters.add('x', function (x) {
-      return Math.max(0, Math.min(chart.plotContainer.width(), x as number));
-    });
+    //Resize button 1
+    const resizeButton1 = initButton(root, chart.plotContainer.width());
 
     resizeButton1.events.on('dragged', function () {
-      const x = resizeButton1.x();
-      const position = xAxis.toAxisPosition(x / chart.plotContainer.width());
-
-      const value = xAxis.positionToValue(position);
-
+      const value = axisRangeDrag(resizeButton1);
       range1.set('value', value);
-      rangeEvent({ first: value });
+    });
+
+    resizeButton1.events.on('dragstop', function () {
+      rangeEvent({
+        firstValue: range1.get('value') as number,
+        label: chartEvents.LINEAREA_DRAGSTOP,
+        action: 'Range button 1 dragstop',
+      });
     });
 
     range1.set(
@@ -274,35 +262,22 @@ const LineChartAm: FC<LineChartAmProps> = ({
       stroke: color as am5.Color,
     });
 
-    const resizeButton2 = am5.Button.new(root, {
-      themeTags: ['resize', 'horizontal'],
-      icon: am5.Graphics.new(root, {
-        themeTags: ['icon'],
-      }),
-    });
-
-    // restrict from being dragged vertically
-    resizeButton2.adapters.add('y', function () {
-      return 0;
-    });
-
-    // restrict from being dragged outside of plot
-    resizeButton2.adapters.add('x', function (x) {
-      return Math.max(0, Math.min(chart.plotContainer.width(), x as number));
-    });
+    //Resize button 2
+    const resizeButton2 = initButton(root, chart.plotContainer.width());
 
     // change range when x changes
     resizeButton2.events.on('dragged', function () {
-      const x = resizeButton2.x();
-      const position = xAxis.toAxisPosition(x / chart.plotContainer.width());
-
-      const value = xAxis.positionToValue(position);
-
+      const value = axisRangeDrag(resizeButton2);
       range2.set('value', value);
-
       range1.set('endValue', value);
+    });
 
-      rangeEvent({ second: value });
+    resizeButton2.events.on('dragstop', function () {
+      rangeEvent({
+        secondValue: range2.get('value') as number,
+        label: chartEvents.LINEAREA_DRAGSTOP,
+        action: 'Range button 2 dragstop',
+      });
     });
 
     // set bullet for the range
@@ -318,9 +293,22 @@ const LineChartAm: FC<LineChartAmProps> = ({
     series.appear(1000);
     chart.appear(1000, 100);
 
+    function axisRangeDrag(
+      button: am5.Button,
+      dx = 0,
+      dposition = 0,
+      axis: am5xy.DateAxis<am5xy.AxisRenderer> = xAxis
+    ): number {
+      const x = button.x() + dx;
+      const position = axis.toAxisPosition(
+        (x + dposition) / chart.plotContainer.width()
+      );
+      const value = axis.positionToValue(position);
+      return value;
+    }
+
     return () => {
       root.dispose();
-      // setChartState(1);
     };
   }, [chartId, chartData, customData]);
 

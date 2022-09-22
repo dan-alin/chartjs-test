@@ -10,7 +10,7 @@ interface FlourishChartProps {
 
 const FlourishChart: FC<FlourishChartProps> = ({
   dataId,
-  customOptions = {},
+  customOptions,
   size,
 }) => {
   const windowSize: WindowSize = useWindowSize(true, 100, 60);
@@ -18,8 +18,6 @@ const FlourishChart: FC<FlourishChartProps> = ({
 
   useEffect(() => {
     const script = document.createElement('script');
-
-    console.log('options', customOptions);
     setChartOptions(customOptions);
 
     script.src = 'https://public.flourish.studio/resources/embed.js';
