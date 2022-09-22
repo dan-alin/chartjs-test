@@ -5,12 +5,12 @@ import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 interface FlourishChartProps {
   dataId: string | undefined;
   customOptions: AmCustomOptions;
-  size?: ChartSize;
+  size?: ChartSize | undefined;
 }
 
 const FlourishChart: FC<FlourishChartProps> = ({
   dataId,
-  customOptions = {},
+  customOptions,
   size,
 }) => {
   const windowSize: WindowSize = useWindowSize(true, 100, 60);
@@ -18,8 +18,6 @@ const FlourishChart: FC<FlourishChartProps> = ({
 
   useEffect(() => {
     const script = document.createElement('script');
-
-    console.log('options', customOptions);
     setChartOptions(customOptions);
 
     script.src = 'https://public.flourish.studio/resources/embed.js';
