@@ -362,7 +362,12 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'force_directed':
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
-      return <DoughnutChartAM customData={customAmdoughnutData} />;
+      return (
+        <DoughnutChartAM
+          customData={customAmdoughnutData}
+          customOptions={{ hideLegend: false }}
+        />
+      );
     case 'am_bar':
       return <BarChartAm />;
     case 'am_linearea':
