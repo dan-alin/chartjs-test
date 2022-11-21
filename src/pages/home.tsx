@@ -255,7 +255,7 @@ const circularPackingData = d3ChartDataGenerator('D3_circular');
 
 const customForceDirectedData = AMChartDataGenerator(
   'force_directed',
-  40
+  20
 ) as ForceDirected;
 
 const customAmLinechartData = AMChartDataGenerator('am_linearea');
