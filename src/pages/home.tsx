@@ -255,7 +255,7 @@ const circularPackingData = d3ChartDataGenerator('D3_circular');
 
 const customForceDirectedData = AMChartDataGenerator(
   'force_directed',
-  40
+  20
 ) as ForceDirected;
 
 const customAmLinechartData = AMChartDataGenerator('am_linearea');
@@ -362,7 +362,12 @@ const renderSwitch = (chart: ChartInfoProps) => {
     case 'force_directed':
       return <ForceDirectedChart customData={customForceDirectedData} />;
     case 'am_doughnut':
-      return <DoughnutChartAM customData={customAmdoughnutData} />;
+      return (
+        <DoughnutChartAM
+          customData={customAmdoughnutData}
+          customOptions={{ hideLegend: false }}
+        />
+      );
     case 'am_bar':
       return <BarChartAm />;
     case 'am_linearea':

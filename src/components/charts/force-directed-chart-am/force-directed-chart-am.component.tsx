@@ -13,7 +13,7 @@ import { Color } from '@amcharts/amcharts5';
 import { GroupsColors } from 'src/utils/configurations/chart-config';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 import customChartEvent from 'src/utils/webview/custom-events';
-import { chartEvents } from 'src/models/events.model';
+import { WebviewActions, WebviewCharts } from 'src/models/events.model';
 import { ChartEventData } from '@typings/chartEvents';
 // import { faker } from "@faker-js/faker";
 
@@ -60,7 +60,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     });
 
     if (dispatch) {
-      customChartEvent.dispatch(chartEvents.FILTER, {
+      customChartEvent.dispatch(WebviewCharts.BUBBLE, WebviewActions.FILTER, {
         action: 'Force directed group filter',
         group: groupFilter.current,
       });
@@ -74,7 +74,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     }
   };
 
-  customChartEvent.listen(chartEvents.FILTER, changeGroupListener);
+  customChartEvent.listen(WebviewActions.FILTER, changeGroupListener);
 
   useEffect(() => {
     if (customData) {
@@ -129,7 +129,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
         initialDepth: 1,
         downDepth: 3,
         topDepth: 1,
-        manyBodyStrength: 0.1,
+        manyBodyStrength: 0.2,
         centerStrength: 0.1,
         nodePadding: 0,
         minRadius: 5,
@@ -262,7 +262,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
 
   useEffect(
     () => () =>
-      customChartEvent.remove([chartEvents.FILTER], [changeGroupListener]),
+      customChartEvent.remove([WebviewActions.FILTER], [changeGroupListener]),
     []
   );
 
