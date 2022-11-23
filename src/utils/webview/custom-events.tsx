@@ -1,25 +1,29 @@
 /* eslint-disable no-undef */
 import { ChartEventData } from '@typings/chartEvents';
-import { chartEvents } from 'src/models/events.model';
+import { WebviewCharts, WebviewActions } from 'src/models/events.model';
 
 const customChartEvent = {
   dispatch: (
-    label: chartEvents = chartEvents.CHART,
+    chart: WebviewCharts = WebviewCharts.DOUGHNUT,
+    action: WebviewActions,
     data: ChartEventData = {},
     bubbles = false,
     eventNode = document.getElementById('chartEvents')
   ): void => {
     if (eventNode) {
-      const customEvent = new CustomEvent(label, {
+      const customEvent = new CustomEvent(`${chart.toUpperCase()}.${action}`, {
         bubbles,
         detail: data,
       });
       eventNode?.dispatchEvent(customEvent);
-      console.log(`--- emit ${label} ---`, customEvent.detail);
+      console.log(
+        `--- emit ${chart.toUpperCase()}.${action} ---`,
+        customEvent.detail
+      );
     }
   },
   listen: (
-    label: chartEvents = chartEvents.CHART,
+    label: WebviewActions,
     callback: EventListenerOrEventListenerObject,
     eventNode = document.getElementById('chartEventsListen')
   ) => {

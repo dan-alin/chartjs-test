@@ -10,10 +10,10 @@ import {
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import '../charts.style.scss';
-import { chartEvents } from 'src/models/events.model';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 import customChartEvent from 'src/utils/webview/custom-events';
 import { DRangeEvent } from '@typings/chartEvents';
+import { WebviewActions, WebviewCharts } from 'src/models/events.model';
 export enum ChartCategories {
   xy = 'xy',
   hierarchy = 'hierarchy',
@@ -68,7 +68,8 @@ const rangeEvent = (rangeEvent: DRangeEvent) => {
     secondValue: rangeEvent.secondValue,
   };
   customChartEvent.dispatch(
-    rangeEvent.label ? rangeEvent.label : chartEvents.LINEAREA_DRAGSTOP,
+    rangeEvent.label ? rangeEvent.label : WebviewCharts.LINEAREA,
+    WebviewActions.LINEAREA_DRAGSTOP,
     detail
   );
 };
@@ -193,7 +194,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
     rangeEvent({
       firstValue: rangeTime1,
       secondValue: rangeTime2,
-      label: chartEvents.LINEAREA_DRAGSTOP,
+      label: WebviewActions.LINEAREA_DRAGSTOP,
       action: 'Initial range draggable area',
     });
 
@@ -224,7 +225,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       rangeEvent({
         firstValue: value,
         secondValue: endValue,
-        label: chartEvents.LINEAREA_DRAGSTOP,
+        label: WebviewActions.LINEAREA_DRAGSTOP,
         action: 'Drag both axis',
       });
       axisFill?.set('x', 0);
@@ -241,7 +242,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
     resizeButton1.events.on('dragstop', function () {
       rangeEvent({
         firstValue: range1.get('value') as number,
-        label: chartEvents.LINEAREA_DRAGSTOP,
+        label: WebviewActions.LINEAREA_DRAGSTOP,
         action: 'Range button 1 dragstop',
       });
     });
@@ -275,7 +276,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
     resizeButton2.events.on('dragstop', function () {
       rangeEvent({
         secondValue: range2.get('value') as number,
-        label: chartEvents.LINEAREA_DRAGSTOP,
+        label: WebviewActions.LINEAREA_DRAGSTOP,
         action: 'Range button 2 dragstop',
       });
     });

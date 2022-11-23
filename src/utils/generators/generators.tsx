@@ -254,6 +254,7 @@ export const AMChartDataGenerator = (
 
         return {
           name: group,
+          id: group.toLowerCase(),
           color: c,
           value:
             group === 'Altro'

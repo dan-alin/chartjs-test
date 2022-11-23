@@ -31,6 +31,7 @@ const config = merge(commonConfig, {
     rules: [scssLoader, cssLoader],
   },
   plugins: [publicPlugin],
+  devtool: 'eval-source-map',
 });
 
 module.exports = config;
