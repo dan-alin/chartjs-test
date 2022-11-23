@@ -129,7 +129,7 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
         initialDepth: 1,
         downDepth: 3,
         topDepth: 1,
-        manyBodyStrength: 0.1,
+        manyBodyStrength: 0.2,
         centerStrength: 0.1,
         nodePadding: 0,
         minRadius: 5,
