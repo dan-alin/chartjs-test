@@ -36,7 +36,9 @@ export type AmChartProps = {
 
 export type AmCustomOptions = {
   hideLegend?: boolean;
+  legendPosition?: 'left' | 'right' | 'bottom' | 'top' | undefined;
   windowHeight?: boolean;
+  rotateFocus?: boolean;
 };
 
 export type GaugePlugin = {
@@ -139,6 +141,7 @@ export type DoughnutData = {
   name: string;
   value: number;
   color: am5.Color;
+  id: string;
 };
 
 export type LineAreaData = {

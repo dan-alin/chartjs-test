@@ -8,6 +8,7 @@ import registerServiceWorker from './serviceWorkerRegistration';
 const urlSearchParams = new URLSearchParams(window.location.search);
 if (urlSearchParams) {
   const params = Object.fromEntries(urlSearchParams.entries());
+
   if (params.lang) {
     window.configLang = params.lang;
   }
