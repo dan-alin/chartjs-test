@@ -1,10 +1,9 @@
-import { chartEvents } from 'src/models/events.model';
-
+import { WebviewCharts } from 'src/models/events.model';
 export type DispatchEvents = DRangeEvent;
 export type ListenEvents = LIFilterGroupEvent;
 
 export type DRangeEvent = {
-  label: chartEvents;
+  label: WebviewCharts;
   firstValue?: number;
   secondValue?: number;
   action?: string;
