@@ -39,6 +39,8 @@ export type AmCustomOptions = {
   legendPosition?: 'left' | 'right' | 'bottom' | 'top' | undefined;
   windowHeight?: boolean;
   rotateFocus?: boolean;
+  showRange?: boolean;
+  isWebview?: boolean;
 };
 
 export type GaugePlugin = {
@@ -80,8 +82,14 @@ export type AmDoughnutProps = AmChartProps & {
   customData: DoughnutData[];
 };
 
+export type LineData = {
+  date: number;
+  value: number;
+};
+
 export type LineChartAmProps = ChartProps & {
   customOptions?: AmCustomOptions;
+  customData: LineData[];
 };
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 
@@ -118,11 +126,7 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData =
-  | ForceDirected
-  | DoughnutData[]
-  | LineAreaData[]
-  | LineAreaData[];
+export type AMChartsData = ForceDirected | DoughnutData[] | LineData[];
 
 export type ForceDirected = {
   name?: string;
@@ -142,9 +146,4 @@ export type DoughnutData = {
   value: number;
   color: am5.Color;
   id: string;
-};
-
-export type LineAreaData = {
-  date: number;
-  value: number;
 };

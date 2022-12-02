@@ -1,4 +1,5 @@
 import { DoughnutChartAM } from '@components/charts';
+import { DoughnutQueryParams } from '@typings/chartEvents';
 import { AmCustomOptions, DoughnutData } from '@typings/charts';
 import React, { FC, useEffect, useState } from 'react';
 import { AMChartDataGenerator } from 'src/utils';
@@ -9,20 +10,14 @@ const customData = AMChartDataGenerator('am_doughnut', 100, [
   'Altro',
 ]) as DoughnutData[];
 
-export type IParams = {
-  legend?: 'top' | 'left' | 'right' | 'left';
-  rotateFocus?: boolean;
-  policy?: string;
-  delay?: number;
-};
-
 const queryParams = new URLSearchParams(window.location.search);
-const params: IParams = queryParams
+const params: DoughnutQueryParams = queryParams
   ? Object.fromEntries(queryParams.entries())
   : {};
 const webviewOptions: AmCustomOptions = {
   hideLegend: !params.legend,
   windowHeight: true,
+  isWebview: true,
   legendPosition: params.legend,
   rotateFocus: params.rotateFocus || false,
 };

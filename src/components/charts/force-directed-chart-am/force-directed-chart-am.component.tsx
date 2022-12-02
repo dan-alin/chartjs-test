@@ -74,7 +74,11 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
     }
   };
 
-  customChartEvent.listen(WebviewActions.FILTER, changeGroupListener);
+  customChartEvent.listen(
+    WebviewCharts.BUBBLE,
+    WebviewActions.FILTER,
+    changeGroupListener
+  );
 
   useEffect(() => {
     if (customData) {
