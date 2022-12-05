@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
-import { IXYChartSettings } from '@amcharts/amcharts5/xy';
+import { IDateAxisDataItem, IXYChartSettings } from '@amcharts/amcharts5/xy';
 import { AmCustomOptions, LineData, LineChartAmProps } from '@typings/charts';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
@@ -17,6 +17,7 @@ import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 import customChartEvent from 'src/utils/webview/custom-events';
 import { DRangeEvent } from '@typings/chartEvents';
 import { WebviewActions, WebviewCharts } from 'src/models/events.model';
+import { DataItem } from '@amcharts/amcharts5';
 export enum ChartCategories {
   xy = 'xy',
   hierarchy = 'hierarchy',
@@ -68,6 +69,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
   size = 'responsive',
   customOptions,
   customData,
+  rangeDrag,
 }) => {
   const chartId = useId();
   const [chartData, setChartData] = useState<LineData[]>([]);
@@ -76,10 +78,13 @@ const LineChartAm: FC<LineChartAmProps> = ({
     windowHeight: false,
   });
   const [showRange, setShowRange] = useState<boolean | undefined>(false);
+  const [showEvents, setShowEvents] = useState<boolean | undefined>(false);
   const root = useRef<am5.Root>();
   const chart = useRef<am5xy.XYChart>();
   const series = useRef<am5xy.LineSeries>();
   const xAxis = useRef<am5xy.DateAxis<am5xy.AxisRenderer>>();
+  const ranges = useRef<am5.DataItem<am5xy.IDateAxisDataItem>[]>([]);
+  const eventsRanges = useRef<am5.DataItem<am5xy.IDateAxisDataItem>[]>([]);
 
   useEffect(() => {
     if (customData) {
@@ -88,13 +93,20 @@ const LineChartAm: FC<LineChartAmProps> = ({
     if (customOptions) {
       setChartOptions(customOptions);
       setShowRange(customOptions.showRange);
+      setShowEvents(customOptions.showEvents);
       if (customOptions.isWebview) {
         customChartEvent.listen(
           WebviewCharts.LINE,
           WebviewActions.SHOWRANGE,
           (data) => {
-            console.log('RANGE', data);
-            setShowRange(true);
+            setShowRange((data as CustomEvent).detail.show);
+          }
+        );
+        customChartEvent.listen(
+          WebviewCharts.LINE,
+          WebviewActions.SHOWEVENTS,
+          (data) => {
+            setShowEvents((data as CustomEvent).detail.show);
           }
         );
       }
@@ -164,38 +176,15 @@ const LineChartAm: FC<LineChartAmProps> = ({
   }, [chartId, chartData]);
 
   useEffect(() => {
-    if (
-      showRange &&
-      root.current &&
-      chart.current &&
-      series.current &&
-      xAxis.current
-    ) {
+    if (root.current && chart.current && series.current && xAxis.current) {
       const chartRoot = root.current;
-      const rangeDate = new Date(
-        (series.current.dataItems[0].dataContext as LineData).date
-      );
-      am5.time.add(
-        rangeDate,
-        'day',
-        Math.round(series.current.dataItems.length / 2)
-      );
-      const rangeTime1 = (series.current.dataItems[0].dataContext as LineData)
-        .date;
-      const rangeTime2 = (
-        series.current.dataItems[series.current.dataItems.length - 1]
-          .dataContext as LineData
-      ).date;
       const color = chartRoot.interfaceColors.get('primaryButton');
       const plotWidth = chart.current.plotContainer.width();
       const xAxisRange: am5xy.DateAxis<am5xy.AxisRenderer> = xAxis.current;
-      console.log('series', series.current);
 
       if (showRange) {
-        const ranges = [
-          xAxisRange.createAxisRange(xAxisRange.makeDataItem({})),
-          xAxisRange.createAxisRange(xAxisRange.makeDataItem({})),
-        ];
+        createRange();
+        const axisFill = ranges.current[0].get('axisFill');
 
         //Range buttons
         const rangeButtons = [
@@ -203,11 +192,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
           initButton(chartRoot, plotWidth),
         ];
 
-        // add axis range 1
-        ranges[0].setAll({ value: rangeTime1, endValue: rangeTime2 });
-        ranges[1].set('value', rangeTime2);
-
-        ranges.forEach((range, index) => {
+        ranges.current.forEach((range, index) => {
           range.get('grid')?.setAll({
             strokeOpacity: 1,
             stroke: color as am5.Color,
@@ -221,7 +206,8 @@ const LineChartAm: FC<LineChartAmProps> = ({
           range.set('bullet', am5xy.AxisBullet.new(chartRoot, bulletOptions));
         });
 
-        const axisFill = ranges[0].get('axisFill');
+        console.log('range 01', ranges.current[0]);
+
         axisFill?.setAll({
           fillOpacity: 0.15,
           fill: color as am5.Color,
@@ -248,13 +234,13 @@ const LineChartAm: FC<LineChartAmProps> = ({
             dx,
             axisFill.width()
           );
-          ranges[0].setAll({ value, endValue });
-          ranges[1].set('value', endValue);
+          ranges.current[0].setAll({ value, endValue });
+          ranges.current[1].set('value', endValue);
           rangeEvent({
             firstValue: value,
             secondValue: endValue,
-            label: WebviewActions.DRAGSTOP,
-            action: 'Drag both axis',
+            action: WebviewActions.DRAGSTOP,
+            description: 'Drag both axis',
           });
           axisFill?.set('x', 0);
         });
@@ -262,41 +248,93 @@ const LineChartAm: FC<LineChartAmProps> = ({
         rangeButtons.forEach((button, index) => {
           button.events.on('dragged', function () {
             const value = axisRangeDrag(button, xAxisRange, plotWidth);
-            ranges[index].set('value', value);
-            ranges[0].set('endValue', ranges[1].get('value'));
+            ranges.current[index].set('value', value);
+            ranges.current[0].set('endValue', ranges.current[1].get('value'));
           });
           button.events.on('dragstop', function () {
             rangeEvent({
-              firstValue: ranges[0].get('value') as number,
-              secondValue: ranges[1].get('value') as number,
-              label: WebviewActions.DRAGSTOP,
-              action: 'Range button 1 dragstop',
+              firstValue: ranges.current[0].get('value') as number,
+              secondValue: ranges.current[1].get('value') as number,
+              action: WebviewActions.DRAGSTOP,
+              description: 'Range button 1 dragstop',
             });
           });
         });
-
-        const rangeEvent = (rangeEvent: DRangeEvent) => {
-          const detail = {
-            action: rangeEvent.action,
-            firstValue: ranges[0].get('value'),
-            secondValue: ranges[1].get('value'),
-          };
-          customChartEvent.dispatch(
-            WebviewCharts.LINEAREA,
-            rangeEvent.label ? rangeEvent.label : WebviewActions.DRAGSTOP,
-            detail
-          );
-        };
-
         rangeEvent({
-          firstValue: rangeTime1,
-          secondValue: rangeTime2,
-          label: WebviewActions.DRAGSTOP,
-          action: 'Initial range draggable area',
+          firstValue: ranges.current[0].get('value') as number,
+          secondValue: ranges.current[1].get('value') as number,
+          action: WebviewActions.DRAGSTOP,
+          description: 'Initial range draggable area',
+        });
+        console.log('range 02', xAxisRange.axisRanges.values);
+      } else {
+        ranges.current?.forEach((range) => {
+          xAxisRange.axisRanges.removeValue(range);
+          console.log('range final', range);
+          console.log(xAxisRange.axisRanges.values);
+        });
+        //xAxisRange.axisRanges.clear()
+      }
+    }
+  }, [showRange]);
+
+  useEffect(() => {
+    if (root.current && chart.current && series.current && xAxis.current) {
+      //const color = chartRoot.interfaceColors.get('primaryButton');
+      const xAxisRange: am5xy.DateAxis<am5xy.AxisRenderer> = xAxis.current;
+      const chartRoot = root.current;
+      const color = chartRoot.interfaceColors.get('primaryButton');
+      if (showEvents) {
+        series.current.dataItems.forEach((serie) => {
+          const lineData = serie.dataContext as LineData;
+          if (lineData.isEvent) {
+            const dataItem: DataItem<IDateAxisDataItem> =
+              xAxisRange.createAxisRange(
+                xAxisRange.makeDataItem({
+                  value: lineData.date,
+                })
+              );
+            dataItem.get('grid')?.setAll({
+              strokeOpacity: 1,
+              stroke: color as am5.Color,
+            });
+            eventsRanges.current = [...eventsRanges.current, dataItem];
+          }
+        });
+      } else {
+        xAxisRange.axisRanges.each((axis) => {
+          console.log(axis);
+        });
+        eventsRanges.current.forEach((range) => {
+          xAxisRange.axisRanges.removeValue(range);
+          console.log('range final', range);
+          console.log(xAxisRange.axisRanges.values);
         });
       }
     }
-  }, [showRange, root]);
+  }, [showEvents]);
+
+  function createRange() {
+    if (series.current && xAxis.current) {
+      const rangeTime1 = (series.current.dataItems[0].dataContext as LineData)
+        .date;
+      const rangeTime2 = (
+        series.current.dataItems[series.current.dataItems.length - 1]
+          .dataContext as LineData
+      ).date;
+      ranges.current = [
+        xAxis.current.createAxisRange(
+          xAxis.current.makeDataItem({
+            value: rangeTime1,
+            endValue: rangeTime2,
+          })
+        ),
+        xAxis.current.createAxisRange(
+          xAxis.current.makeDataItem({ value: rangeTime2 })
+        ),
+      ];
+    }
+  }
 
   function axisRangeDrag(
     button: am5.Button,
@@ -309,6 +347,21 @@ const LineChartAm: FC<LineChartAmProps> = ({
     const position = axis.toAxisPosition((x + dposition) / plotWidth);
     const value = axis.positionToValue(position);
     return value;
+  }
+
+  function rangeEvent(rangeEvent: DRangeEvent) {
+    const detail = {
+      firstValue: rangeEvent.firstValue,
+      secondValue: rangeEvent.secondValue,
+    };
+    customChartEvent.dispatch(
+      WebviewCharts.LINE,
+      rangeEvent.action ? rangeEvent.action : WebviewActions.DRAGSTOP,
+      detail
+    );
+    if (rangeDrag) {
+      rangeDrag(WebviewCharts.LINE, detail);
+    }
   }
 
   return (

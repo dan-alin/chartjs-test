@@ -3,10 +3,10 @@ export type DispatchEvents = DRangeEvent;
 export type ListenEvents = LIFilterGroupEvent;
 
 export type DRangeEvent = {
-  label: WebviewActions;
+  action: WebviewActions;
   firstValue?: number;
   secondValue?: number;
-  action?: string;
+  description?: string;
 };
 
 export type LIFilterGroupEvent = {

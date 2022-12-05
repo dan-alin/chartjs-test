@@ -11,4 +11,5 @@ export enum WebviewActions {
   FILTER = 'filter_chart',
   ROTATE = 'rotate',
   SHOWRANGE = 'show_range',
+  SHOWEVENTS = 'show_events',
 }

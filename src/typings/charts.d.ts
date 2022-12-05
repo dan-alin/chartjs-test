@@ -38,8 +38,6 @@ export type AmCustomOptions = {
   hideLegend?: boolean;
   legendPosition?: 'left' | 'right' | 'bottom' | 'top' | undefined;
   windowHeight?: boolean;
-  rotateFocus?: boolean;
-  showRange?: boolean;
   isWebview?: boolean;
 };
 
@@ -77,19 +75,33 @@ export type ScatterChartProps = ChartProps & {
 export type ForceDirectedProps = AmChartProps & {
   customData: ForceDirected;
 };
-
+export type DoughnutOptions = AmCustomOptions & {
+  rotateFocus?: boolean;
+};
 export type AmDoughnutProps = AmChartProps & {
+  customOptions?: DoughnutOptions;
   customData: DoughnutData[];
 };
 
 export type LineData = {
   date: number;
   value: number;
+  isEvent?: boolean;
 };
-
+export type LineOptions = AmCustomOptions & {
+  showRange: boolean;
+  showEvents: boolean;
+};
 export type LineChartAmProps = ChartProps & {
-  customOptions?: AmCustomOptions;
+  customOptions?: LineOptions;
   customData: LineData[];
+  rangeDrag?: (
+    label: string,
+    value: {
+      firstValue: number | undefined;
+      secondValue: number | undefined;
+    }
+  ) => void;
 };
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 
