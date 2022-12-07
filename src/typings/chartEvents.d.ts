@@ -1,13 +1,12 @@
-import { chartEvents } from 'src/models/events.model';
-
+import { WebviewActions } from 'src/models/events.model';
 export type DispatchEvents = DRangeEvent;
 export type ListenEvents = LIFilterGroupEvent;
 
 export type DRangeEvent = {
-  label: chartEvents;
+  action: WebviewActions;
   firstValue?: number;
   secondValue?: number;
-  action?: string;
+  description?: string;
 };
 
 export type LIFilterGroupEvent = {
@@ -16,3 +15,20 @@ export type LIFilterGroupEvent = {
 };
 
 export type ChartEventData = DispatchEvents | ListenEvents | any;
+
+export type QueryParams = {
+  legend?: 'top' | 'left' | 'right' | 'left';
+  policy?: string;
+  client?: string;
+  delay?: number;
+};
+
+export type DoughnutQueryParams = QueryParams & {
+  rotateFocus?: boolean;
+};
+
+export type LineQueryParams = QueryParams & {
+  yCategory?: yCategories;
+};
+
+export type yCategories = 'performance' | 'volatility' | 'risk';

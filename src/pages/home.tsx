@@ -7,6 +7,7 @@ import {
   Charts,
   DoughnutData,
   ForceDirected,
+  LineData,
 } from '@typings/charts.d';
 import {
   ChartData,
@@ -258,7 +259,7 @@ const customForceDirectedData = AMChartDataGenerator(
   20
 ) as ForceDirected;
 
-const customAmLinechartData = AMChartDataGenerator('am_linearea');
+const customAmLinechartData = AMChartDataGenerator('am_linearea') as LineData[];
 
 const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
   'Cash',

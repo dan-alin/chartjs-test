@@ -23,12 +23,13 @@ const customChartEvent = {
     }
   },
   listen: (
-    label: WebviewActions,
+    chart: WebviewCharts = WebviewCharts.DOUGHNUT,
+    action: WebviewActions,
     callback: EventListenerOrEventListenerObject,
     eventNode = document.getElementById('chartEventsListen')
   ) => {
     if (eventNode) {
-      eventNode.addEventListener(label, callback);
+      eventNode.addEventListener(`${chart.toUpperCase()}.${action}`, callback);
     }
   },
   remove: (

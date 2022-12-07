@@ -38,7 +38,7 @@ export type AmCustomOptions = {
   hideLegend?: boolean;
   legendPosition?: 'left' | 'right' | 'bottom' | 'top' | undefined;
   windowHeight?: boolean;
-  rotateFocus?: boolean;
+  isWebview?: boolean;
 };
 
 export type GaugePlugin = {
@@ -75,13 +75,33 @@ export type ScatterChartProps = ChartProps & {
 export type ForceDirectedProps = AmChartProps & {
   customData: ForceDirected;
 };
-
+export type DoughnutOptions = AmCustomOptions & {
+  rotateFocus?: boolean;
+};
 export type AmDoughnutProps = AmChartProps & {
+  customOptions?: DoughnutOptions;
   customData: DoughnutData[];
 };
 
+export type LineData = {
+  date: number;
+  value: number;
+  isEvent?: boolean;
+};
+export type LineOptions = AmCustomOptions & {
+  showRange: boolean;
+  showEvents: boolean;
+};
 export type LineChartAmProps = ChartProps & {
-  customOptions?: AmCustomOptions;
+  customOptions?: LineOptions;
+  customData: LineData[];
+  rangeDrag?: (
+    label: string,
+    value: {
+      firstValue: number | undefined;
+      secondValue: number | undefined;
+    }
+  ) => void;
 };
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 
@@ -118,11 +138,7 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData =
-  | ForceDirected
-  | DoughnutData[]
-  | LineAreaData[]
-  | LineAreaData[];
+export type AMChartsData = ForceDirected | DoughnutData[] | LineData[];
 
 export type ForceDirected = {
   name?: string;
@@ -142,9 +158,4 @@ export type DoughnutData = {
   value: number;
   color: am5.Color;
   id: string;
-};
-
-export type LineAreaData = {
-  date: number;
-  value: number;
 };
