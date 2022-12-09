@@ -2,10 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { LineChartAm } from '@components/charts';
 import { LineOptions, LineData } from '@typings/charts';
 import { LineQueryParams } from '@typings/chartEvents';
-import customChartEvent from 'src/utils/webview/custom-events';
-import { WebviewActions, WebviewCharts } from 'src/models/events.model';
+// import customChartEvent from 'src/utils/webview/custom-events';
+// import { WebviewActions, WebviewCharts } from 'src/models/events.model';
 import * as am5 from '@amcharts/amcharts5';
-import { Button } from '@components/index';
+
 //generate data - remove with real ones
 let value = 20;
 function generateData(addDay: number): LineData {
@@ -47,29 +47,29 @@ const webviewOptions: LineOptions = {
   isWebview: true,
 };
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-let showRange = false;
-let showEvents = false;
+// let showRange = false;
+// let showEvents = false;
 
-const dispatchRange = () => {
-  showRange = !showRange;
-  customChartEvent.dispatch(
-    WebviewCharts.LINE,
-    WebviewActions.SHOWRANGE,
-    { show: showRange },
-    false,
-    document.getElementById('chartEventsListen')
-  );
-};
-const dispatchEvents = () => {
-  showEvents = !showEvents;
-  customChartEvent.dispatch(
-    WebviewCharts.LINE,
-    WebviewActions.SHOWEVENTS,
-    { show: showEvents },
-    false,
-    document.getElementById('chartEventsListen')
-  );
-};
+// const dispatchRange = () => {
+//   showRange = !showRange;
+//   customChartEvent.dispatch(
+//     WebviewCharts.LINE,
+//     WebviewActions.SHOWRANGE,
+//     { show: showRange },
+//     false,
+//     document.getElementById('chartEventsListen')
+//   );
+// };
+// const dispatchEvents = () => {
+//   showEvents = !showEvents;
+//   customChartEvent.dispatch(
+//     WebviewCharts.LINE,
+//     WebviewActions.SHOWEVENTS,
+//     { show: showEvents },
+//     false,
+//     document.getElementById('chartEventsListen')
+//   );
+// };
 
 const LineChartAmPage: FC = () => {
   const [data, setData] = useState<LineData[][]>();
@@ -86,8 +86,6 @@ const LineChartAmPage: FC = () => {
 
   return (
     <div>
-      <Button onClick={dispatchRange}> range</Button>
-      <Button onClick={dispatchEvents}> events</Button>
       {data && (
         <LineChartAm
           customData={data}
