@@ -33,8 +33,6 @@ export type DoughnutQueryParams = QueryParams & {
 };
 
 export type LineQueryParams = QueryParams & {
-  yCategory?: yCategories;
+  yCategory?: 'performance' | 'volatility' | 'risk';
   emulateLines?: number;
 };
-
-export type yCategories = 'performance' | 'volatility' | 'risk';
