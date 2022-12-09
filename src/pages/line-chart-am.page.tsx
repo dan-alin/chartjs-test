@@ -6,11 +6,12 @@ import customChartEvent from 'src/utils/webview/custom-events';
 import { WebviewActions, WebviewCharts } from 'src/models/events.model';
 import * as am5 from '@amcharts/amcharts5';
 import { Button } from '@components/index';
-//generate date
-const date: Date = new Date();
-function generateData(value = 20): LineData {
+//generate data - remove with real ones
+let value = 20;
+function generateData(addDay: number): LineData {
+  const date: Date = new Date();
   value = Math.round(Math.random() * 10 - 5 + value);
-  am5.time.add(date, 'day', 1);
+  am5.time.add(date, 'day', addDay);
   return {
     date: date.getTime(),
     value: value,
@@ -21,17 +22,23 @@ function generateData(value = 20): LineData {
 function generateDatas(count: number): LineData[] {
   const data: LineData[] = [];
   for (let i = 0; i < count; ++i) {
-    data.push(generateData());
+    data.push(generateData(i));
   }
   return data;
 }
 
-const customLineAm: LineData[] = generateDatas(30);
+let customLineData: LineData[][] = [];
+
+// ---------------------
 
 const queryParams = new URLSearchParams(window.location.search);
 const params: LineQueryParams = queryParams
   ? Object.fromEntries(queryParams.entries())
   : {};
+for (let i = 1; i <= (params.emulateLines ? params.emulateLines : 1); i++) {
+  customLineData = [...customLineData, generateDatas(30)];
+}
+
 const webviewOptions: LineOptions = {
   hideLegend: true,
   windowHeight: true,
@@ -65,10 +72,10 @@ const dispatchEvents = () => {
 };
 
 const LineChartAmPage: FC = () => {
-  const [data, setData] = useState<LineData[]>();
+  const [data, setData] = useState<LineData[][]>();
   async function fetchData(delay = 0) {
     await sleep(delay);
-    setData(customLineAm);
+    setData(customLineData);
   }
 
   useEffect(() => {

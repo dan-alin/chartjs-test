@@ -15,17 +15,13 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import '../charts.style.scss';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 import customChartEvent from 'src/utils/webview/custom-events';
-import { DRangeEvent } from '@typings/chartEvents';
 import { WebviewActions, WebviewCharts } from 'src/models/events.model';
 import { DataItem } from '@amcharts/amcharts5';
-export enum ChartCategories {
-  xy = 'xy',
-  hierarchy = 'hierarchy',
-}
+import { LineToggleShow } from '@typings/chartEvents';
 
+// INIT functions -----
 const initChart = (
   root: am5.Root,
-  category: ChartCategories,
   customSettings?: IXYChartSettings
 ): am5xy.XYChart => {
   const settings: IXYChartSettings = {
@@ -36,16 +32,7 @@ const initChart = (
     layout: root.verticalLayout,
     ...customSettings,
   };
-  let chartInit: am5xy.XYChart;
-
-  switch (category) {
-    case ChartCategories.xy:
-      chartInit = am5xy.XYChart.new(root, settings);
-      break;
-    default:
-      chartInit = am5xy.XYChart.new(root, settings);
-      break;
-  }
+  const chartInit: am5xy.XYChart = am5xy.XYChart.new(root, settings);
   return root?.container?.children.push(chartInit);
 };
 
@@ -64,6 +51,7 @@ const initButton = (root: am5.Root, width: number): am5.Button => {
   });
   return rangeButton;
 };
+// -----
 
 const LineChartAm: FC<LineChartAmProps> = ({
   size = 'responsive',
@@ -72,7 +60,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
   rangeDrag,
 }) => {
   const chartId = useId();
-  const [chartData, setChartData] = useState<LineData[]>([]);
+  const [chartData, setChartData] = useState<LineData[][]>([]);
   const windowSize: WindowSize = useWindowSize(true);
   const [chartOptions, setChartOptions] = useState<AmCustomOptions>({
     windowHeight: false,
@@ -99,14 +87,14 @@ const LineChartAm: FC<LineChartAmProps> = ({
           WebviewCharts.LINE,
           WebviewActions.SHOWRANGE,
           (data) => {
-            setShowRange((data as CustomEvent).detail.show);
+            setShowRange((data as CustomEvent<LineToggleShow>).detail.show);
           }
         );
         customChartEvent.listen(
           WebviewCharts.LINE,
           WebviewActions.SHOWEVENTS,
           (data) => {
-            setShowEvents((data as CustomEvent).detail.show);
+            setShowEvents((data as CustomEvent<LineToggleShow>).detail.show);
           }
         );
       }
@@ -114,11 +102,12 @@ const LineChartAm: FC<LineChartAmProps> = ({
   }, [customOptions, customData]);
 
   useLayoutEffect(() => {
+    root.current = am5.Root.new(chartId);
+    root.current.setThemes([am5themes_Animated.new(root.current)]);
     if (chartData.length > 0) {
       console.log(chartData);
-      root.current = am5.Root.new(chartId);
-      root.current.setThemes([am5themes_Animated.new(root.current)]);
-      chart.current = initChart(root.current, ChartCategories.xy);
+      chart.current = initChart(root.current);
+
       //cursor
       const cursor = chart.current.set(
         'cursor',
@@ -126,6 +115,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       );
       cursor.lineX.set('forceHidden', true);
       cursor.lineY.set('forceHidden', true);
+
       //axes generation
       xAxis.current = chart.current.xAxes.push(
         am5xy.DateAxis.new(root.current, {
@@ -143,36 +133,38 @@ const LineChartAm: FC<LineChartAmProps> = ({
           renderer: am5xy.AxisRendererY.new(root.current, {}),
         })
       );
+
       // Add series
       // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-      series.current = chart.current.series.push(
-        am5xy.LineSeries.new(root.current, {
-          name: 'Series',
-          xAxis: xAxis.current,
-          yAxis: yAxis,
-          valueYField: 'value',
-          valueXField: 'date',
-        })
-      );
+      chartData.forEach((data: LineData[]) => {
+        if (chart.current && root.current && xAxis.current) {
+          series.current = chart.current.series.push(
+            am5xy.LineSeries.new(root.current, {
+              name: 'Series',
+              xAxis: xAxis.current,
+              yAxis: yAxis,
+              valueYField: 'value',
+              valueXField: 'date',
+            })
+          );
 
-      series.current.fills.template.setAll({
-        fillOpacity: 0.1,
-        visible: true,
+          series.current.fills.template.setAll({
+            fillOpacity: 0.1,
+            visible: true,
+          });
+          series.current.data.setAll(data);
+          series.current.appear(1000);
+        }
       });
-
-      series.current.data.setAll(chartData);
 
       // Make stuff animate on load
       // https://www.amcharts.com/docs/v5/concepts/animations/
-      series.current.appear(1000);
       chart.current.appear(1000, 100);
-
-      return () => {
-        if (root.current) {
-          root.current.dispose();
-        }
-      };
     }
+
+    return () => {
+      root.current?.dispose();
+    };
   }, [chartId, chartData]);
 
   useEffect(() => {
@@ -186,7 +178,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
         createRange();
         const axisFill = ranges.current[0].get('axisFill');
 
-        //Range buttons
+        //RANGE BUTTONS with bullets
         const rangeButtons = [
           initButton(chartRoot, plotWidth),
           initButton(chartRoot, plotWidth),
@@ -206,8 +198,22 @@ const LineChartAm: FC<LineChartAmProps> = ({
           range.set('bullet', am5xy.AxisBullet.new(chartRoot, bulletOptions));
         });
 
-        console.log('range 01', ranges.current[0]);
+        rangeButtons.forEach((button, index) => {
+          button.events.on('dragged', function () {
+            const value = axisRangeDrag(button, xAxisRange, plotWidth);
+            ranges.current[index].set('value', value);
+            ranges.current[0].set('endValue', ranges.current[1].get('value'));
+          });
+          button.events.on('dragstop', function () {
+            rangeEvent(
+              WebviewActions.DRAGSTOP,
+              ranges.current[0].get('value') as number,
+              ranges.current[1].get('value') as number
+            );
+          });
+        });
 
+        // AXIS fill and events
         axisFill?.setAll({
           fillOpacity: 0.15,
           fill: color as am5.Color,
@@ -236,42 +242,19 @@ const LineChartAm: FC<LineChartAmProps> = ({
           );
           ranges.current[0].setAll({ value, endValue });
           ranges.current[1].set('value', endValue);
-          rangeEvent({
-            firstValue: value,
-            secondValue: endValue,
-            action: WebviewActions.DRAGSTOP,
-            description: 'Drag both axis',
-          });
+          rangeEvent(WebviewActions.DRAGSTOP, value, endValue);
           axisFill?.set('x', 0);
         });
 
-        rangeButtons.forEach((button, index) => {
-          button.events.on('dragged', function () {
-            const value = axisRangeDrag(button, xAxisRange, plotWidth);
-            ranges.current[index].set('value', value);
-            ranges.current[0].set('endValue', ranges.current[1].get('value'));
-          });
-          button.events.on('dragstop', function () {
-            rangeEvent({
-              firstValue: ranges.current[0].get('value') as number,
-              secondValue: ranges.current[1].get('value') as number,
-              action: WebviewActions.DRAGSTOP,
-              description: 'Range button 1 dragstop',
-            });
-          });
-        });
-        rangeEvent({
-          firstValue: ranges.current[0].get('value') as number,
-          secondValue: ranges.current[1].get('value') as number,
-          action: WebviewActions.DRAGSTOP,
-          description: 'Initial range draggable area',
-        });
-        console.log('range 02', xAxisRange.axisRanges.values);
+        rangeEvent(
+          WebviewActions.DRAGSTOP,
+          ranges.current[0].get('value') as number,
+          ranges.current[1].get('value') as number
+        );
       } else {
+        // REMOVE range
         ranges.current?.forEach((range) => {
           xAxisRange.axisRanges.removeValue(range);
-          console.log('range final', range);
-          console.log(xAxisRange.axisRanges.values);
         });
         //xAxisRange.axisRanges.clear()
       }
@@ -302,13 +285,9 @@ const LineChartAm: FC<LineChartAmProps> = ({
           }
         });
       } else {
-        xAxisRange.axisRanges.each((axis) => {
-          console.log(axis);
-        });
+        // REMOVE events
         eventsRanges.current.forEach((range) => {
           xAxisRange.axisRanges.removeValue(range);
-          console.log('range final', range);
-          console.log(xAxisRange.axisRanges.values);
         });
       }
     }
@@ -349,14 +328,26 @@ const LineChartAm: FC<LineChartAmProps> = ({
     return value;
   }
 
-  function rangeEvent(rangeEvent: DRangeEvent) {
-    const detail = {
-      firstValue: rangeEvent.firstValue,
-      secondValue: rangeEvent.secondValue,
-    };
+  function rangeEvent(
+    action: WebviewActions,
+    firstValue: number,
+    secondValue: number
+  ) {
+    let detail;
+    if (firstValue < secondValue) {
+      detail = {
+        firstValue: firstValue,
+        secondValue: secondValue,
+      };
+    } else {
+      detail = {
+        firstValue: secondValue,
+        secondValue: firstValue,
+      };
+    }
     customChartEvent.dispatch(
       WebviewCharts.LINE,
-      rangeEvent.action ? rangeEvent.action : WebviewActions.DRAGSTOP,
+      action ? action : WebviewActions.DRAGSTOP,
       detail
     );
     if (rangeDrag) {

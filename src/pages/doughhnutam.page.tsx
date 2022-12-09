@@ -1,6 +1,6 @@
 import { DoughnutChartAM } from '@components/charts';
 import { DoughnutQueryParams } from '@typings/chartEvents';
-import { AmCustomOptions, DoughnutData } from '@typings/charts';
+import { DoughnutOptions, DoughnutData } from '@typings/charts';
 import React, { FC, useEffect, useState } from 'react';
 import { AMChartDataGenerator } from 'src/utils';
 const customData = AMChartDataGenerator('am_doughnut', 100, [
@@ -14,7 +14,7 @@ const queryParams = new URLSearchParams(window.location.search);
 const params: DoughnutQueryParams = queryParams
   ? Object.fromEntries(queryParams.entries())
   : {};
-const webviewOptions: AmCustomOptions = {
+const webviewOptions: DoughnutOptions = {
   hideLegend: !params.legend,
   windowHeight: true,
   isWebview: true,

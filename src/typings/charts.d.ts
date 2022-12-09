@@ -92,9 +92,9 @@ export type LineOptions = AmCustomOptions & {
   showRange: boolean;
   showEvents: boolean;
 };
-export type LineChartAmProps = ChartProps & {
+export type LineChartAmProps = AmChartProps & {
   customOptions?: LineOptions;
-  customData: LineData[];
+  customData: LineData[][];
   rangeDrag?: (
     label: string,
     value: {
@@ -138,7 +138,7 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData = ForceDirected | DoughnutData[] | LineData[];
+export type AMChartsData = ForceDirected | DoughnutData[] | LineData[][];
 
 export type ForceDirected = {
   name?: string;
