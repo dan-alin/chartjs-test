@@ -44,6 +44,7 @@ const DoughnutAm: FC = () => {
         <DoughnutChartAM
           customData={data}
           customOptions={webviewOptions}
+          sliceSelect={(data) => console.log('slice ' + data.sliceId)}
         ></DoughnutChartAM>
       )}
     </>

@@ -15,6 +15,7 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
   size = 'responsive',
   customData,
   customOptions,
+  sliceSelect,
 }) => {
   const chartId = useId();
   const windowSize: WindowSize = useWindowSize(true);
@@ -231,6 +232,11 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
           sliceId: sliceData.id,
         }
       );
+      if (sliceSelect) {
+        sliceSelect({
+          sliceId: sliceData.id,
+        });
+      }
     }
 
     return () => {

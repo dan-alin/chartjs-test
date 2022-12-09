@@ -351,7 +351,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       detail
     );
     if (rangeDrag) {
-      rangeDrag(WebviewCharts.LINE, detail);
+      rangeDrag(detail);
     }
   }
 
