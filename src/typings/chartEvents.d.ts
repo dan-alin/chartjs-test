@@ -1,20 +1,25 @@
-import { WebviewActions } from 'src/models/events.model';
-export type DispatchEvents = DRangeEvent;
-export type ListenEvents = LIFilterGroupEvent;
+export type ChartEventData = DispatchEvents | ListenEvents;
+export type DispatchEvents = LineRangeEvent | FilterBubble | SliceSelect;
+export type ListenEvents = FilterBubble | LineToggleShow;
 
-export type DRangeEvent = {
-  action: WebviewActions;
-  firstValue?: number;
-  secondValue?: number;
-  description?: string;
+// Line chart
+export type LineRangeEvent = {
+  firstValue?: number | undefined;
+  secondValue?: number | undefined;
+};
+export type LineToggleShow = {
+  show: boolean;
 };
 
-export type LIFilterGroupEvent = {
-  action: string;
+// Bubble chart
+export type FilterBubble = {
   group: string;
 };
 
-export type ChartEventData = DispatchEvents | ListenEvents | any;
+// Pie chart
+export type SliceSelect = {
+  sliceId: string;
+};
 
 export type QueryParams = {
   legend?: 'top' | 'left' | 'right' | 'left';
@@ -28,7 +33,6 @@ export type DoughnutQueryParams = QueryParams & {
 };
 
 export type LineQueryParams = QueryParams & {
-  yCategory?: yCategories;
+  yCategory?: 'performance' | 'volatility' | 'risk';
+  emulateLines?: number;
 };
-
-export type yCategories = 'performance' | 'volatility' | 'risk';

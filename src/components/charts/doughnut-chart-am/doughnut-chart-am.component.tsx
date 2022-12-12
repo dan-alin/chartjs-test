@@ -3,9 +3,9 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import {
-  AmCustomOptions,
   AmDoughnutProps,
   DoughnutData,
+  DoughnutOptions,
 } from '@typings/charts';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 import customChartEvent from 'src/utils/webview/custom-events';
@@ -15,12 +15,13 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
   size = 'responsive',
   customData,
   customOptions,
+  sliceSelect,
 }) => {
   const chartId = useId();
   const windowSize: WindowSize = useWindowSize(true);
 
   const [chartData, setChartData] = useState<DoughnutData[]>([]);
-  const [chartOptions, setChartOptions] = useState<AmCustomOptions>({
+  const [chartOptions, setChartOptions] = useState<DoughnutOptions>({
     hideLegend: true,
   });
   useEffect(() => {
@@ -211,7 +212,6 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       const middleAngle = startAngle + arc / 2;
       const firstAngle = series.dataItems[0].get('slice').get('startAngle');
       if (firstAngle && middleAngle) {
-        console.log('angles', startAngle, middleAngle);
         series.animate({
           key: 'startAngle',
           to: firstAngle - middleAngle,
@@ -229,10 +229,14 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
         WebviewCharts.DOUGHNUT,
         WebviewActions.SLICEFOCUS,
         {
-          action: 'Doughnut slice focus',
           sliceId: sliceData.id,
         }
       );
+      if (sliceSelect) {
+        sliceSelect({
+          sliceId: sliceData.id,
+        });
+      }
     }
 
     return () => {
