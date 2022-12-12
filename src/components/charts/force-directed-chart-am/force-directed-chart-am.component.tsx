@@ -14,7 +14,7 @@ import { GroupsColors } from 'src/utils/configurations/chart-config';
 import useWindowSize, { WindowSize } from 'src/hooks/window-size.hook';
 import customChartEvent from 'src/utils/webview/custom-events';
 import { WebviewActions, WebviewCharts } from 'src/models/events.model';
-import { ChartEventData } from '@typings/chartEvents';
+import { FilterBubble, ListenEvents } from '@typings/chartEvents';
 // import { faker } from "@faker-js/faker";
 
 const ForceDirectedChart: FC<ForceDirectedProps> = ({
@@ -61,16 +61,15 @@ const ForceDirectedChart: FC<ForceDirectedProps> = ({
 
     if (dispatch) {
       customChartEvent.dispatch(WebviewCharts.BUBBLE, WebviewActions.FILTER, {
-        action: 'Force directed group filter',
         group: groupFilter.current,
       });
     }
   };
 
-  const changeGroupListener = (data: ChartEventData) => {
+  const changeGroupListener = (data: CustomEvent<ListenEvents>) => {
     if (data) {
       console.log('filter group', data);
-      changeGroupFilter(data.detail.group);
+      changeGroupFilter((data as CustomEvent<FilterBubble>).detail.group);
     }
   };
 

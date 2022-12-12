@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
-import { ChartEventData } from '@typings/chartEvents';
+import { DispatchEvents, ListenEvents } from '@typings/chartEvents';
 import { WebviewCharts, WebviewActions } from 'src/models/events.model';
 
 const customChartEvent = {
   dispatch: (
     chart: WebviewCharts = WebviewCharts.DOUGHNUT,
     action: WebviewActions,
-    data: ChartEventData = {},
+    data: DispatchEvents | ListenEvents = {}, // ListenEvents only for develop webview purpose
     bubbles = false,
     eventNode = document.getElementById('chartEvents')
   ): void => {
@@ -17,7 +17,7 @@ const customChartEvent = {
       });
       eventNode?.dispatchEvent(customEvent);
       console.log(
-        `--- emit ${chart.toUpperCase()}.${action} ---`,
+        `--- Dispatch ${chart.toUpperCase()}.${action} ---`,
         customEvent.detail
       );
     }
@@ -25,22 +25,25 @@ const customChartEvent = {
   listen: (
     chart: WebviewCharts = WebviewCharts.DOUGHNUT,
     action: WebviewActions,
-    callback: EventListenerOrEventListenerObject,
+    callback: (data: CustomEvent<ListenEvents>) => void,
     eventNode = document.getElementById('chartEventsListen')
   ) => {
     if (eventNode) {
-      eventNode.addEventListener(`${chart.toUpperCase()}.${action}`, callback);
+      eventNode.addEventListener(
+        `${chart.toUpperCase()}.${action}`,
+        callback as EventListener
+      );
     }
   },
   remove: (
     labels: string[],
-    callbacks: EventListenerOrEventListenerObject[],
+    callbacks: ((data: CustomEvent<ListenEvents>) => void)[],
     eventNode = document.getElementById('chartEventsListen')
   ) => {
     if (eventNode && labels) {
       labels.forEach((label, i) => {
-        eventNode.removeEventListener(label, callbacks[i]);
-        console.log(`--- removed ${label} ---`);
+        eventNode.removeEventListener(label, callbacks[i] as EventListener);
+        console.log(`--- Removed ${label} ---`);
       });
     }
   },

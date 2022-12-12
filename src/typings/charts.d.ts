@@ -4,6 +4,8 @@ import {
   ComplexFillTarget,
   TooltipPositionerFunction,
 } from 'chart.js';
+
+import { LineRangeEvent, SliceSelect } from './chartEvents';
 import * as am5 from '@amcharts/amcharts5';
 export type d3Charts = 'D3_circular';
 export type AMCharts =
@@ -81,6 +83,7 @@ export type DoughnutOptions = AmCustomOptions & {
 export type AmDoughnutProps = AmChartProps & {
   customOptions?: DoughnutOptions;
   customData: DoughnutData[];
+  sliceSelect?: (value: SliceSelect) => void;
 };
 
 export type LineData = {
@@ -92,16 +95,10 @@ export type LineOptions = AmCustomOptions & {
   showRange: boolean;
   showEvents: boolean;
 };
-export type LineChartAmProps = ChartProps & {
+export type LineChartAmProps = AmChartProps & {
   customOptions?: LineOptions;
-  customData: LineData[];
-  rangeDrag?: (
-    label: string,
-    value: {
-      firstValue: number | undefined;
-      secondValue: number | undefined;
-    }
-  ) => void;
+  customData: LineData[][];
+  rangeDrag?: (value: LineRangeEvent) => void;
 };
 export type ChartSize = 'xs' | 'md' | 'xl' | 'responsive';
 
@@ -138,7 +135,7 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData = ForceDirected | DoughnutData[] | LineData[];
+export type AMChartsData = ForceDirected | DoughnutData[] | LineData[][];
 
 export type ForceDirected = {
   name?: string;
