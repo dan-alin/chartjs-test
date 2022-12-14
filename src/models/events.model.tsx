@@ -6,7 +6,7 @@ export enum WebviewCharts {
 }
 export enum WebviewActions {
   SLICEFOCUS = 'slice_focus',
-  DATA = 'data',
+  FETCHDATA = 'fetch_data',
   DRAGSTOP = 'dragstop',
   FILTER = 'filter_chart',
   ROTATE = 'rotate',
