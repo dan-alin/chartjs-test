@@ -1,6 +1,7 @@
+import { LineData } from './charts';
 export type ChartEventData = DispatchEvents | ListenEvents;
 export type DispatchEvents = LineRangeEvent | FilterBubble | SliceSelect;
-export type ListenEvents = FilterBubble | LineToggleShow;
+export type ListenEvents = FilterBubble | LineToggleShow | LineData[][];
 
 // Line chart
 export type LineRangeEvent = {
