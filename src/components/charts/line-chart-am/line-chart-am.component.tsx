@@ -25,10 +25,10 @@ const initChart = (
   customSettings?: IXYChartSettings
 ): am5xy.XYChart => {
   const settings: IXYChartSettings = {
-    panX: true,
+    panX: false,
     panY: false,
-    wheelX: 'panX',
-    wheelY: 'zoomX',
+    wheelX: 'none',
+    wheelY: 'none',
     layout: root.verticalLayout,
     ...customSettings,
   };
