@@ -38,7 +38,7 @@ const params: LineQueryParams = queryParams
   ? Object.fromEntries(queryParams.entries())
   : {};
 for (let i = 1; i <= (params.emulateLines ? params.emulateLines : 1); i++) {
-  customLineData = [...customLineData, generateDatas(500)];
+  customLineData = [...customLineData, generateDatas(3650)];
 }
 
 const webviewOptions: LineOptions = {
@@ -54,8 +54,7 @@ const LineChartAmPage: FC = () => {
   const [data, setData] = useState<LineData[][]>();
   async function fetchData(delay = 0) {
     await sleep(delay);
-
-    //setData(customLineData);
+    setData(customLineData);
     // customChartEvent.dispatch(
     //   WebviewCharts.LINE,
     //   WebviewActions.FETCHDATA,
@@ -74,7 +73,7 @@ const LineChartAmPage: FC = () => {
         setData((data as CustomEvent<LineData[][]>).detail);
       }
     );
-    if (params) {
+    if (params && params.emulateLines) {
       fetchData(params.delay);
     }
   }, []);
