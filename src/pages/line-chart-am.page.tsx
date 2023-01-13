@@ -38,13 +38,13 @@ const params: LineQueryParams = queryParams
   ? Object.fromEntries(queryParams.entries())
   : {};
 for (let i = 1; i <= (params.emulateLines ? params.emulateLines : 1); i++) {
-  customLineData = [...customLineData, generateDatas(3650)];
+  customLineData = [...customLineData, generateDatas(10)];
 }
 
 const webviewOptions: LineOptions = {
   hideLegend: true,
   windowHeight: true,
-  showRange: false,
+  showRange: true,
   showEvents: false,
   isWebview: true,
 };
