@@ -23,9 +23,6 @@ export type SliceSelect = {
 };
 
 export type QueryParams = {
-  legend?: 'top' | 'left' | 'right' | 'left';
-  policy?: string;
-  client?: string;
   delay?: number;
 };
 
@@ -34,6 +31,10 @@ export type DoughnutQueryParams = QueryParams & {
 };
 
 export type LineQueryParams = QueryParams & {
-  yCategory?: 'performance' | 'volatility' | 'risk';
   emulateLines?: number;
+  showRange?: boolean;
+  showEvents?: boolean;
+  hideYAxis?: boolean;
+  lineType?: 'single' | 'multiple' | 'area' | undefined;
+  maxYAxis?: number;
 };

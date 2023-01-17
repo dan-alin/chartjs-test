@@ -140,17 +140,35 @@ const LineChartAm: FC<LineChartAmProps> = ({
       );
       const yAxis = chart.current.yAxes.push(
         am5xy.ValueAxis.new(root.current, {
+          calculateTotals: true,
+          numberFormat: "#'%'",
+          forceHidden: customOptions?.hideYAxis || false,
           renderer: am5xy.AxisRendererY.new(root.current, {}),
         })
       );
+
+      if (customOptions?.lineType === 'area') {
+        yAxis.setAll({ min: 0, max: customOptions?.maxYAxis || 100 });
+        console.log('max', customOptions?.maxYAxis);
+      }
 
       // SERIES
       // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
       chartData.forEach((data: LineData[]) => {
         if (chart.current && root.current && xAxis.current) {
+          chart.current
+            .get('colors')
+            ?.set('colors', [
+              am5.color(0x007ab3),
+              am5.color(0x63bd00),
+              am5.color(0xff6707),
+              am5.color(0x3c3c3c),
+            ]);
+
           series.current = chart.current.series.push(
             am5xy.LineSeries.new(root.current, {
               name: 'Series',
+              stacked: customOptions?.lineType === 'area',
               xAxis: xAxis.current,
               yAxis: yAxis,
               valueYField: 'value',
@@ -163,10 +181,43 @@ const LineChartAm: FC<LineChartAmProps> = ({
             })
           );
 
-          series.current.fills.template.setAll({
-            fillOpacity: 0.1,
-            visible: true,
-          });
+          let fillOptions: Partial<am5.IGraphicsSettings> = {};
+
+          switch (customOptions?.lineType) {
+            case 'multiple':
+              fillOptions = {
+                fillOpacity: 0,
+                visible: false,
+              };
+
+              break;
+            case 'area':
+              fillOptions = {
+                visible: true,
+                fillOpacity: 1,
+              };
+              series.current.set('valueYShow', 'valueYTotalPercent');
+              break;
+            default:
+              fillOptions = {
+                visible: true,
+                fillOpacity: 0.1,
+                fillGradient: am5.LinearGradient.new(root.current, {
+                  stops: [
+                    {
+                      color: series.current.get('fill') as am5.Color,
+                      opacity: 0.3,
+                    },
+                    {
+                      opacity: 0,
+                    },
+                  ],
+                }),
+              };
+              break;
+          }
+
+          series.current.fills.template.setAll(fillOptions);
 
           series.current.data.setAll(data);
 
@@ -263,33 +314,11 @@ const LineChartAm: FC<LineChartAmProps> = ({
           fillOpacity: 0.15,
           fill: color as am5.Color,
           visible: true,
-          draggable: true,
+          draggable: false,
         });
 
         axisFill?.adapters.add('y', () => {
           return 0;
-        });
-
-        axisFill?.events.on('dragstop', () => {
-          const dx = axisFill?.x();
-          const value = axisRangeDrag(
-            rangeButtons[0],
-            xAxisRange,
-            plotWidth,
-            dx
-          );
-          const endValue = axisRangeDrag(
-            // FIX RANGE DRAG
-            rangeButtons[0],
-            xAxisRange,
-            plotWidth,
-            dx,
-            axisFill.width()
-          );
-          ranges.current[0].setAll({ value, endValue });
-          ranges.current[1].set('value', endValue);
-          rangeEvent(WebviewActions.DRAGSTOP, value, endValue);
-          axisFill?.set('x', 0);
         });
 
         rangeEvent(
