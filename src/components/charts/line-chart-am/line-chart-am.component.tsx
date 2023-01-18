@@ -43,17 +43,16 @@ const initButton = (
   height: number
 ): am5.Button => {
   const rangeButton = am5.Button.new(root, {
-    height: height,
-    y: -height,
+    height: -height,
+    y: 0,
     background: am5.Rectangle.new(root, {
       fill: am5.color(0x000),
       fillOpacity: 0,
     }),
-    visible: true,
     draggable: true,
   });
   rangeButton.adapters.add('y', function () {
-    return -height;
+    return 0;
   });
   rangeButton.adapters.add('x', function (x) {
     return Math.max(0, Math.min(width, x as number));
@@ -129,13 +128,14 @@ const LineChartAm: FC<LineChartAmProps> = ({
       //AXES generation
       xAxis.current = chart.current.xAxes.push(
         am5xy.DateAxis.new(root.current, {
-          groupData: true,
+          groupData: false,
           baseInterval: {
             timeUnit: 'day',
             count: 1,
           },
-          renderer: am5xy.AxisRendererX.new(root.current, {}),
-          tooltip: am5.Tooltip.new(root.current, {}),
+          renderer: am5xy.AxisRendererX.new(root.current, {
+            minGridDistance: 50,
+          }),
         })
       );
       const yAxis = chart.current.yAxes.push(
@@ -149,7 +149,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
       if (customOptions?.lineType === 'area') {
         yAxis.setAll({ min: 0, max: customOptions?.maxYAxis || 100 });
-        console.log('max', customOptions?.maxYAxis);
       }
 
       // SERIES
@@ -278,24 +277,21 @@ const LineChartAm: FC<LineChartAmProps> = ({
           initButton(chartRoot, plotWidth, plotHeight),
         ];
 
-        ranges.current.forEach((range, index) => {
-          range.get('grid')?.setAll({
-            strokeOpacity: 1,
-            stroke: color as am5.Color,
-            location: index,
-          });
-          const bulletOptions: am5xy.IAxisBulletSettings = {
-            sprite: rangeButtons[index],
-            location: index,
-          };
-          range.set('bullet', am5xy.AxisBullet.new(chartRoot, bulletOptions));
-        });
-
         rangeButtons.forEach((button, index) => {
           button.events.on('dragged', function () {
             const value = axisRangeDrag(button, xAxisRange, plotWidth);
             ranges.current[index].set('value', value);
-            ranges.current[0].set('endValue', ranges.current[1].get('value'));
+            if (index === 1) {
+              ranges.current[0].set('endValue', ranges.current[1].get('value'));
+            }
+
+            ranges.current[index].set(
+              'bullet',
+              am5xy.AxisBullet.new(chartRoot, {
+                sprite: button,
+                location: index,
+              })
+            );
           });
 
           button.events.on('dragstop', function () {
@@ -307,6 +303,22 @@ const LineChartAm: FC<LineChartAmProps> = ({
             axisFill?.set('x', 0);
             cursorMoved(index);
           });
+        });
+
+        ranges.current.forEach((range, index) => {
+          range.get('grid')?.setAll({
+            strokeOpacity: 1,
+            stroke: color as am5.Color,
+            location: index,
+          });
+          const bulletOptions: am5xy.IAxisBulletSettings = {
+            sprite: rangeButtons[index],
+            location: index,
+          };
+          if (index === 0) {
+            bulletOptions.location = 0;
+          }
+          range.set('bullet', am5xy.AxisBullet.new(chartRoot, bulletOptions));
         });
 
         // AXIS fill and events
@@ -370,10 +382,10 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
   function createRange() {
     if (series.current && xAxis.current) {
-      const rangeTime1 = (series.current.dataItems[0].dataContext as LineData)
+      const rangeTime1 = (series.current.dataItems[2].dataContext as LineData)
         .date;
       const rangeTime2 = (
-        series.current.dataItems[series.current.dataItems.length - 1]
+        series.current.dataItems[series.current.dataItems.length - 3]
           .dataContext as LineData
       ).date;
       ranges.current = [
@@ -436,7 +448,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
         activeBullets[index][i].unhover();
       }
     }
-    console.log('CURSOR', series.current?.bullets);
     activeBullets[index] = [];
     if (chart.current) {
       chart.current.series.each((series) => {
