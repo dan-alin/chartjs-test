@@ -9,10 +9,10 @@ import customChartEvent from 'src/utils/webview/custom-events';
 import { WebviewActions, WebviewCharts } from 'src/models/events.model';
 
 //generate data - remove with real ones
-let value = 200;
+let value = 10;
 function generateData(addDay: number): LineData {
   const date: Date = new Date();
-  value = Math.round(Math.random() * 10 - 5 + value);
+  value = Math.round((Math.random() + 0.2) * 20 - 3 + value / 1.1);
   am5.time.add(date, 'day', addDay);
   return {
     date: date.getTime(),
@@ -38,16 +38,19 @@ const params: LineQueryParams = queryParams
   ? Object.fromEntries(queryParams.entries())
   : {};
 for (let i = 1; i <= (params.emulateLines ? params.emulateLines : 1); i++) {
-  customLineData = [...customLineData, generateDatas(3650)];
+  customLineData = [...customLineData, generateDatas(50)];
 }
 
 const webviewOptions: LineOptions = {
   hideLegend: true,
   windowHeight: true,
-  showRange: false,
-  showEvents: false,
   isWebview: true,
+  showRange: !!params.showRange,
+  showEvents: !!params.showEvents,
+  hideYAxis: !!params.hideYAxis,
+  lineType: params.lineType,
 };
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const LineChartAmPage: FC = () => {

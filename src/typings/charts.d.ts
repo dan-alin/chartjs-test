@@ -41,6 +41,8 @@ export type AmCustomOptions = {
   legendPosition?: 'left' | 'right' | 'bottom' | 'top' | undefined;
   windowHeight?: boolean;
   isWebview?: boolean;
+  hideYAxis?: boolean;
+  maxYAxis?: number;
 };
 
 export type GaugePlugin = {
@@ -94,6 +96,10 @@ export type LineData = {
 export type LineOptions = AmCustomOptions & {
   showRange: boolean;
   showEvents: boolean;
+  hideYAxis?: boolean;
+  lineType?: 'single' | 'multiple' | 'area' | undefined;
+  strokeColor?: string | number;
+  maxYAxis?: number;
 };
 export type LineChartAmProps = AmChartProps & {
   customOptions?: LineOptions;
