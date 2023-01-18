@@ -30,21 +30,30 @@ const initChart = (
     wheelX: 'none',
     wheelY: 'none',
     layout: root.verticalLayout,
+    cursor: am5xy.XYCursor.new(root, {}),
     ...customSettings,
   };
   const chartInit: am5xy.XYChart = am5xy.XYChart.new(root, settings);
   return root?.container?.children.push(chartInit);
 };
 
-const initButton = (root: am5.Root, width: number): am5.Button => {
+const initButton = (
+  root: am5.Root,
+  width: number,
+  height: number
+): am5.Button => {
   const rangeButton = am5.Button.new(root, {
-    themeTags: ['resize', 'horizontal'],
-    icon: am5.Graphics.new(root, {
-      themeTags: ['icon'],
+    height: height,
+    y: -height,
+    background: am5.Rectangle.new(root, {
+      fill: am5.color(0x000),
+      fillOpacity: 0,
     }),
+    visible: true,
+    draggable: true,
   });
   rangeButton.adapters.add('y', function () {
-    return 0;
+    return -height;
   });
   rangeButton.adapters.add('x', function (x) {
     return Math.max(0, Math.min(width, x as number));
@@ -73,6 +82,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
   const xAxis = useRef<am5xy.DateAxis<am5xy.AxisRenderer>>();
   const ranges = useRef<am5.DataItem<am5xy.IDateAxisDataItem>[]>([]);
   const eventsRanges = useRef<am5.DataItem<am5xy.IDateAxisDataItem>[]>([]);
+  const activeBullets: am5.Sprite[][] = [];
 
   useEffect(() => {
     if (customData) {
@@ -104,11 +114,11 @@ const LineChartAm: FC<LineChartAmProps> = ({
   useLayoutEffect(() => {
     root.current = am5.Root.new(chartId);
     root.current.setThemes([am5themes_Animated.new(root.current)]);
-    if (chartData.length > 0) {
+    if (chartData.length > 0 && root.current) {
       console.log(chartData);
       chart.current = initChart(root.current);
 
-      //cursor
+      //CURSOR
       const cursor = chart.current.set(
         'cursor',
         am5xy.XYCursor.new(root.current, {})
@@ -116,7 +126,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       cursor.lineX.set('forceHidden', true);
       cursor.lineY.set('forceHidden', true);
 
-      //axes generation
+      //AXES generation
       xAxis.current = chart.current.xAxes.push(
         am5xy.DateAxis.new(root.current, {
           groupData: true,
@@ -125,34 +135,117 @@ const LineChartAm: FC<LineChartAmProps> = ({
             count: 1,
           },
           renderer: am5xy.AxisRendererX.new(root.current, {}),
+          tooltip: am5.Tooltip.new(root.current, {}),
         })
       );
-
       const yAxis = chart.current.yAxes.push(
         am5xy.ValueAxis.new(root.current, {
+          calculateTotals: true,
+          numberFormat: "#'%'",
+          forceHidden: customOptions?.hideYAxis || false,
           renderer: am5xy.AxisRendererY.new(root.current, {}),
         })
       );
 
-      // Add series
+      if (customOptions?.lineType === 'area') {
+        yAxis.setAll({ min: 0, max: customOptions?.maxYAxis || 100 });
+        console.log('max', customOptions?.maxYAxis);
+      }
+
+      // SERIES
       // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
       chartData.forEach((data: LineData[]) => {
         if (chart.current && root.current && xAxis.current) {
+          chart.current
+            .get('colors')
+            ?.set('colors', [
+              am5.color(0x007ab3),
+              am5.color(0x63bd00),
+              am5.color(0xff6707),
+              am5.color(0x3c3c3c),
+            ]);
+
           series.current = chart.current.series.push(
             am5xy.LineSeries.new(root.current, {
               name: 'Series',
+              stacked: customOptions?.lineType === 'area',
               xAxis: xAxis.current,
               yAxis: yAxis,
               valueYField: 'value',
               valueXField: 'date',
+              tooltip: am5.Tooltip.new(root.current, {
+                labelText: '',
+                forceHidden: true,
+                animationDuration: 0,
+              }),
             })
           );
 
-          series.current.fills.template.setAll({
-            fillOpacity: 0.1,
-            visible: true,
-          });
+          let fillOptions: Partial<am5.IGraphicsSettings> = {};
+
+          switch (customOptions?.lineType) {
+            case 'multiple':
+              fillOptions = {
+                fillOpacity: 0,
+                visible: false,
+              };
+
+              break;
+            case 'area':
+              fillOptions = {
+                visible: true,
+                fillOpacity: 1,
+              };
+              series.current.set('valueYShow', 'valueYTotalPercent');
+              break;
+            default:
+              fillOptions = {
+                visible: true,
+                fillOpacity: 0.1,
+                fillGradient: am5.LinearGradient.new(root.current, {
+                  stops: [
+                    {
+                      color: series.current.get('fill') as am5.Color,
+                      opacity: 0.3,
+                    },
+                    {
+                      opacity: 0,
+                    },
+                  ],
+                }),
+              };
+              break;
+          }
+
+          series.current.fills.template.setAll(fillOptions);
+
           series.current.data.setAll(data);
+
+          series.current.bullets.push((root) => {
+            // create the circle first
+            const circle = am5.Circle.new(root, {
+              radius: 5,
+              stroke: series.current?.get('fill') as am5.Color,
+              strokeWidth: 1,
+              interactive: false, //required to trigger the state on hover
+              fill: series.current?.get('fill') as am5.Color,
+              opacity: 0,
+            });
+
+            circle.states.create('default', {
+              opacity: 0,
+            });
+
+            circle.states.create('hover', {
+              opacity: 0,
+              fill: am5.color('#FF0000'),
+            });
+
+            return am5.Bullet.new(root, {
+              sprite: circle,
+            });
+          });
+
           series.current.appear(1000);
         }
       });
@@ -172,6 +265,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
       const chartRoot = root.current;
       const color = chartRoot.interfaceColors.get('primaryButton');
       const plotWidth = chart.current.plotContainer.width();
+      const plotHeight = chart.current.plotContainer.height();
       const xAxisRange: am5xy.DateAxis<am5xy.AxisRenderer> = xAxis.current;
 
       if (showRange) {
@@ -180,21 +274,20 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
         //RANGE BUTTONS with bullets
         const rangeButtons = [
-          initButton(chartRoot, plotWidth),
-          initButton(chartRoot, plotWidth),
+          initButton(chartRoot, plotWidth, plotHeight),
+          initButton(chartRoot, plotWidth, plotHeight),
         ];
 
         ranges.current.forEach((range, index) => {
           range.get('grid')?.setAll({
             strokeOpacity: 1,
             stroke: color as am5.Color,
+            location: index,
           });
           const bulletOptions: am5xy.IAxisBulletSettings = {
             sprite: rangeButtons[index],
+            location: index,
           };
-          if (index === 0) {
-            bulletOptions.location = 0;
-          }
           range.set('bullet', am5xy.AxisBullet.new(chartRoot, bulletOptions));
         });
 
@@ -204,12 +297,15 @@ const LineChartAm: FC<LineChartAmProps> = ({
             ranges.current[index].set('value', value);
             ranges.current[0].set('endValue', ranges.current[1].get('value'));
           });
+
           button.events.on('dragstop', function () {
             rangeEvent(
               WebviewActions.DRAGSTOP,
               ranges.current[0].get('value') as number,
               ranges.current[1].get('value') as number
             );
+            axisFill?.set('x', 0);
+            cursorMoved(index);
           });
         });
 
@@ -218,32 +314,11 @@ const LineChartAm: FC<LineChartAmProps> = ({
           fillOpacity: 0.15,
           fill: color as am5.Color,
           visible: true,
-          draggable: true,
+          draggable: false,
         });
 
-        axisFill?.adapters.add('y', function () {
+        axisFill?.adapters.add('y', () => {
           return 0;
-        });
-
-        axisFill?.events.on('dragstop', function () {
-          const dx = axisFill?.x();
-          const value = axisRangeDrag(
-            rangeButtons[0],
-            xAxisRange,
-            plotWidth,
-            dx
-          );
-          const endValue = axisRangeDrag(
-            rangeButtons[1],
-            xAxisRange,
-            plotWidth,
-            dx,
-            axisFill.width()
-          );
-          ranges.current[0].setAll({ value, endValue });
-          ranges.current[1].set('value', endValue);
-          rangeEvent(WebviewActions.DRAGSTOP, value, endValue);
-          axisFill?.set('x', 0);
         });
 
         rangeEvent(
@@ -352,6 +427,27 @@ const LineChartAm: FC<LineChartAmProps> = ({
     );
     if (rangeDrag) {
       rangeDrag(detail);
+    }
+  }
+
+  function cursorMoved(index = 0) {
+    if (activeBullets[index]) {
+      for (let i = 0; i < activeBullets[index].length; i++) {
+        activeBullets[index][i].unhover();
+      }
+    }
+    console.log('CURSOR', series.current?.bullets);
+    activeBullets[index] = [];
+    if (chart.current) {
+      chart.current.series.each((series) => {
+        series.getDataItemById;
+        const dataItem = series.get('tooltip')?.dataItem;
+        if (dataItem && dataItem.bullets) {
+          const bulletSprite = dataItem.bullets[0].get('sprite');
+          bulletSprite.hover();
+          activeBullets[index].push(bulletSprite);
+        }
+      });
     }
   }
 
