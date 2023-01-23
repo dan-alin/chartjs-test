@@ -125,6 +125,12 @@ const LineChartAm: FC<LineChartAmProps> = ({
       cursor.lineX.set('forceHidden', true);
       cursor.lineY.set('forceHidden', true);
 
+      const axisRendererOptions: am5xy.IAxisRendererXSettings = {};
+
+      if (customOptions?.minGridDistance) {
+        axisRendererOptions.minGridDistance = customOptions?.minGridDistance;
+      }
+
       //AXES generation
       xAxis.current = chart.current.xAxes.push(
         am5xy.DateAxis.new(root.current, {
@@ -133,9 +139,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
             timeUnit: 'day',
             count: 1,
           },
-          renderer: am5xy.AxisRendererX.new(root.current, {
-            minGridDistance: 50,
-          }),
+          renderer: am5xy.AxisRendererX.new(root.current, axisRendererOptions),
         })
       );
       const yAxis = chart.current.yAxes.push(
@@ -146,10 +150,6 @@ const LineChartAm: FC<LineChartAmProps> = ({
           renderer: am5xy.AxisRendererY.new(root.current, {}),
         })
       );
-
-      if (customOptions?.lineType === 'area') {
-        yAxis.setAll({ min: 0, max: customOptions?.maxYAxis || 100 });
-      }
 
       // SERIES
       // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
@@ -191,6 +191,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
               break;
             case 'area':
+              yAxis.setAll({ min: 0, max: customOptions?.maxYAxis || 100 });
               fillOptions = {
                 visible: true,
                 fillOpacity: 1,
@@ -315,9 +316,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
             sprite: rangeButtons[index],
             location: index,
           };
-          if (index === 0) {
-            bulletOptions.location = 0;
-          }
+
           range.set('bullet', am5xy.AxisBullet.new(chartRoot, bulletOptions));
         });
 

@@ -37,4 +37,5 @@ export type LineQueryParams = QueryParams & {
   hideYAxis?: boolean;
   lineType?: 'single' | 'multiple' | 'area' | undefined;
   maxYAxis?: number;
+  minGridDistance?: number;
 };
