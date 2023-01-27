@@ -100,6 +100,7 @@ export type LineOptions = AmCustomOptions & {
   lineType?: 'single' | 'multiple' | 'area' | undefined;
   strokeColor?: string | number;
   maxYAxis?: number;
+  minGridDistance?: number | undefined;
 };
 export type LineChartAmProps = AmChartProps & {
   customOptions?: LineOptions;

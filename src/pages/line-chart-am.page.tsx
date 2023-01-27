@@ -49,6 +49,9 @@ const webviewOptions: LineOptions = {
   showEvents: !!params.showEvents,
   hideYAxis: !!params.hideYAxis,
   lineType: params.lineType,
+  minGridDistance: params.minGridDistance
+    ? Number(params.minGridDistance)
+    : undefined,
 };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
