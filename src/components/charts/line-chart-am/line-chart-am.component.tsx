@@ -137,7 +137,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
           startLocation: 0.5,
           endLocation: 0.5,
           groupData: false,
-          dateFormats: { day: 'MM/dd' },
+          dateFormats: { day: 'dd/MM/yy' },
           markUnitChange: false,
           baseInterval: {
             timeUnit: 'day',
