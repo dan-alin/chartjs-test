@@ -19,7 +19,6 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
 }) => {
   const chartId = useId();
   const windowSize: WindowSize = useWindowSize(true);
-
   const [chartData, setChartData] = useState<DoughnutData[]>([]);
   const [chartOptions, setChartOptions] = useState<DoughnutOptions>({
     hideLegend: true,
@@ -30,7 +29,6 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
     }
     if (customOptions) {
       setChartOptions(customOptions);
-      console.log('options', customOptions);
     }
   }, [customOptions, customData]);
 
@@ -53,10 +51,10 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
     // SERIES
     const series = container.series.push(
       am5percent.PieSeries.new(root, {
-        name: 'Sales',
-        categoryField: 'name',
+        name: 'Series',
+        categoryField: 'description',
         fillField: 'color',
-        valueField: 'value',
+        valueField: 'percentage',
         alignLabels: false,
         legendLabelText:
           "[#837D87][fontSize: 16px]{category}[/][/]\n[{color}][fontSize: 32px]{valuePercentTotal.formatNumber('#.00')}%[/][/]",
@@ -70,42 +68,30 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
       strokeWidth: 4,
     });
 
-    series.labels.template.set('visible', false);
-    series.ticks.template.set('visible', false);
-
     series.slices.template.adapters.add(
-      'fillGradient',
-      (value: am5.Gradient | undefined, target: am5.Slice) => {
-        let gradient;
-        if (target && target.dataItem?.dataContext) {
-          const item = target.dataItem?.dataContext as DoughnutData;
-          gradient = value;
-          if (item.value > 20) {
-            gradient = am5.LinearGradient.new(root, {
-              stops: [
-                {
-                  brighten: 0,
-                },
-                {
-                  brighten: 0.4,
-                },
-              ],
-              rotation: 0,
-            });
-          }
+      'fill',
+      (value: am5.Color | undefined, target: am5.Slice) => {
+        let color = value;
+        if (target) {
+          const dataItem = target.dataItem?.dataContext as DoughnutData;
+          color =
+            dataItem && dataItem.color ? am5.color(dataItem.color) : value;
         }
-        return gradient;
+        return color;
       }
     );
 
-    series.slices.template.states.create('hover', {
+    series.labels.template.set('visible', false);
+    series.ticks.template.set('visible', false);
+
+    const fixedPiecePie: Partial<am5.ISliceSettings> = {
       shiftRadius: 0,
       scale: 1,
-    });
-    series.slices.template.states.create('active', {
-      shiftRadius: 0,
-      scale: 1,
-    });
+    };
+
+    series.slices.template.states.create('active', fixedPiecePie);
+    series.slices.template.states.create('hover', fixedPiecePie);
+    series.slices.template.states.create('hoverActive', fixedPiecePie);
 
     if (chartOptions.rotateFocus) {
       series.slices.template.events.on('click', function (e) {
@@ -190,8 +176,8 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
         prev,
         current
       ) {
-        return (prev.dataItem?.dataContext as DoughnutData).value >
-          (current.dataItem?.dataContext as DoughnutData).value
+        return (prev.dataItem?.dataContext as DoughnutData).percentage >
+          (current.dataItem?.dataContext as DoughnutData).percentage
           ? prev
           : current;
       }); //returns object
@@ -203,7 +189,7 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
 
     // Play initial series animation
     // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
-    container.appear(1000, 100);
+    container.appear(500, 10);
 
     function selectSlice(slice: am5.Slice, duration = 1000) {
       const sliceData = slice?.dataItem?.dataContext as DoughnutData;
@@ -229,12 +215,12 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
         WebviewCharts.DOUGHNUT,
         WebviewActions.SLICEFOCUS,
         {
-          sliceId: sliceData.id,
+          description: sliceData.description,
         }
       );
       if (sliceSelect) {
         sliceSelect({
-          sliceId: sliceData.id,
+          description: sliceData.description,
         });
       }
     }

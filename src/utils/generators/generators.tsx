@@ -1,5 +1,4 @@
 import { BubbleDataPoint, ChartArea, ChartData, ChartDataset } from 'chart.js';
-import * as am5 from '@amcharts/amcharts5';
 import { range } from 'lodash';
 import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
@@ -248,15 +247,11 @@ export const AMChartDataGenerator = (
     case 'am_doughnut':
       chartData = groups.map((group) => {
         const colorGroup = AssetColors.find((asset) => asset.group === group);
-        const c: am5.Color = am5.color(
-          colorGroup ? colorGroup.color : faker.color.rgb()
-        );
-
+        const c: string = colorGroup ? colorGroup.color : faker.color.rgb();
         return {
-          name: group,
-          id: group.toLowerCase(),
+          description: group,
           color: c,
-          value:
+          percentage:
             group === 'Altro'
               ? 10
               : faker.datatype.number({ min: 10, max: dataRange }),
