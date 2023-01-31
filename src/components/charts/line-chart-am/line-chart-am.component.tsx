@@ -134,7 +134,11 @@ const LineChartAm: FC<LineChartAmProps> = ({
       //AXES generation
       xAxis.current = chart.current.xAxes.push(
         am5xy.DateAxis.new(root.current, {
+          startLocation: 0.5,
+          endLocation: 0.5,
           groupData: false,
+          dateFormats: { day: 'MM/dd' },
+          markUnitChange: false,
           baseInterval: {
             timeUnit: 'day',
             count: 1,

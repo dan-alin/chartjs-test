@@ -1,7 +1,11 @@
-import { LineData } from './charts';
+import { LineData, DoughnutData } from './charts';
 export type ChartEventData = DispatchEvents | ListenEvents;
 export type DispatchEvents = LineRangeEvent | FilterBubble | SliceSelect;
-export type ListenEvents = FilterBubble | LineToggleShow | LineData[][];
+export type ListenEvents =
+  | FilterBubble
+  | LineToggleShow
+  | LineData[][]
+  | DoughnutData[];
 
 // Line chart
 export type LineRangeEvent = {
@@ -19,11 +23,12 @@ export type FilterBubble = {
 
 // Pie chart
 export type SliceSelect = {
-  sliceId: string;
+  description: string;
 };
 
 export type QueryParams = {
   delay?: number;
+  emulateData?: boolean;
 };
 
 export type DoughnutQueryParams = QueryParams & {
