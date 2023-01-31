@@ -6,7 +6,6 @@ import {
 } from 'chart.js';
 
 import { LineRangeEvent, SliceSelect } from './chartEvents';
-import * as am5 from '@amcharts/amcharts5';
 export type d3Charts = 'D3_circular';
 export type AMCharts =
   | 'force_directed'
@@ -100,6 +99,7 @@ export type LineOptions = AmCustomOptions & {
   lineType?: 'single' | 'multiple' | 'area' | undefined;
   strokeColor?: string | number;
   maxYAxis?: number;
+  minGridDistance?: number | undefined;
 };
 export type LineChartAmProps = AmChartProps & {
   customOptions?: LineOptions;
@@ -157,8 +157,7 @@ export type ForceDirectedData = {
 };
 
 export type DoughnutData = {
-  name: string;
-  value: number;
-  color: am5.Color;
-  id: string;
+  description: string;
+  percentage: number;
+  color: string;
 };
