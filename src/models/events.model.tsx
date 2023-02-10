@@ -3,6 +3,8 @@ export enum WebviewCharts {
   LINE = 'LINE',
   LINEAREA = 'LINAEREA',
   BUBBLE = 'BUBBLE',
+  BAR = 'BAR',
+  ALL = 'ALL',
 }
 export enum WebviewActions {
   SLICEFOCUS = 'slice_focus',
@@ -12,4 +14,5 @@ export enum WebviewActions {
   ROTATE = 'rotate',
   SHOWRANGE = 'show_range',
   SHOWEVENTS = 'show_events',
+  READY = 'ready',
 }

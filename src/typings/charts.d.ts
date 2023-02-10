@@ -41,6 +41,7 @@ export type AmCustomOptions = {
   windowHeight?: boolean;
   isWebview?: boolean;
   hideYAxis?: boolean;
+  hideXAxis?: boolean;
   maxYAxis?: number;
 };
 
@@ -62,9 +63,11 @@ export type LineChartProps = ChartProps & {
   customFill?: ComplexFillTarget | undefined;
   showAlwaysTooltip?: boolean;
 };
-export type BarChartProps = ChartProps & {
+
+export type BarChartCJSProps = ChartProps & {
   customOptions?: ChartOptions<'bar'>;
 };
+
 export type DoughnutChartProps = ChartProps & {
   customOptions?: ChartOptions<'doughnut'>;
 };
@@ -81,6 +84,18 @@ export type ForceDirectedProps = AmChartProps & {
 export type DoughnutOptions = AmCustomOptions & {
   rotateFocus?: boolean;
 };
+
+export type BarChartOptions = AmCustomOptions & {
+  hideGrid?: boolean;
+  barType: BarTypes;
+};
+
+export type BarChartProps = AmChartProps & {
+  customOptions?: BarChartOptions;
+  customData: BarChartData[];
+  lines?: string[];
+};
+
 export type AmDoughnutProps = AmChartProps & {
   customOptions?: DoughnutOptions;
   customData: DoughnutData[];
@@ -141,7 +156,11 @@ export type CircularPackingData =
   | CircularPackingMainData
   | CircularPackingElement;
 
-export type AMChartsData = ForceDirected | DoughnutData[] | LineData[][];
+export type AMChartsData =
+  | ForceDirected
+  | DoughnutData[]
+  | LineData[][]
+  | BarChartData[];
 
 export type ForceDirected = {
   name?: string;
@@ -161,3 +180,18 @@ export type DoughnutData = {
   percentage: number;
   color: string;
 };
+
+export type BarChartData = {
+  date: string | number | null;
+  valueX: number | string | null;
+  valueY: number | string | null;
+  color?: string;
+  lineData?: {
+    line: string;
+    family: string;
+    total: number;
+    trend: number;
+  };
+};
+
+export type BarTypes = 'negPositive' | 'lines' | 'horizontal';

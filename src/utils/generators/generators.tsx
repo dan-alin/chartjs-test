@@ -1,11 +1,13 @@
 import { BubbleDataPoint, ChartArea, ChartData, ChartDataset } from 'chart.js';
-import { range } from 'lodash';
+import { random, range, sample } from 'lodash';
 import { faker } from '@faker-js/faker';
 //import { ChartDataSets } from 'chart.js';
 import colorLib, { Color, RGBA } from '@kurkle/color';
 import {
   AMCharts,
   AMChartsData,
+  BarChartData,
+  BarTypes,
   chartJsCharts,
   CircularPackingElement,
   CircularPackingMainData,
@@ -219,6 +221,7 @@ export const AMChartDataGenerator = (
   ]
 ): AMChartsData => {
   let chartData: AMChartsData;
+  let startingDate = new Date();
 
   switch (chartType) {
     case 'force_directed':
@@ -247,7 +250,9 @@ export const AMChartDataGenerator = (
     case 'am_doughnut':
       chartData = groups.map((group) => {
         const colorGroup = AssetColors.find((asset) => asset.group === group);
-        const c: string = colorGroup ? colorGroup.color : faker.color.rgb();
+        const c: string = colorGroup
+          ? colorGroup.color
+          : faker.color.rgb({ format: 'hex', casing: 'lower' });
         return {
           description: group,
           color: c,
@@ -256,6 +261,24 @@ export const AMChartDataGenerator = (
               ? 10
               : faker.datatype.number({ min: 10, max: dataRange }),
         };
+      });
+      break;
+    case 'am_bar':
+      chartData = range(dataRange).map(() => {
+        const bar: BarChartData = {
+          // line: name,
+          // color: faker.color.rgb({ format: 'hex', casing: 'lower' }),
+          // value: faker.datxzatype.number({ min: 400, max: 2000 }),
+          valueY: faker.datatype.number({ min: -10, max: 10 }),
+          valueX: null,
+          date: startingDate.toISOString(),
+        };
+        startingDate = new Date(
+          startingDate.getFullYear(),
+          startingDate.getMonth(),
+          startingDate.getDate() + 2
+        );
+        return bar;
       });
       break;
     default:
@@ -286,5 +309,67 @@ export const AMChartDataGenerator = (
 //   }
 //   return data;
 // }
+
+export function generateBarData(
+  columns = 15,
+  barType: BarTypes = 'negPositive'
+): BarChartData[] {
+  let startingDate = new Date();
+  let chartData: BarChartData[];
+  const lines = ['X-TEAM', 'TIME&GO', 'SOLUTION'];
+
+  switch (barType) {
+    case 'negPositive':
+      chartData = range(columns).map(() => {
+        const bar: BarChartData = {
+          valueY: random(-10.0, 10.0, true),
+          valueX: null,
+          date: startingDate.toISOString(),
+        };
+        startingDate = new Date(
+          startingDate.getFullYear(),
+          startingDate.getMonth(),
+          startingDate.getDate() + 2
+        );
+        return bar;
+      });
+      break;
+    case 'lines':
+      chartData = range(columns).map((column) => {
+        const line = '' + sample(lines);
+        const family = `Family name ${column}`;
+        const bar: BarChartData = {
+          valueY: random(0, 40, true),
+          valueX: `${line} ${family}`,
+          date: null,
+          color: randomColor(),
+          lineData: {
+            line,
+            family,
+            total: random(100000.0, 400000.0, true),
+            trend: random(-20.0, +20.0, true),
+          },
+        };
+        return bar;
+      });
+      break;
+    case 'horizontal':
+      chartData = range(columns).map((column) => {
+        const bar: BarChartData = {
+          valueX: random(-20, 10, true),
+          valueY: `X-TEAM ${sample(lines)}${column}`,
+          date: null,
+          color: randomColor(),
+        };
+        return bar;
+      });
+      break;
+  }
+  return chartData;
+}
+
+const randomColor = (): string => {
+  return '#' + Math.floor(Math.random() * 16777215).toString(16);
+};
 
 export default chartDataGenerator;
