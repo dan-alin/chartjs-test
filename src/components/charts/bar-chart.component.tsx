@@ -10,7 +10,7 @@ import {
   BarElement,
   ChartOptions,
 } from 'chart.js';
-import { BarChartProps } from '@typings/charts.d';
+import { BarChartCJSProps } from '@typings/charts.d';
 import { getDefaultData } from 'src/utils/configurations/chart-config';
 import useChart from 'src/hooks/use-chart.hook';
 
@@ -23,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-const BarChart: FC<BarChartProps> = ({
+const BarChartCjs: FC<BarChartCJSProps> = ({
   size,
   customOptions = {},
   customData = getDefaultData(),
@@ -49,4 +49,4 @@ const BarChart: FC<BarChartProps> = ({
   );
 };
 
-export default BarChart;
+export default BarChartCjs;

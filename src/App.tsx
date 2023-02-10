@@ -14,12 +14,14 @@ import DoughnutAm from '@pages/doughhnutam.page';
 // import { AMChartDataGenerator } from './utils';
 import LineChartAmPage from '@pages/line-chart-am.page';
 import { WebviewEvents } from './components';
+import BarWV from '@pages/bar.page';
 
 const hideNavbar = [
   '/linechart',
   '/forcedirectedchart',
   '/flourishchart',
   '/doughnut',
+  '/bar',
 ];
 // const customData = AMChartDataGenerator('am_linearea')
 
@@ -43,6 +45,7 @@ const RoutesComponent: FC = () => {
       <Route path={routes.linechart} element={<LineChartAmPage />} />
       <Route path={routes.flourish} element={<Flourish />} />
       <Route path={routes.doughnutam} element={<DoughnutAm />} />
+      <Route path={routes.bar} element={<BarWV />} />
     </Routes>
   );
 };

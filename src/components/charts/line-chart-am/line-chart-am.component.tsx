@@ -137,7 +137,12 @@ const LineChartAm: FC<LineChartAmProps> = ({
           startLocation: 0.5,
           endLocation: 0.5,
           groupData: false,
-          dateFormats: { day: 'dd/MM/yy' },
+          dateFormats: {
+            day: 'dd/MM/yy',
+            week: 'dd/MM/yy',
+            mont: 'dd/MM/yy',
+            year: 'yyyy',
+          },
           markUnitChange: false,
           baseInterval: {
             timeUnit: 'day',
@@ -157,7 +162,7 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
       // SERIES
       // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-      chartData.forEach((data: LineData[]) => {
+      chartData.forEach((data: LineData[], key) => {
         if (chart.current && root.current && xAxis.current) {
           chart.current
             .get('colors')
@@ -170,15 +175,15 @@ const LineChartAm: FC<LineChartAmProps> = ({
 
           series.current = chart.current.series.push(
             am5xy.LineSeries.new(root.current, {
-              name: 'Series',
+              name: 'Series' + key,
               stacked: customOptions?.lineType === 'area',
               xAxis: xAxis.current,
               yAxis: yAxis,
               valueYField: 'value',
               valueXField: 'date',
               tooltip: am5.Tooltip.new(root.current, {
-                labelText: '',
-                forceHidden: true,
+                autoTextColor: false,
+                getFillFromSprite: false,
                 animationDuration: 0,
               }),
             })

@@ -39,6 +39,10 @@ const DoughnutAm: FC = () => {
         setData((domData as CustomEvent<DoughnutData[]>).detail);
       }
     );
+
+    window.addEventListener('load', () => {
+      customChartEvent.dispatch(WebviewCharts.ALL, WebviewActions.READY);
+    });
   }, []);
 
   return (

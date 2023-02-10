@@ -54,21 +54,8 @@ const webviewOptions: LineOptions = {
     : undefined,
 };
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const LineChartAmPage: FC = () => {
   const [data, setData] = useState<LineData[][]>();
-  async function fetchData(delay = 0) {
-    await sleep(delay);
-    setData(customLineData);
-    // customChartEvent.dispatch(
-    //   WebviewCharts.LINE,
-    //   WebviewActions.FETCHDATA,
-    //   customLineData,
-    //   false,
-    //   document.getElementById('chartEventsListen')
-    // );
-  }
 
   useEffect(() => {
     customChartEvent.listen(
@@ -80,8 +67,20 @@ const LineChartAmPage: FC = () => {
       }
     );
     if (params && params.emulateLines) {
-      fetchData(params.delay);
+      setData(customLineData);
     }
+
+    window.addEventListener('load', () => {
+      customChartEvent.dispatch(WebviewCharts.ALL, WebviewActions.READY);
+    });
+
+    // customChartEvent.dispatch(
+    //   WebviewCharts.LINE,
+    //   WebviewActions.FETCHDATA,
+    //   customLineData,
+    //   false,
+    //   document.getElementById('chartEventsListen')
+    // );
   }, []);
 
   return (

@@ -228,7 +228,7 @@ const DoughnutChartAM: FC<AmDoughnutProps> = ({
     return () => {
       root.dispose();
     };
-  }, [chartId, chartData, chartOptions, windowSize]);
+  }, [chartId, chartData, chartOptions, sliceSelect]);
 
   return (
     <>
