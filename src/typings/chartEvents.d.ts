@@ -1,3 +1,4 @@
+import { BarChartData } from './charts.d';
 import { LineData, DoughnutData } from './charts';
 export type ChartEventData = DispatchEvents | ListenEvents;
 export type DispatchEvents = LineRangeEvent | FilterBubble | SliceSelect;
@@ -5,7 +6,8 @@ export type ListenEvents =
   | FilterBubble
   | LineToggleShow
   | LineData[][]
-  | DoughnutData[];
+  | DoughnutData[]
+  | BarChartData[];
 
 // Line chart
 export type LineRangeEvent = {
@@ -33,6 +35,11 @@ export type QueryParams = {
 
 export type DoughnutQueryParams = QueryParams & {
   rotateFocus?: boolean;
+};
+
+export type BarQueryParams = QueryParams & {
+  direction?: 'vertical' | 'horizontal';
+  barType?: 'negPositive' | 'lines';
 };
 
 export type LineQueryParams = QueryParams & {

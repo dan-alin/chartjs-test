@@ -6,6 +6,7 @@ const routes = {
   flourishchart: '/flourishchart',
   linechart: '/linechart',
   doughnutam: '/doughnut',
+  bar: '/bar',
 };
 
 export default routes;

@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { chartConfigurations, yAxeRight } from '../utils';
 import {
+  BarChartData,
   ChartInfoProps,
   Charts,
   DoughnutData,
@@ -20,12 +21,12 @@ import {
   LineChart,
   PieChart,
   DoughnutChart,
-  BarChart,
   ScatterChart,
   CircularPacking,
   GaugeChart,
   ForceDirectedChart,
   LineChartAm,
+  BarChartCjs,
 } from '@components/charts';
 import chartDataGenerator, {
   d3ChartDataGenerator,
@@ -259,7 +260,9 @@ const customForceDirectedData = AMChartDataGenerator(
   20
 ) as ForceDirected;
 
-const customAmLinechartData = AMChartDataGenerator('am_linearea') as LineData[];
+const customAmLinechartData = AMChartDataGenerator(
+  'am_linearea'
+) as LineData[][];
 
 const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
   'Cash',
@@ -267,6 +270,8 @@ const customAmdoughnutData = AMChartDataGenerator('am_doughnut', 100, [
   'Bond',
   'Altro',
 ]) as DoughnutData[];
+
+const customAmBarData = AMChartDataGenerator('am_bar') as BarChartData[];
 
 let customFill: ComplexFillTarget | undefined;
 const renderSwitch = (chart: ChartInfoProps) => {
@@ -334,7 +339,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
         customBarData = chartDataGenerator(5, 2, chart.id, colorsDefaults);
       }
       return (
-        <BarChart
+        <BarChartCjs
           size='responsive'
           customOptions={customBarOptions}
           customData={customBarData as ChartData<'bar'>}
@@ -370,7 +375,7 @@ const renderSwitch = (chart: ChartInfoProps) => {
         />
       );
     case 'am_bar':
-      return <BarChartAm />;
+      return <BarChartAm customData={customAmBarData} />;
     case 'am_linearea':
       return <LineChartAm customData={customAmLinechartData} />;
 
